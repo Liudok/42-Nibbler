@@ -1,3 +1,6 @@
 #pragma once
 
-extern "C" void sampleFunction();
+enum responseTypes { toNcurses, toDummy,
+	left, right, up, down, noResponse };
+
+extern "C" responseTypes sampleFunction();

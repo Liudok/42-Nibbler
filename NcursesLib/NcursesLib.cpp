@@ -1,7 +1,8 @@
 #include "NcursesLib.hpp"
 #include <iostream>
 
-extern "C" void sampleFunction()
+extern "C" responseTypes sampleFunction()
 {
-	std::cout << "Ncurses sample function called" << std::endl;
+	std::cout << "sampleFunction of the ncurses dll called" << std::endl;
+	return noResponse;
 }
