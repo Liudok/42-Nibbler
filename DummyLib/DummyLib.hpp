@@ -1,6 +1,6 @@
 #pragma once
 
-enum responseType { toNcurses, toDummy,
-	left, right, up, down, noResponse };
+enum responseType { noResponse, left, right, up, down,
+		toNcurses, toDummy, };
 
 extern "C" responseType getResponse();

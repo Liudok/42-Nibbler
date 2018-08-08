@@ -11,8 +11,8 @@ public:
 	~LogicUnit();
 private:
 	enum libraryType { ncurses, dummy };
-	enum responseType { toNcurses, toDummy,
-		left, right, up, down, noResponse };
+	enum responseType { noResponse, toNcurses, toDummy,
+		left, right, up, down };
 	static constexpr size_t nbLibraries = 2;
 	using ptrToLibraryType = void*;
 	using responseFunctionsType = unsigned long(*)();
