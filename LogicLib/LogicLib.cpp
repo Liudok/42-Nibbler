@@ -13,35 +13,24 @@ LogicUnit::LogicUnit() : libraries_(initLibraries()),
 
 void LogicUnit::loopTheGame()
 {
-	while (true){
-		const auto response = getResponse();
-		if (response == noResponse)
-			std::cout << "No response" << std::endl;
-		break;
-	}
+	getResponse();
+	currentLibrary_ = dummy;
+	getResponse();
 }
 
 auto LogicUnit::initLibraries()
 	-> std::array<ptrToLibraryType, nbLibraries>
 {
 	std::array<ptrToLibraryType, LogicUnit::nbLibraries> libraries;
-	const auto ncursesDynamicLibName = "libNcursesLib.dylib";
-	libraries[ncurses] =
-		dlopen(ncursesDynamicLibName, RTLD_LAZY | RTLD_LOCAL);
-	if (!libraries[ncurses])
-		throw std::runtime_error("The ncurses dl is not found");
-	libraries[dummy] = nullptr;
+	const char* libraryNames[nbLibraries] =
+		{ "libNcursesLib.dylib", "libDummyLib.dylib"};
+	for (size_t currentLib = 0; currentLib < nbLibraries; ++currentLib){
+		libraries[currentLib] =
+			dlopen(libraryNames[currentLib], RTLD_LAZY | RTLD_LOCAL);
+		if (!libraries[currentLib])
+			throw std::runtime_error("The dl is not found");
+	}
 	return libraries;
-}
-
-auto LogicUnit::getResponse()
-	-> responseTypes
-{
-	if (!librariesFunctionsGetResponsePtrs_[currentLibrary_])
-		throw std::runtime_error("The getResponse function is not yet"
-			" defined for the library");
-	return static_cast<responseTypes>
-		(librariesFunctionsGetResponsePtrs_[currentLibrary_]());
 }
 
 auto LogicUnit::initGetResponseFunctions()
@@ -49,14 +38,22 @@ auto LogicUnit::initGetResponseFunctions()
 {
 	std::array<responseFunctionsType, nbLibraries>
 		librariesFunctionsGetResponsePtrs;
-	const auto getResponseFunctionName = "sampleFunction";
-	librariesFunctionsGetResponsePtrs[ncurses] =
-		reinterpret_cast<responseFunctionsType>(dlsym(libraries_[ncurses],
-			getResponseFunctionName));
-	if (!librariesFunctionsGetResponsePtrs[ncurses])
-		throw std::runtime_error("Ncurses getResponse function not found");
-	librariesFunctionsGetResponsePtrs[dummy] = nullptr;
+	const auto getResponseFunctionName = "getResponse";
+	for (size_t currentLib = 0; currentLib < nbLibraries; ++currentLib){
+		librariesFunctionsGetResponsePtrs[currentLib] =
+			reinterpret_cast<responseFunctionsType>(dlsym(libraries_[currentLib],
+				getResponseFunctionName));
+		if (!librariesFunctionsGetResponsePtrs[currentLib])
+			throw std::runtime_error("GetResponse function not found");
+	}
 	return librariesFunctionsGetResponsePtrs;
+}
+
+auto LogicUnit::getResponse()
+	-> responseType
+{
+	return static_cast<responseType>
+		(librariesFunctionsGetResponsePtrs_[currentLibrary_]());
 }
 
 LogicUnit::~LogicUnit()

@@ -22,6 +22,12 @@ file(GLOB NcursesLibSources
 
 add_library(NcursesLib SHARED ${NcursesLibSources})
 
+file(GLOB DummyLibSources
+	${CMAKE_CURRENT_SOURCE_DIR}/DummyLib/*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/DummyLib/*.hpp)
+
+add_library(DummyLib SHARED ${DummyLibSources})
+
 file(GLOB TesterSources
 	${CMAKE_CURRENT_SOURCE_DIR}/Tester/*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Tester/*.hpp)
@@ -30,7 +36,7 @@ add_executable(Nibbler main.cpp)
 
 add_executable(Tester ${TesterSources})
 
-target_link_libraries(MyLogicLib NcursesLib)
+target_link_libraries(MyLogicLib NcursesLib DummyLib)
 
 target_link_libraries(Nibbler MyLogicLib)
 
