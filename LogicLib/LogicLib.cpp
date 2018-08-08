@@ -9,7 +9,8 @@ int sampleSum(int a, int b)
 
 LogicUnit::LogicUnit() : libraries_(initLibraries()),
 	librariesFunctionsGetResponsePtrs_(initGetResponseFunctions()),
-		currentLibrary_(ncurses) {}
+		currentLibrary_(ncurses),
+			gameState_(height, std::vector<size_t>(width)) {}
 
 void LogicUnit::loopTheGame()
 {
@@ -49,7 +50,7 @@ auto LogicUnit::initGetResponseFunctions()
 	return librariesFunctionsGetResponsePtrs;
 }
 
-auto LogicUnit::getResponse()
+auto LogicUnit::getResponse() const
 	-> responseType
 {
 	return static_cast<responseType>
