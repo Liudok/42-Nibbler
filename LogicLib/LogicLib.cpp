@@ -9,13 +9,16 @@ int sampleSum(int a, int b)
 
 LogicUnit::LogicUnit() : libraries_(initLibraries()),
 	librariesFunctionsGetResponsePtrs_(initGetResponseFunctions()),
-		currentLibrary_(ncurses),
-			gameState_(height, std::vector<size_t>(width)) {}
+		librariesFunctionsDrowPtrs_(initDrowFunctions()),
+			currentLibrary_(ncurses),
+				gameState_(height, std::vector<size_t>(width, 0)) {}
 
 void LogicUnit::loopTheGame()
 {
+	drow();
 	getResponse();
 	currentLibrary_ = dummy;
+	drow();
 	getResponse();
 }
 
@@ -50,11 +53,32 @@ auto LogicUnit::initGetResponseFunctions()
 	return librariesFunctionsGetResponsePtrs;
 }
 
+auto LogicUnit::initDrowFunctions()
+	-> std::array<drowFunctionsType, nbLibraries>
+{
+	std::array<drowFunctionsType, nbLibraries>
+		librariesFunctionsDrowPtrs;
+	const auto getResponseFunctionName = "drow";
+	for (size_t currentLib = 0; currentLib < nbLibraries; ++currentLib){
+		librariesFunctionsDrowPtrs[currentLib] =
+			reinterpret_cast<drowFunctionsType>(dlsym(libraries_[currentLib],
+				getResponseFunctionName));
+		if (!librariesFunctionsDrowPtrs[currentLib])
+			throw std::runtime_error("Drow function not found");
+	}
+	return librariesFunctionsDrowPtrs;
+}
+
 auto LogicUnit::getResponse() const
 	-> responseType
 {
 	return static_cast<responseType>
 		(librariesFunctionsGetResponsePtrs_[currentLibrary_]());
+}
+
+void LogicUnit::drow() const
+{
+	librariesFunctionsDrowPtrs_[currentLibrary_](gameState_);
 }
 
 LogicUnit::~LogicUnit()

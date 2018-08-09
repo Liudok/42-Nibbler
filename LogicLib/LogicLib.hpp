@@ -20,13 +20,18 @@ private:
 	static constexpr size_t width = 10;
 	using ptrToLibraryType = void*;
 	using responseFunctionsType = unsigned long(*)();
+	using drowFunctionsType = void (*)(std::vector<std::vector<size_t>> const&);
 	std::array<ptrToLibraryType, nbLibraries> initLibraries();
 	std::array<responseFunctionsType, nbLibraries> initGetResponseFunctions();
+	std::array<drowFunctionsType, nbLibraries> initDrowFunctions();
 	responseType getResponse() const;
+	void drow() const;
 	void sendGameState() const; 
 	std::array<ptrToLibraryType, nbLibraries> libraries_;
 	std::array<responseFunctionsType, nbLibraries>
 		librariesFunctionsGetResponsePtrs_;
+	std::array<drowFunctionsType, nbLibraries>
+		librariesFunctionsDrowPtrs_;
 	libraryType currentLibrary_;
 	std::vector<std::vector<size_t>> gameState_;
 };

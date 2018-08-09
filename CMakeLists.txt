@@ -36,6 +36,8 @@ add_executable(Nibbler main.cpp)
 
 add_executable(Tester ${TesterSources})
 
+target_link_libraries(NcursesLib ncurses)
+
 target_link_libraries(MyLogicLib NcursesLib DummyLib)
 
 target_link_libraries(Nibbler MyLogicLib)
