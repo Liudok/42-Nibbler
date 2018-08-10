@@ -1,12 +1,14 @@
 #pragma once
-
-#include <vector>
-
-enum responseType { noResponse, left, right, up, down,
-		toNcurses, toDummy, };
+#include "../IWindow/IWindow.hpp"
 
 extern "C"
 {
-	responseType getResponse();
-	void drow(std::vector<std::vector<size_t>> const&);
+	IWindow* create();
 }
+
+class DummyWindow : public IWindow
+{
+public:
+	responseType getResponse() override;
+	void drow(std::vector<std::vector<size_t>> const&) override;
+};

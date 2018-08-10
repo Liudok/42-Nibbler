@@ -1,12 +1,18 @@
 #pragma once
-
-#include <vector>
-
-enum responseType { noResponse, toNcurses, toDummy,
-	left, right, up, down };
+#include "../IWindow/IWindow.hpp"
+#include <ncurses.h>
 
 extern "C"
 {
-	responseType getResponse();
-	void drow(std::vector<std::vector<size_t>> const&);
+	IWindow* create();
 }
+
+class NcuresesWindow : public IWindow
+{
+public:
+	responseType getResponse() override;
+	void drow(std::vector<std::vector<size_t>> const&) override;
+private:
+	void drowGameState(WINDOW* window,
+		std::vector<std::vector<size_t>> const& gameState);
+};

@@ -12,19 +12,22 @@ project(Nibbler)
 
 file(GLOB LogicSources
 	${CMAKE_CURRENT_SOURCE_DIR}/LogicLib/*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/LogicLib/*.hpp)
+	${CMAKE_CURRENT_SOURCE_DIR}/LogicLib/*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
 
 add_library(MyLogicLib STATIC ${LogicSources})
 
 file(GLOB NcursesLibSources
 	${CMAKE_CURRENT_SOURCE_DIR}/NcursesLib/*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/NcursesLib/*.hpp)
+	${CMAKE_CURRENT_SOURCE_DIR}/NcursesLib/*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
 
 add_library(NcursesLib SHARED ${NcursesLibSources})
 
 file(GLOB DummyLibSources
 	${CMAKE_CURRENT_SOURCE_DIR}/DummyLib/*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/DummyLib/*.hpp)
+	${CMAKE_CURRENT_SOURCE_DIR}/DummyLib/*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
 
 add_library(DummyLib SHARED ${DummyLibSources})
 

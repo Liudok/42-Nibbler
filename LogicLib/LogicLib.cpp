@@ -8,18 +8,12 @@ int sampleSum(int a, int b)
 }
 
 LogicUnit::LogicUnit() : libraries_(initLibraries()),
-	librariesFunctionsGetResponsePtrs_(initGetResponseFunctions()),
-		librariesFunctionsDrowPtrs_(initDrowFunctions()),
-			currentLibrary_(ncurses),
-				gameState_(height, std::vector<size_t>(width, 0)) {}
+	windows_(initWindows()),
+		gameState_(height, std::vector<size_t>(width, 0)) {}
 
 void LogicUnit::loopTheGame()
 {
-	drow();
-	getResponse();
-	currentLibrary_ = dummy;
-	drow();
-	getResponse();
+	windows_[currentLibraryIndex_]->drow(gameState_);
 }
 
 auto LogicUnit::initLibraries()
@@ -37,48 +31,19 @@ auto LogicUnit::initLibraries()
 	return libraries;
 }
 
-auto LogicUnit::initGetResponseFunctions()
-	-> std::array<responseFunctionsType, nbLibraries>
+auto LogicUnit::initWindows()
+	-> std::vector<windowPtr>
 {
-	std::array<responseFunctionsType, nbLibraries>
-		librariesFunctionsGetResponsePtrs;
-	const auto getResponseFunctionName = "getResponse";
-	for (size_t currentLib = 0; currentLib < nbLibraries; ++currentLib){
-		librariesFunctionsGetResponsePtrs[currentLib] =
-			reinterpret_cast<responseFunctionsType>(dlsym(libraries_[currentLib],
-				getResponseFunctionName));
-		if (!librariesFunctionsGetResponsePtrs[currentLib])
-			throw std::runtime_error("GetResponse function not found");
+	std::vector<windowPtr> result;
+	const auto factoryFunctionName = "create";
+	using factoryFunctionType = IWindow* (*)();
+	for (size_t i = 0; i < nbLibraries; ++i){
+		auto factoryFunctionPtr =
+			reinterpret_cast<factoryFunctionType>(dlsym(libraries_[i],
+				factoryFunctionName));
+		result.push_back(windowPtr{factoryFunctionPtr()});
 	}
-	return librariesFunctionsGetResponsePtrs;
-}
-
-auto LogicUnit::initDrowFunctions()
-	-> std::array<drowFunctionsType, nbLibraries>
-{
-	std::array<drowFunctionsType, nbLibraries>
-		librariesFunctionsDrowPtrs;
-	const auto getResponseFunctionName = "drow";
-	for (size_t currentLib = 0; currentLib < nbLibraries; ++currentLib){
-		librariesFunctionsDrowPtrs[currentLib] =
-			reinterpret_cast<drowFunctionsType>(dlsym(libraries_[currentLib],
-				getResponseFunctionName));
-		if (!librariesFunctionsDrowPtrs[currentLib])
-			throw std::runtime_error("Drow function not found");
-	}
-	return librariesFunctionsDrowPtrs;
-}
-
-auto LogicUnit::getResponse() const
-	-> responseType
-{
-	return static_cast<responseType>
-		(librariesFunctionsGetResponsePtrs_[currentLibrary_]());
-}
-
-void LogicUnit::drow() const
-{
-	librariesFunctionsDrowPtrs_[currentLibrary_](gameState_);
+	return result;
 }
 
 LogicUnit::~LogicUnit()
