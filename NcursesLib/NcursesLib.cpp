@@ -12,7 +12,6 @@ responseType NcuresesWindow::getResponse()
 {
 	const auto response = wgetch(window_);
 	switch(response){
-		case ' ': return noResponse;
 		case 'q': return endGame;
 		case 'a': return left;
 		case 'd': return right;
