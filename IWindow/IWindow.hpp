@@ -2,9 +2,7 @@
 #include <vector>
 
 enum responseType { noResponse, left, right, up, down,
-		toNcurses, toDummy, };
-
-enum gameStateType { empty, body, head, food };
+		toNcurses, toDummy, endGame};
 
 class IWindow
 {

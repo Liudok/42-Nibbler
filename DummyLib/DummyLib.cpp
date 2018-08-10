@@ -13,8 +13,21 @@ extern "C"
 responseType DummyWindow::getResponse()
 {
 	std::cout << "getResponse of the dummy dll called" << std::endl;
-	return noResponse;
+	char response;
+	std::cin >> response;
+	switch(response){
+		case ' ': return noResponse;
+		case 'q': return endGame;
+		case 'a': return left;
+		case 'd': return right;
+		case 'w': return up;
+		case 's': return down;
+		case 'z': return toNcurses;
+		case 'x': return toDummy;
+		default: return noResponse;
+	}
 }
+
 void DummyWindow::drow(std::vector<std::vector<size_t>> const& gameState)
 {
 	std::cout << "Drow of the dummy dll called" << std::endl;
