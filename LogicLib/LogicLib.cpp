@@ -13,6 +13,11 @@ LogicUnit::LogicUnit() : libraries_(initLibraries()),
 
 void LogicUnit::loopTheGame()
 {
+	windows_[currentLibraryIndex_]->openWindow(width, height);
+	windows_[currentLibraryIndex_]->drow(gameState_);
+	windows_[currentLibraryIndex_]->closeWindow();
+	
+	currentLibraryIndex_ = dummy;
 	windows_[currentLibraryIndex_]->drow(gameState_);
 }
 

@@ -19,25 +19,39 @@ responseType NcuresesWindow::getResponse()
 void NcuresesWindow::drow(std::vector<std::vector<size_t>> const& gameState)
 {
 	std::cout << "Drow of the ncurses dll called" << std::endl;
-	initscr();
-	const size_t nbRows = gameState.size();
-	const size_t nbColumns = gameState[0].size();
-	auto window = newwin(nbRows, nbColumns, 0, 0);
-	curs_set(0);
-	keypad(window, TRUE);
-	drowGameState(window, gameState);
-	wrefresh(window);
+	window_ = newwin(height_, width_, 0, 0);
+	keypad(window_, TRUE);
+	drowGameState(window_, gameState);
+	wrefresh(window_);
 	sleep(1);
-	delwin(window);
+}
+
+void NcuresesWindow::openWindow()
+{
+	initscr();
+	curs_set(0);
+}
+
+void NcuresesWindow::openWindow(size_t width, size_t height)
+{
+	width_ = width;
+	height_ = height;
+	initscr();
+	curs_set(0);
+}
+
+void NcuresesWindow::closeWindow()
+{
+	delwin(window_);
 	endwin();
 }
 
-void NcuresesWindow::drowGameState(WINDOW* window,
+void NcuresesWindow::drowGameState(WINDOW* window_,
 	std::vector<std::vector<size_t>> const& gameState)
 {
 	const size_t nbRows = gameState.size();
 	const size_t nbColumns = gameState[0].size();
 	for (size_t i = 0; i < nbRows; ++i)
 		for (size_t j = 0; j < nbColumns; ++j)
-			mvwprintw(window, i, j, "%i", gameState[i][j]);
+			mvwprintw(window_, i, j, "%i", gameState[i][j]);
 }

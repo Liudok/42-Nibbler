@@ -24,3 +24,18 @@ void DummyWindow::drow(std::vector<std::vector<size_t>> const& gameState)
 		std::cout << std::endl;
 	}
 }
+
+void DummyWindow::openWindow()
+{
+	std::cout << "openWindow of the dummy dll called" << std::endl;
+}
+
+void DummyWindow::openWindow(size_t, size_t)
+{
+	std::cout << "openWindow of the dummy dll called" << std::endl;
+}
+
+void DummyWindow::closeWindow()
+{
+	std::cout << "closeWindow of the dummy dll called" << std::endl;
+}
