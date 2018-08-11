@@ -25,25 +25,21 @@ responseType NcuresesWindow::getResponse()
 
 void NcuresesWindow::drow(std::vector<std::vector<size_t>> const& gameState)
 {
-	window_ = newwin(height_, width_, 0, 0);
+	window_ = newwin(height_ + 2, width_ + 2, 0, 0);
 	keypad(window_, TRUE);
 	nodelay(window_, FALSE);
-	drowGameState(window_, gameState);
-	wrefresh(window_);
-}
-
-void NcuresesWindow::openWindow()
-{
+	box(window_, 0, 0);
 	initscr();
 	curs_set(0);
+	drowGameState(window_, gameState);
+	wrefresh(window_);
 }
 
 void NcuresesWindow::openWindow(size_t width, size_t height)
 {
 	width_ = width;
 	height_ = height;
-	initscr();
-	curs_set(0);
+	
 }
 
 void NcuresesWindow::closeWindow()
@@ -57,7 +53,11 @@ void NcuresesWindow::drowGameState(WINDOW* window_,
 {
 	const size_t nbRows = gameState.size();
 	const size_t nbColumns = gameState[0].size();
-	for (size_t i = 0; i < nbRows; ++i)
-		for (size_t j = 0; j < nbColumns; ++j)
-			mvwprintw(window_, i, j, "%i", gameState[i][j]);
+	for (size_t i = 0; i < nbRows; ++i){
+		for (size_t j = 0; j < nbColumns; ++j){
+			if (gameState[i][j]) wattron(window_, A_BOLD);
+			mvwprintw(window_, i + 1, j + 1, "%i", gameState[i][j]);
+			wattroff(window_, A_BOLD);
+		}
+	}
 }

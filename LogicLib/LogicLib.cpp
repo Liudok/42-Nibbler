@@ -9,27 +9,24 @@ int sampleSum(int a, int b)
 
 LogicUnit::LogicUnit() : libraries_(initLibraries()),
 	windows_(initWindows()),
-		gameState_(height, std::vector<size_t>(width, 0))
+		gameField_(height, std::vector<size_t>(width, 0))
 {
-	gameState_[headPos_.y][headPos_.x] = head;
+	snake_.fillMap(gameField_);
 }
 
 void LogicUnit::loopTheGame()
 {
 	currentLibraryIndex_ = dummy;
 	windows_[currentLibraryIndex_]->openWindow(width, height);
-	windows_[currentLibraryIndex_]->drow(gameState_);
-	while (true){
-		const auto response =
-			windows_[currentLibraryIndex_]->getResponse();
-		updateGameState(response);
-	}
+	windows_[currentLibraryIndex_]->drow(gameField_);
+	while (true)
+		updateGameState(windows_[currentLibraryIndex_]->getResponse());
 }
 
 auto LogicUnit::initLibraries()
 	-> std::array<ptrToLibraryType, nbLibraries>
 {
-	std::array<ptrToLibraryType, LogicUnit::nbLibraries> libraries;
+	std::array<ptrToLibraryType, nbLibraries> libraries;
 	const char* libraryNames[nbLibraries] =
 		{ "libNcursesLib.dylib", "libDummyLib.dylib"};
 	for (size_t currentLib = 0; currentLib < nbLibraries; ++currentLib){
@@ -60,42 +57,58 @@ void LogicUnit::updateGameState(responseType response)
 {
 	switch(response){
 		case noResponse:
-			windows_[currentLibraryIndex_]->drow(gameState_);
+			windows_[currentLibraryIndex_]->drow(gameField_);
 			break;
 		case endGame:
 			windows_[currentLibraryIndex_]->closeWindow();
 			exit(0);
-		case left: 
-			headPos_.x = (headPos_.x == 0) ? 0 : headPos_.x - 1;
-			gameState_[headPos_.y][headPos_.x] = head;
-			windows_[currentLibraryIndex_]->drow(gameState_);
+		case left:
+			if (snake_.getHeadPosition().x == 0){
+				windows_[currentLibraryIndex_]->closeWindow();
+				exit(0);
+			}
+			snake_.move(left);
+			snake_.fillMap(gameField_);
+			windows_[currentLibraryIndex_]->drow(gameField_);
 			break;
 		case right:
-			headPos_.x = (headPos_.x + 1) % gameState_[0].size();
-			gameState_[headPos_.y][headPos_.x] = head;
-			windows_[currentLibraryIndex_]->drow(gameState_);
+			if (snake_.getHeadPosition().x == gameField_[0].size() - 1){
+				windows_[currentLibraryIndex_]->closeWindow();
+				exit(0);
+			}
+			snake_.move(right);
+			snake_.fillMap(gameField_);
+			windows_[currentLibraryIndex_]->drow(gameField_);
 			break;
 		case up:
-			headPos_.y = (headPos_.y == 0) ? 0 : headPos_.y - 1;
-			gameState_[headPos_.y][headPos_.x] = head;
-			windows_[currentLibraryIndex_]->drow(gameState_);
+			if (snake_.getHeadPosition().y == 0){
+				windows_[currentLibraryIndex_]->closeWindow();
+				exit(0);
+			}
+			snake_.move(up);
+			snake_.fillMap(gameField_);
+			windows_[currentLibraryIndex_]->drow(gameField_);
 			break;
 		case down:
-			headPos_.y = (headPos_.y + 1) % gameState_.size();
-			gameState_[headPos_.y][headPos_.x] = head;
-			windows_[currentLibraryIndex_]->drow(gameState_);
+			if (snake_.getHeadPosition().y == gameField_.size() - 1){
+				windows_[currentLibraryIndex_]->closeWindow();
+				exit(0);
+			}
+			snake_.move(down);
+			snake_.fillMap(gameField_);
+			windows_[currentLibraryIndex_]->drow(gameField_);
 			break;
 		case toNcurses:
 			windows_[currentLibraryIndex_]->closeWindow();
 			currentLibraryIndex_ = ncurses;
 			windows_[currentLibraryIndex_]->openWindow(width, height);
-			windows_[currentLibraryIndex_]->drow(gameState_);
+			windows_[currentLibraryIndex_]->drow(gameField_);
 			break;
 		case toDummy:
 			windows_[currentLibraryIndex_]->closeWindow();
 			currentLibraryIndex_ = dummy;
 			windows_[currentLibraryIndex_]->openWindow(width, height);
-			windows_[currentLibraryIndex_]->drow(gameState_);
+			windows_[currentLibraryIndex_]->drow(gameField_);
 	}
 }
 

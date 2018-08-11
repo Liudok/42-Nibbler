@@ -6,6 +6,11 @@ if (${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 	message(FATAL_ERROR "In-source builds are prohibited. Sorry :(")
 endif()
 
+if (NOT APPLE)
+	message(FATAL_ERROR
+	"The project may be built only in macOS for now. Sorry :(")
+endif()
+
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 
 project(Nibbler)

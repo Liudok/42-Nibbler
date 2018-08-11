@@ -1,6 +1,5 @@
 #include "DummyLib.hpp"
 #include <iostream>
-#include <vector>
 
 extern "C"
 {
@@ -42,11 +41,6 @@ void DummyWindow::drow(std::vector<std::vector<size_t>> const& gameState)
 			std::cout << cell;
 		std::cout << std::endl;
 	}
-}
-
-void DummyWindow::openWindow()
-{
-	std::cout << "openWindow of the dummy dll called" << std::endl;
 }
 
 void DummyWindow::openWindow(size_t, size_t)
