@@ -18,7 +18,7 @@ LogicUnit::LogicUnit() : libraries_(initLibraries()),
 void LogicUnit::loopTheGame()
 {
 	windows_[currentLibraryIndex_]->openWindow(width, height);
-	windows_[currentLibraryIndex_]->drow(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_);
 	std::function<void()> reactFunctions[nbResponses] = {
 		std::bind(&LogicUnit::reactToNoResponse, this),
 		std::bind(&LogicUnit::reactToLeft, this),
@@ -73,7 +73,7 @@ void LogicUnit::reactToNoResponse()
 		return;
 	}
 	snake_.fillMap(gameField_);
-	windows_[currentLibraryIndex_]->drow(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_);
 }
 
 void LogicUnit::reactToLeft()
@@ -84,7 +84,7 @@ void LogicUnit::reactToLeft()
 		return;
 	}
 	snake_.fillMap(gameField_);
-	windows_[currentLibraryIndex_]->drow(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_);
 }
 
 void LogicUnit::reactToRight()
@@ -95,7 +95,7 @@ void LogicUnit::reactToRight()
 		return;
 	}
 	snake_.fillMap(gameField_);
-	windows_[currentLibraryIndex_]->drow(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_);
 }
 
 void LogicUnit::reactToUp()
@@ -106,7 +106,7 @@ void LogicUnit::reactToUp()
 		return;
 	}
 	snake_.fillMap(gameField_);
-	windows_[currentLibraryIndex_]->drow(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_);
 }
 
 void LogicUnit::reactToDown()
@@ -117,7 +117,7 @@ void LogicUnit::reactToDown()
 		return;
 	}
 	snake_.fillMap(gameField_);
-	windows_[currentLibraryIndex_]->drow(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_);
 }
 
 void LogicUnit::reactToToNcurses()
@@ -125,7 +125,7 @@ void LogicUnit::reactToToNcurses()
 	windows_[currentLibraryIndex_]->closeWindow();
 	currentLibraryIndex_ = ncurses;
 	windows_[currentLibraryIndex_]->openWindow(width, height);
-	windows_[currentLibraryIndex_]->drow(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_);
 }
 
 void LogicUnit::reactToToDummy()
@@ -133,7 +133,7 @@ void LogicUnit::reactToToDummy()
 	windows_[currentLibraryIndex_]->closeWindow();
 	currentLibraryIndex_ = dummy;
 	windows_[currentLibraryIndex_]->openWindow(width, height);
-	windows_[currentLibraryIndex_]->drow(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_);
 }
 
 void LogicUnit::reactToEndGame()

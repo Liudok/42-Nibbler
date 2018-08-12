@@ -23,10 +23,10 @@ responseType NcuresesWindow::getResponse()
 	}
 }
 
-void NcuresesWindow::drow(std::vector<std::vector<size_t>> const& gameState)
+void NcuresesWindow::draw(std::vector<std::vector<size_t>> const& gameState)
 {
 	window_ = newwin(height_ + 2, width_ + 2, 0, 0);
-	drowGameState(window_, gameState);
+	drawGameState(window_, gameState);
 	keypad(window_, TRUE);
 	nodelay(window_, FALSE);
 	box(window_, 0, 0);
@@ -47,7 +47,7 @@ void NcuresesWindow::closeWindow()
 	endwin();
 }
 
-void NcuresesWindow::drowGameState(WINDOW* window_,
+void NcuresesWindow::drawGameState(WINDOW* window_,
 	std::vector<std::vector<size_t>> const& gameState)
 {
 	for (size_t i = 0; i < height_; ++i){
