@@ -4,6 +4,8 @@
 enum responseType { noResponse, left, right, up, down,
 		toNcurses, toDummy, endGame };
 
+constexpr size_t nbResponses = 8;
+
 enum gameFieldCellType { empty, body, head, food };
 
 class IWindow

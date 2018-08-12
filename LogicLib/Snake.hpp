@@ -14,7 +14,7 @@ public:
 	using direction = responseType;
 	Snake(size_t width, size_t height);
 	void fillMap(gameField&) const;
-	void move(const direction);
+	void move(const direction = noResponse);
 	bool isOutOfField() const;
 private:
 	void updateDirection(const direction newDirection);

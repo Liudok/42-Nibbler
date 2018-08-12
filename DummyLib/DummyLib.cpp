@@ -20,7 +20,7 @@ responseType DummyWindow::getResponse()
 	std::cout << "\'z\' - to switch to ncurses mode" << std::endl;
 	std::cout << "\'q\' - to switch to dummy mode" << std::endl;
 	std::cout << "And then hit Enter..." << std::endl;
-	const auto response = std::cin.get();
+	const char response = std::cin.get(); std::cin.ignore();
 	switch(response){
 		case 'q': return endGame;
 		case 'a': return left;

@@ -17,11 +17,22 @@ LogicUnit::LogicUnit() : libraries_(initLibraries()),
 
 void LogicUnit::loopTheGame()
 {
-	currentLibraryIndex_ = dummy;
 	windows_[currentLibraryIndex_]->openWindow(width, height);
 	windows_[currentLibraryIndex_]->drow(gameField_);
-	while (true)
-		updateGameState(windows_[currentLibraryIndex_]->getResponse());
+	std::function<void()> reactFunctions[nbResponses] = {
+		std::bind(&LogicUnit::reactToNoResponse, this),
+		std::bind(&LogicUnit::reactToLeft, this),
+		std::bind(&LogicUnit::reactToRight, this),
+		std::bind(&LogicUnit::reactToUp, this),
+		std::bind(&LogicUnit::reactToDown, this),
+		std::bind(&LogicUnit::reactToToNcurses, this),
+		std::bind(&LogicUnit::reactToToDummy, this),
+		std::bind(&LogicUnit::reactToEndGame, this) };
+	while (!endOfGame_){
+		const auto response = windows_[currentLibraryIndex_]->getResponse();
+		reactFunctions[response]();
+	}
+	windows_[currentLibraryIndex_]->closeWindow();
 }
 
 auto LogicUnit::initLibraries()
@@ -54,47 +65,81 @@ auto LogicUnit::initWindows()
 	return result;
 }
 
-void LogicUnit::updateGameState(responseType response)
+void LogicUnit::reactToNoResponse()
 {
-	switch(response){
-		case noResponse:
-			windows_[currentLibraryIndex_]->drow(gameField_);
-			break;
-		case endGame:
-			windows_[currentLibraryIndex_]->closeWindow();
-			exit(0);
-		case left:
-			snake_.move(left);
-			snake_.fillMap(gameField_);
-			windows_[currentLibraryIndex_]->drow(gameField_);
-			break;
-		case right:
-			snake_.move(right);
-			snake_.fillMap(gameField_);
-			windows_[currentLibraryIndex_]->drow(gameField_);
-			break;
-		case up:
-			snake_.move(up);
-			snake_.fillMap(gameField_);
-			windows_[currentLibraryIndex_]->drow(gameField_);
-			break;
-		case down:
-			snake_.move(down);
-			snake_.fillMap(gameField_);
-			windows_[currentLibraryIndex_]->drow(gameField_);
-			break;
-		case toNcurses:
-			windows_[currentLibraryIndex_]->closeWindow();
-			currentLibraryIndex_ = ncurses;
-			windows_[currentLibraryIndex_]->openWindow(width, height);
-			windows_[currentLibraryIndex_]->drow(gameField_);
-			break;
-		case toDummy:
-			windows_[currentLibraryIndex_]->closeWindow();
-			currentLibraryIndex_ = dummy;
-			windows_[currentLibraryIndex_]->openWindow(width, height);
-			windows_[currentLibraryIndex_]->drow(gameField_);
+	snake_.move();
+	if (snake_.isOutOfField()){
+		endOfGame_ = true;
+		return;
 	}
+	snake_.fillMap(gameField_);
+	windows_[currentLibraryIndex_]->drow(gameField_);
+}
+
+void LogicUnit::reactToLeft()
+{
+	snake_.move(left);
+	if (snake_.isOutOfField()){
+		endOfGame_ = true;
+		return;
+	}
+	snake_.fillMap(gameField_);
+	windows_[currentLibraryIndex_]->drow(gameField_);
+}
+
+void LogicUnit::reactToRight()
+{
+	snake_.move(right);
+	if (snake_.isOutOfField()){
+		endOfGame_ = true;
+		return;
+	}
+	snake_.fillMap(gameField_);
+	windows_[currentLibraryIndex_]->drow(gameField_);
+}
+
+void LogicUnit::reactToUp()
+{
+	snake_.move(up);
+	if (snake_.isOutOfField()){
+		endOfGame_ = true;
+		return;
+	}
+	snake_.fillMap(gameField_);
+	windows_[currentLibraryIndex_]->drow(gameField_);
+}
+
+void LogicUnit::reactToDown()
+{
+	snake_.move(down);
+	if (snake_.isOutOfField()){
+		endOfGame_ = true;
+		return;
+	}
+	snake_.fillMap(gameField_);
+	windows_[currentLibraryIndex_]->drow(gameField_);
+}
+
+void LogicUnit::reactToToNcurses()
+{
+	windows_[currentLibraryIndex_]->closeWindow();
+	currentLibraryIndex_ = ncurses;
+	windows_[currentLibraryIndex_]->openWindow(width, height);
+	windows_[currentLibraryIndex_]->drow(gameField_);
+}
+
+void LogicUnit::reactToToDummy()
+{
+	windows_[currentLibraryIndex_]->closeWindow();
+	currentLibraryIndex_ = dummy;
+	windows_[currentLibraryIndex_]->openWindow(width, height);
+	windows_[currentLibraryIndex_]->drow(gameField_);
+}
+
+void LogicUnit::reactToEndGame()
+{
+	windows_[currentLibraryIndex_]->closeWindow();
+	endOfGame_ = true;
 }
 
 LogicUnit::~LogicUnit()
