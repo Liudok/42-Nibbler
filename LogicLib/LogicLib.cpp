@@ -1,6 +1,8 @@
 #include "LogicLib.hpp"
 #include <dlfcn.h>
 #include <iostream>
+#include <chrono>
+#include <unistd.h>
 
 int sampleSum(int a, int b)
 {
@@ -28,9 +30,16 @@ void LogicUnit::loopTheGame()
 		std::bind(&LogicUnit::reactToToNcurses, this),
 		std::bind(&LogicUnit::reactToToDummy, this),
 		std::bind(&LogicUnit::reactToEndGame, this) };
+	const auto normalLoopDuration = 700000;
 	while (!endOfGame_){
+		const auto t0 = std::chrono::high_resolution_clock::now();
 		const auto response = windows_[currentLibraryIndex_]->getResponse();
 		reactFunctions[response]();
+		const auto t1 = std::chrono::high_resolution_clock::now();
+		const auto timePassed = (t1-t0).count();
+		const auto delta = normalLoopDuration - timePassed;
+		if (delta > 0)
+			usleep(delta);
 	}
 	windows_[currentLibraryIndex_]->closeWindow();
 }

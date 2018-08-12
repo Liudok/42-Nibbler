@@ -11,6 +11,7 @@ extern "C"
 responseType NcuresesWindow::getResponse()
 {
 	const auto response = wgetch(window_);
+	flushinp();
 	switch(response){
 		case 'q': return endGame;
 		case 'a': return left;
@@ -26,12 +27,12 @@ responseType NcuresesWindow::getResponse()
 void NcuresesWindow::draw(std::vector<std::vector<size_t>> const& gameState)
 {
 	window_ = newwin(height_ + 2, width_ + 2, 0, 0);
-	drawGameState(window_, gameState);
 	keypad(window_, TRUE);
-	nodelay(window_, FALSE);
+	nodelay(window_, TRUE);
 	box(window_, 0, 0);
 	initscr();
 	curs_set(0);
+	drawGameState(window_, gameState);
 	wrefresh(window_);
 }
 
