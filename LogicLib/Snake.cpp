@@ -1,5 +1,8 @@
 #include "Snake.hpp"
 
+Snake::Snake(size_t width, size_t height)
+	: width_(width), height_(height) {}
+
 void Snake::fillMap(gameField& field) const
 {
 	for(auto& line : field)
@@ -14,15 +17,21 @@ void Snake::move(const direction newDirection)
 {
 	updateDirection(newDirection);
 	const auto newHeadPosition = defineNewHeadPosition();
+	const size_t overflow = std::numeric_limits<size_t>::max();
+	if (newHeadPosition.x == width_ || newHeadPosition.x == overflow ||
+		newHeadPosition.y == height_ || newHeadPosition.y == overflow){
+		outOfField_ = true;
+		return;
+	}
 	for (size_t i = body_.size() - 1; i > 0; --i)
 		body_[i] = body_[i - 1];
 	body_[0] = head_;
 	head_ = newHeadPosition;
 }
 
-Point const& Snake::getHeadPosition() const
+bool Snake::isOutOfField() const
 {
-	return head_;
+	return outOfField_;
 }
 
 void Snake::updateDirection(const direction newDirection)

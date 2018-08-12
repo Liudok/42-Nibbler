@@ -9,7 +9,8 @@ int sampleSum(int a, int b)
 
 LogicUnit::LogicUnit() : libraries_(initLibraries()),
 	windows_(initWindows()),
-		gameField_(height, std::vector<size_t>(width, 0))
+		gameField_(height, std::vector<size_t>(width, 0)),
+		snake_(gameField_[0].size(), gameField_.size())
 {
 	snake_.fillMap(gameField_);
 }
@@ -63,37 +64,21 @@ void LogicUnit::updateGameState(responseType response)
 			windows_[currentLibraryIndex_]->closeWindow();
 			exit(0);
 		case left:
-			if (snake_.getHeadPosition().x == 0){
-				windows_[currentLibraryIndex_]->closeWindow();
-				exit(0);
-			}
 			snake_.move(left);
 			snake_.fillMap(gameField_);
 			windows_[currentLibraryIndex_]->drow(gameField_);
 			break;
 		case right:
-			if (snake_.getHeadPosition().x == gameField_[0].size() - 1){
-				windows_[currentLibraryIndex_]->closeWindow();
-				exit(0);
-			}
 			snake_.move(right);
 			snake_.fillMap(gameField_);
 			windows_[currentLibraryIndex_]->drow(gameField_);
 			break;
 		case up:
-			if (snake_.getHeadPosition().y == 0){
-				windows_[currentLibraryIndex_]->closeWindow();
-				exit(0);
-			}
 			snake_.move(up);
 			snake_.fillMap(gameField_);
 			windows_[currentLibraryIndex_]->drow(gameField_);
 			break;
 		case down:
-			if (snake_.getHeadPosition().y == gameField_.size() - 1){
-				windows_[currentLibraryIndex_]->closeWindow();
-				exit(0);
-			}
 			snake_.move(down);
 			snake_.fillMap(gameField_);
 			windows_[currentLibraryIndex_]->drow(gameField_);
