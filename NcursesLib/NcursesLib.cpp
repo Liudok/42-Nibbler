@@ -26,12 +26,14 @@ responseType NcuresesWindow::getResponse()
 
 void NcuresesWindow::draw(std::vector<std::vector<size_t>> const& gameState)
 {
-	window_ = newwin(height_ + 2, width_ + 2, 0, 0);
-	keypad(window_, TRUE);
-	nodelay(window_, TRUE);
-	box(window_, 0, 0);
-	initscr();
-	curs_set(0);
+	if (!window_){
+		window_ = newwin(height_ + 2, width_ + 2, 0, 0);
+		keypad(window_, TRUE);
+		nodelay(window_, TRUE);
+		box(window_, 0, 0);
+		initscr();
+		curs_set(0);
+	}
 	drawGameState(window_, gameState);
 	wrefresh(window_);
 }
