@@ -12,10 +12,10 @@ public:
 	void loopTheGame();
 	~LogicUnit();
 private:
-	enum libraryType { ncurses, dummy };
-	static constexpr size_t nbLibraries = 2;
-	static constexpr size_t height = 30;
-	static constexpr size_t width = 50;
+	enum libraryType { ncurses, dummy, sdl };
+	static constexpr size_t nbLibraries = 3;
+	static constexpr size_t height = 500;
+	static constexpr size_t width = 300;
 	using ptrToLibraryType = void*;
 	using windowPtr = std::unique_ptr<IWindow>;
 	using libraryIndex = size_t;
@@ -24,7 +24,7 @@ private:
 	std::vector<windowPtr> initWindows();
 	std::array<ptrToLibraryType, nbLibraries> libraries_;
 	std::vector<windowPtr> windows_;
-	libraryIndex currentLibraryIndex_ = ncurses;
+	libraryIndex currentLibraryIndex_ = sdl;
 	gameField gameField_;
 	Snake snake_;
 	bool endOfGame_ = false;

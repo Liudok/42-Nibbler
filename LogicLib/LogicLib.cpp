@@ -49,7 +49,7 @@ auto LogicUnit::initLibraries()
 {
 	std::array<ptrToLibraryType, nbLibraries> libraries;
 	const char* libraryNames[nbLibraries] =
-		{ "libNcursesLib.dylib", "libDummyLib.dylib"};
+		{ "libNcursesLib.dylib", "libDummyLib.dylib", "libSdlLib.dylib"};
 	for (size_t currentLib = 0; currentLib < nbLibraries; ++currentLib){
 		libraries[currentLib] =
 			dlopen(libraryNames[currentLib], RTLD_LAZY | RTLD_LOCAL);
