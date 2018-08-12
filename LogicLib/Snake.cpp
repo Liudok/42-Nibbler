@@ -8,16 +8,28 @@ void Snake::fillMap(gameField& field) const
 	for(auto& line : field)
 		for (auto& cell : line)
 			cell = empty;
-	field[head_.y][head_.x] = head;
+	field[foodPos_.y][foodPos_.x] = food;
+	field[headPos_.y][headPos_.x] = head;
 	for (auto const& bodyPart : body_)
 		field[bodyPart.y][bodyPart.x] = body;
 }
 
 void Snake::move(const direction newDirection)
 {
+	const size_t overflow = std::numeric_limits<size_t>::max();
+	if (headPos_ == foodPos_){
+		auto newBodyPart = body_[body_.size() - 1];
+		--newBodyPart.x;
+		if (newBodyPart.x == overflow){
+			outOfField_ = true;
+			return;
+		}
+		body_.push_back(std::move(newBodyPart));
+		srand(time(NULL));
+		foodPos_ = {rand() % width_, rand() % height_};
+	}
 	updateDirection(newDirection);
 	const auto newHeadPosition = defineNewHeadPosition();
-	const size_t overflow = std::numeric_limits<size_t>::max();
 	if (newHeadPosition.x == width_ || newHeadPosition.x == overflow ||
 		newHeadPosition.y == height_ || newHeadPosition.y == overflow){
 		outOfField_ = true;
@@ -25,8 +37,8 @@ void Snake::move(const direction newDirection)
 	}
 	for (size_t i = body_.size() - 1; i > 0; --i)
 		body_[i] = body_[i - 1];
-	body_[0] = head_;
-	head_ = newHeadPosition;
+	body_[0] = headPos_;
+	headPos_ = newHeadPosition;
 }
 
 bool Snake::isOutOfField() const
@@ -42,7 +54,7 @@ void Snake::updateDirection(const direction newDirection)
 
 Point Snake::defineNewHeadPosition() const
 {
-	Point result = head_;
+	Point result = headPos_;
 	if (currentDirection_ == left)
 		--result.x;
 	else if (currentDirection_ == right)
