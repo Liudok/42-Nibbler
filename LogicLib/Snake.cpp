@@ -9,9 +9,10 @@ void Snake::fillMap(gameField& field) const
 		for (auto& cell : line)
 			cell = empty;
 	field[foodPos_.y][foodPos_.x] = food;
-	field[headPos_.y][headPos_.x] = head;
 	for (auto const& bodyPart : body_)
 		field[bodyPart.y][bodyPart.x] = body;
+	field[headPos_.y][headPos_.x] =
+		collapsed() ? collision : head;
 }
 
 void Snake::move(const direction newDirection)
@@ -39,11 +40,13 @@ void Snake::move(const direction newDirection)
 		body_[i] = body_[i - 1];
 	body_[0] = headPos_;
 	headPos_ = newHeadPosition;
+	if (headHitBody())
+		hitBody_ = true;
 }
 
-bool Snake::isOutOfField() const
+bool Snake::collapsed() const
 {
-	return outOfField_;
+	return outOfField_ || hitBody_;
 }
 
 void Snake::updateDirection(const direction newDirection)
@@ -76,5 +79,13 @@ bool Snake::validNewDirection(const direction newDirection) const
 	if ((currentDirection_ == up || currentDirection_ == down) && 
 		(newDirection == left || newDirection == right))
 		return true;
+	return false;
+}
+
+bool Snake::headHitBody() const
+{
+	for (auto const& bodyPart : body_)
+		if (bodyPart == headPos_)
+			return true;
 	return false;
 }

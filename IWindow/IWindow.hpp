@@ -6,7 +6,7 @@ enum responseType { noResponse, left, right, up, down,
 
 constexpr size_t nbResponses = 8;
 
-enum gameFieldCellType { empty, body, head, food };
+enum gameFieldCellType { empty, body, head, food, collision };
 
 class IWindow
 {
