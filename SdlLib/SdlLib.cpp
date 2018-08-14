@@ -1,5 +1,6 @@
 #include "SdlLib.hpp"
-
+#include <iostream>
+#include <unistd.h>
 extern "C"
 {
 	IWindow* create()
@@ -17,13 +18,13 @@ while (SDL_PollEvent(&event_))
 		else if (event_.type == SDL_KEYDOWN )
 		{
 			if (event_.key.keysym.sym == SDLK_UP || event_.key.keysym.sym == SDLK_w)
-				return left;
-			else if (event_.key.keysym.sym == SDLK_DOWN || event_.key.keysym.sym == SDLK_s)
-				return right;
-			else if (event_.key.keysym.sym == SDLK_LEFT || event_.key.keysym.sym == SDLK_a)
 				return up;
-			else if (event_.key.keysym.sym == SDLK_RIGHT || event_.key.keysym.sym == SDLK_d)
+			else if (event_.key.keysym.sym == SDLK_DOWN || event_.key.keysym.sym == SDLK_s)
 				return down;
+			else if (event_.key.keysym.sym == SDLK_LEFT || event_.key.keysym.sym == SDLK_a)
+				return left;
+			else if (event_.key.keysym.sym == SDLK_RIGHT || event_.key.keysym.sym == SDLK_d)
+				return right;
 			else if (event_.key.keysym.sym == SDLK_z)
 				return toNcurses;
 			else if (event_.key.keysym.sym == SDLK_x)
@@ -35,18 +36,17 @@ while (SDL_PollEvent(&event_))
 
 void SDLWindow::draw(std::vector<std::vector<size_t>> const& gameState)
 {
-	SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 255);
 	gameStateToPixels(gameState);
-	SDL_UpdateTexture(canvas_, NULL, pixels_, width_ << 2);
 	SDL_RenderClear(renderer_);
 	SDL_RenderCopy(renderer_, canvas_, NULL, NULL);
 }
 
 void SDLWindow::openWindow(size_t width, size_t height)
 {
-	width_ = width * 10;
-	height_ = height * 10;
-	SDL_Init(SDL_INIT_VIDEO);
+	width_ = width * 10 ;
+	height_ = height * 10 ;
+	std::cout << "width_ = " << width_<< "height_= "<<height_ << std::endl;
+	SDL_Init(SDL_INIT_EVERYTHING);
 
 	window_ = SDL_CreateWindow(
 		"Nibbler", 
@@ -54,55 +54,43 @@ void SDLWindow::openWindow(size_t width, size_t height)
 		SDL_WINDOWPOS_CENTERED,
 		width_,
 		height_,
-		0);
+		SDL_WINDOW_OPENGL |SDL_WINDOW_INPUT_GRABBED |
+										SDL_WINDOW_SHOWN);
 
 	renderer_ = SDL_CreateRenderer(
 		window_,
 		-1,
 		SDL_RENDERER_ACCELERATED);
 
-	canvas_ = SDL_CreateTexture(
-		renderer_,
-		SDL_PIXELFORMAT_ARGB8888,
-		SDL_TEXTUREACCESS_TARGET,
-		width_,
-		height_);
-	SDL_SetRenderDrawColor(renderer_, 0, 255, 0, 255);
-	if (pixels_ != nullptr)
-		delete pixels_;
-	pixels_ = (int*)malloc(sizeof(int) * width_ * height_);
-	bzero(pixels_, sizeof(int) * width_ * height_);
-
 }
 
 
 void SDLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameState)
 {
-	const size_t nbRows = gameState.size() * 10;
-	const size_t nbColumns = gameState[0].size() * 10;
-	for (size_t i = 0; i < nbRows; ++i){
-		for (size_t j = 0; j < nbColumns; ++j)
+	for (size_t i = 0; i < height_; i+=10)
+	{
+		for (size_t j = 0; j < width_; j+=10)
 		{
 			SDL_Rect rectangle;
 
-			rectangle.x = i;
-			rectangle.y = j;
+			rectangle.x = j ;
+			rectangle.y = i ;
 			rectangle.w = 10;
 			rectangle.h = 10;
-			SDL_RenderFillRect(renderer_, &rectangle);
 			if (gameState[i / 10][j / 10] == 0)
 			{
 				SDL_SetRenderDrawColor(renderer_, 214, 48, 250, 255);
-				SDL_RenderDrawRect( renderer_, &rectangle );	
+				SDL_RenderFillRect(renderer_, &rectangle);
 			}
 			else
 			{
-				SDL_SetRenderDrawColor( renderer_, 0, 255,0, 255 );
-				SDL_RenderDrawRect( renderer_, &rectangle );
+				SDL_SetRenderDrawColor( renderer_, 0, 255, 0, 255 );
+				SDL_RenderFillRect(renderer_, &rectangle);
 			}
 		}
 	}
 	drawBorders();
+	usleep(80000);
 	SDL_RenderPresent( renderer_ );
 }
 
@@ -138,7 +126,6 @@ void SDLWindow::drawBorders()
 
 void SDLWindow::closeWindow()
 {
-	//delete pixels_;
 	SDL_DestroyTexture(canvas_);
 	SDL_DestroyRenderer(renderer_);
 	SDL_DestroyWindow(window_);

@@ -20,11 +20,10 @@ class SDLWindow : public IWindow
 
 		void			gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
 		void 			drawBorders();
-		size_t			width_ = 300;
-		size_t			height_ = 500;
+		size_t			width_;
+		size_t			height_;
 		SDL_Window		*window_ = nullptr;
 		SDL_Renderer	*renderer_;
 		SDL_Texture		*canvas_;
-		SDL_Event		event_;
-		int				*pixels_ = nullptr;
+		SDL_Event  		event_;
 };
