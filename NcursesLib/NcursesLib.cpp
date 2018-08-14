@@ -47,6 +47,7 @@ void NcuresesWindow::openWindow(size_t width, size_t height)
 void NcuresesWindow::closeWindow()
 {
 	delwin(window_);
+	window_ = nullptr;
 	endwin();
 }
 
