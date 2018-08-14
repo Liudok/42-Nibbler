@@ -77,7 +77,7 @@ auto LogicUnit::initWindows()
 void LogicUnit::reactToNoResponse()
 {
 	snake_.move();
-	if (snake_.isOutOfField()){
+	if (snake_.collapsed()){
 		endOfGame_ = true;
 		return;
 	}
@@ -88,7 +88,7 @@ void LogicUnit::reactToNoResponse()
 void LogicUnit::reactToLeft()
 {
 	snake_.move(left);
-	if (snake_.isOutOfField()){
+	if (snake_.collapsed()){
 		endOfGame_ = true;
 		return;
 	}
@@ -99,7 +99,7 @@ void LogicUnit::reactToLeft()
 void LogicUnit::reactToRight()
 {
 	snake_.move(right);
-	if (snake_.isOutOfField()){
+	if (snake_.collapsed()){
 		endOfGame_ = true;
 		return;
 	}
@@ -110,7 +110,7 @@ void LogicUnit::reactToRight()
 void LogicUnit::reactToUp()
 {
 	snake_.move(up);
-	if (snake_.isOutOfField()){
+	if (snake_.collapsed()){
 		endOfGame_ = true;
 		return;
 	}
@@ -121,7 +121,7 @@ void LogicUnit::reactToUp()
 void LogicUnit::reactToDown()
 {
 	snake_.move(down);
-	if (snake_.isOutOfField()){
+	if (snake_.collapsed()){
 		endOfGame_ = true;
 		return;
 	}
