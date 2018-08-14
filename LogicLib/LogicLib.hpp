@@ -14,8 +14,8 @@ public:
 private:
 	enum libraryType { ncurses, dummy, sdl };
 	static constexpr size_t nbLibraries = 3;
-	static constexpr size_t height = 500;
-	static constexpr size_t width = 300;
+	static constexpr size_t height = 50;
+	static constexpr size_t width = 30;
 	using ptrToLibraryType = void*;
 	using windowPtr = std::unique_ptr<IWindow>;
 	using libraryIndex = size_t;

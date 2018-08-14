@@ -24,7 +24,7 @@ private:
 	void updateDirection(const direction newDirection);
 	Point defineNewHeadPosition() const;
 	bool validNewDirection(const direction newDirection) const;
-	Point headPos_ {3, 0};
+	Point headPos_ {3, 1};
 	std::vector<Point> body_ {{2, 0}, {1, 0}, {0, 0}, {0, 1}};
 	direction currentDirection_ = right;
 	size_t width_ = 0;

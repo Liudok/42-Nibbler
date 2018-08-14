@@ -14,7 +14,9 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 
 find_package(SDL2 REQUIRED)
+#find_package(SDL2_image REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
+#include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 
 project(Nibbler)
 
@@ -54,7 +56,7 @@ add_executable(Nibbler main.cpp)
 
 add_executable(Tester ${TesterSources})
 
-target_link_libraries(SdlLib ${SDL2_LIBRARIES})
+target_link_libraries(SdlLib ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
 
 target_link_libraries(NcursesLib ncurses)
 
