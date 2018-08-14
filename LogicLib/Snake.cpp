@@ -9,9 +9,10 @@ void Snake::fillMap(gameField& field) const
 		for (auto& cell : line)
 			cell = empty;
 	field[foodPos_.y][foodPos_.x] = food;
-	field[headPos_.y][headPos_.x] = head;
 	for (auto const& bodyPart : body_)
 		field[bodyPart.y][bodyPart.x] = body;
+	field[headPos_.y][headPos_.x] =
+		collapsed() ? collision : head;
 }
 
 void Snake::move(const direction newDirection)
