@@ -41,6 +41,7 @@ void LogicUnit::loopTheGame()
 		if (delta > 0)
 			usleep(delta);
 	}
+	usleep(normalLoopDuration * 3);
 	windows_[currentLibraryIndex_]->closeWindow();
 }
 
@@ -77,56 +78,41 @@ auto LogicUnit::initWindows()
 void LogicUnit::reactToNoResponse()
 {
 	snake_.move();
-	if (snake_.isOutOfField()){
-		endOfGame_ = true;
-		return;
-	}
 	snake_.fillMap(gameField_);
 	windows_[currentLibraryIndex_]->draw(gameField_);
+	endOfGame_ = snake_.collapsed();
 }
 
 void LogicUnit::reactToLeft()
 {
 	snake_.move(left);
-	if (snake_.isOutOfField()){
-		endOfGame_ = true;
-		return;
-	}
 	snake_.fillMap(gameField_);
 	windows_[currentLibraryIndex_]->draw(gameField_);
+	endOfGame_ = snake_.collapsed();
 }
 
 void LogicUnit::reactToRight()
 {
 	snake_.move(right);
-	if (snake_.isOutOfField()){
-		endOfGame_ = true;
-		return;
-	}
 	snake_.fillMap(gameField_);
 	windows_[currentLibraryIndex_]->draw(gameField_);
+	endOfGame_ = snake_.collapsed();
 }
 
 void LogicUnit::reactToUp()
 {
 	snake_.move(up);
-	if (snake_.isOutOfField()){
-		endOfGame_ = true;
-		return;
-	}
 	snake_.fillMap(gameField_);
 	windows_[currentLibraryIndex_]->draw(gameField_);
+	endOfGame_ = snake_.collapsed();
 }
 
 void LogicUnit::reactToDown()
 {
 	snake_.move(down);
-	if (snake_.isOutOfField()){
-		endOfGame_ = true;
-		return;
-	}
 	snake_.fillMap(gameField_);
 	windows_[currentLibraryIndex_]->draw(gameField_);
+	endOfGame_ = snake_.collapsed();
 }
 
 void LogicUnit::reactToToNcurses()

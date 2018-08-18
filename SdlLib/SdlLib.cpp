@@ -43,8 +43,8 @@ void SDLWindow::draw(std::vector<std::vector<size_t>> const& gameState)
 
 void SDLWindow::openWindow(size_t width, size_t height)
 {
-	width_ = width * 10 ;
-	height_ = height * 10 ;
+	width_ = width * 10 + 10;
+	height_ = height * 10 + 10;
 	std::cout << "width_ = " << width_<< "height_= "<<height_ << std::endl;
 	SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -67,30 +67,37 @@ void SDLWindow::openWindow(size_t width, size_t height)
 
 void SDLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameState)
 {
-	for (size_t i = 0; i < height_; i+=10)
+	for (size_t i = 0; i < height_ - 10; i += 10)
 	{
-		for (size_t j = 0; j < width_; j+=10)
+		for (size_t j = 0; j < width_ - 10; j += 10)
 		{
 			SDL_Rect rectangle;
 
-			rectangle.x = j ;
-			rectangle.y = i ;
+			rectangle.x = j + 10;
+			rectangle.y = i + 10;
 			rectangle.w = 10;
 			rectangle.h = 10;
 			if (gameState[i / 10][j / 10] == 0)
 			{
-				SDL_SetRenderDrawColor(renderer_, 214, 48, 250, 255);
+				SDL_SetRenderDrawColor( renderer_, 79, 132, 196, 255 );
 				SDL_RenderFillRect(renderer_, &rectangle);
 			}
 			else
 			{
-				SDL_SetRenderDrawColor( renderer_, 0, 255, 0, 255 );
+				if (gameState[i / 10][j / 10] == 1)
+					SDL_SetRenderDrawColor( renderer_, 127, 255, 212, 255 );
+				else if (gameState[i / 10][j / 10] == 2)
+					SDL_SetRenderDrawColor( renderer_, 64,224,208, 255 );
+				else if (gameState[i / 10][j / 10] == 3)
+					SDL_SetRenderDrawColor( renderer_, 255,105,180, 255 );
+				else if (gameState[i / 10][j / 10] == 4)
+					SDL_SetRenderDrawColor( renderer_, 248, 14, 50, 255 );
 				SDL_RenderFillRect(renderer_, &rectangle);
 			}
 		}
 	}
 	drawBorders();
-	usleep(80000);
+	usleep(90000);
 	SDL_RenderPresent( renderer_ );
 }
 
@@ -100,7 +107,7 @@ void SDLWindow::drawBorders()
 	SDL_Rect bottom;
 	SDL_Rect right;
 	SDL_Rect left;
-	SDL_SetRenderDrawColor(renderer_, 255, 214, 255, 255);
+	SDL_SetRenderDrawColor(renderer_, 95, 158, 160, 255);
 	
 	top.x = 0;
 	top.y = 0;
