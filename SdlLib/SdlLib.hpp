@@ -20,10 +20,12 @@ class SDLWindow : public IWindow
 
 		void			gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
 		void 			drawBorders();
+		bool			isPaused();
 		size_t			width_;
 		size_t			height_;
 		SDL_Window		*window_ = nullptr;
 		SDL_Renderer	*renderer_;
 		SDL_Texture		*canvas_;
 		SDL_Event  		event_;
+		bool paused_ = false;
 };

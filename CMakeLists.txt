@@ -13,10 +13,23 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 
+set(CMAKE_FIND_LIBRARY_SUFFIXES ".dylib")
+set(CMAKE_FIND_LIBRARY_PREFIXES "lib")
+set(CMAKE_SHARED_LIBRARY_PREFIX "lib")
+set(CMAKE_SHARED_LIBRARY_SUFFIX ".dylib")
+
+
 find_package(SDL2 REQUIRED)
 #find_package(SDL2_image REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 #include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
+
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+#find_package(SFML REQUIRED system window graphics)
+#if (SFML_FOUND)
+#    include_directories(${SFML_INCLUDE_DIR})
+#    target_link_libraries(SFMLDemo ${SFML_LIBRARIES})
+#endif()
 
 project(Nibbler)
 

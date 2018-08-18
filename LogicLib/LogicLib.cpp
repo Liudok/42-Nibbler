@@ -29,7 +29,8 @@ void LogicUnit::loopTheGame()
 		std::bind(&LogicUnit::reactToDown, this),
 		std::bind(&LogicUnit::reactToToNcurses, this),
 		std::bind(&LogicUnit::reactToToDummy, this),
-		std::bind(&LogicUnit::reactToEndGame, this) };
+		std::bind(&LogicUnit::reactToEndGame, this),
+		std::bind(&LogicUnit::pauseTheGame, this) };
 	const auto normalLoopDuration = 700000;
 	while (!endOfGame_){
 		const auto t0 = std::chrono::high_resolution_clock::now();
@@ -135,6 +136,16 @@ void LogicUnit::reactToEndGame()
 {
 	windows_[currentLibraryIndex_]->closeWindow();
 	endOfGame_ = true;
+}
+
+void LogicUnit::pauseTheGame()
+{
+	//snake_.move(down);
+	//snake_.fillMap(gameField_);
+	paused_ = true;
+	usleep(1000000);
+	//windows_[currentLibraryIndex_]->draw(gameField_);
+	endOfGame_ = false;
 }
 
 LogicUnit::~LogicUnit()

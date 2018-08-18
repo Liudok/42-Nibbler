@@ -17,6 +17,11 @@ while (SDL_PollEvent(&event_))
 			return endGame;
 		else if (event_.type == SDL_KEYDOWN )
 		{
+			if (isPaused() && event_.key.keysym.sym != SDLK_SPACE)
+				return pauseGame;
+			else
+			{
+				paused_ = false;
 			if (event_.key.keysym.sym == SDLK_UP || event_.key.keysym.sym == SDLK_w)
 				return up;
 			else if (event_.key.keysym.sym == SDLK_DOWN || event_.key.keysym.sym == SDLK_s)
@@ -25,12 +30,20 @@ while (SDL_PollEvent(&event_))
 				return left;
 			else if (event_.key.keysym.sym == SDLK_RIGHT || event_.key.keysym.sym == SDLK_d)
 				return right;
+			else if (event_.key.keysym.sym == SDLK_SPACE)
+				{
+					paused_ = true;
+					return pauseGame;
+				}
 			else if (event_.key.keysym.sym == SDLK_z)
 				return toNcurses;
 			else if (event_.key.keysym.sym == SDLK_x)
 				return toDummy;
+			}
 		}
 	}
+	if (isPaused() && event_.key.keysym.sym != SDLK_SPACE)
+				return pauseGame;
 	return noResponse;
 }
 
@@ -87,9 +100,9 @@ void SDLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameSt
 				if (gameState[i / 10][j / 10] == 1)
 					SDL_SetRenderDrawColor( renderer_, 127, 255, 212, 255 );
 				else if (gameState[i / 10][j / 10] == 2)
-					SDL_SetRenderDrawColor( renderer_, 64,224,208, 255 );
+					SDL_SetRenderDrawColor( renderer_, 64, 224, 208, 255 );
 				else if (gameState[i / 10][j / 10] == 3)
-					SDL_SetRenderDrawColor( renderer_, 255,105,180, 255 );
+					SDL_SetRenderDrawColor( renderer_, 255, 105, 180, 255 );
 				else if (gameState[i / 10][j / 10] == 4)
 					SDL_SetRenderDrawColor( renderer_, 248, 14, 50, 255 );
 				SDL_RenderFillRect(renderer_, &rectangle);
@@ -129,6 +142,11 @@ void SDLWindow::drawBorders()
 	left.w = 10;
 	left.h = height_;
 	SDL_RenderFillRect(renderer_, &left);
+}
+
+bool SDLWindow::isPaused()
+{
+	return paused_;
 }
 
 void SDLWindow::closeWindow()

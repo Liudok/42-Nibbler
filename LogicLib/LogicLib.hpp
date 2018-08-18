@@ -28,6 +28,7 @@ private:
 	gameField gameField_;
 	Snake snake_;
 	bool endOfGame_ = false;
+	bool paused_ = false;
 	void reactToNoResponse();
 	void reactToLeft();
 	void reactToRight();
@@ -36,4 +37,5 @@ private:
 	void reactToToNcurses();
 	void reactToToDummy();
 	void reactToEndGame();
+	void pauseTheGame();
 };
