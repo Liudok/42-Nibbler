@@ -12,8 +12,8 @@ public:
 	void loopTheGame();
 	~LogicUnit();
 private:
-	enum libraryType { ncurses, dummy, sdl };
-	static constexpr size_t nbLibraries = 3;
+	enum libraryType { ncurses, dummy, sdl, sfml};
+	static constexpr size_t nbLibraries = 4;
 	static constexpr size_t height = 50;
 	static constexpr size_t width = 30;
 	using ptrToLibraryType = void*;
@@ -24,7 +24,7 @@ private:
 	std::vector<windowPtr> initWindows();
 	std::array<ptrToLibraryType, nbLibraries> libraries_;
 	std::vector<windowPtr> windows_;
-	libraryIndex currentLibraryIndex_ = sdl;
+	libraryIndex currentLibraryIndex_ = sfml;
 	gameField gameField_;
 	Snake snake_;
 	bool endOfGame_ = false;

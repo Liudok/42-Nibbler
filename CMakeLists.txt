@@ -25,11 +25,8 @@ include_directories(${SDL2_INCLUDE_DIRS})
 #include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
-#find_package(SFML REQUIRED system window graphics)
-#if (SFML_FOUND)
-#    include_directories(${SFML_INCLUDE_DIR})
-#    target_link_libraries(SFMLDemo ${SFML_LIBRARIES})
-#endif()
+find_package(SFML REQUIRED system window graphics)
+
 
 project(Nibbler)
 
@@ -61,6 +58,20 @@ file(GLOB SdlLibSources
 
 add_library(SdlLib SHARED ${SdlLibSources})
 
+file(GLOB SfmlLibSources
+	${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
+
+set(${SFML_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/SFML/include/SFML)
+include_directories(${SFML_INCLUDE_DIR})
+add_library(SfmlLib SHARED ${SfmlLibSources})
+target_link_libraries(SfmlLib ${SFML_LIBRARIES})
+#if (SFML_FOUND)
+    
+    
+#endif()
+
 file(GLOB TesterSources
 	${CMAKE_CURRENT_SOURCE_DIR}/Tester/*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Tester/*.hpp)
@@ -73,7 +84,7 @@ target_link_libraries(SdlLib ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
 
 target_link_libraries(NcursesLib ncurses)
 
-target_link_libraries(MyLogicLib NcursesLib DummyLib SdlLib)
+target_link_libraries(MyLogicLib NcursesLib DummyLib SdlLib SfmlLib)
 
 target_link_libraries(Nibbler MyLogicLib)
 
