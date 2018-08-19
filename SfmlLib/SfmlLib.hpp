@@ -1,7 +1,7 @@
 #pragma once
 #include "../IWindow/IWindow.hpp"
-#include  "SFML/include/SFML/Graphics.hpp"
-
+#include "SFML/include/SFML/Graphics.hpp"
+#include "SFML/include/SFML/Window.hpp"
 extern "C"
 {
 	IWindow* create();

@@ -1,21 +1,14 @@
-#brew update
-#brew install sfml
-#git clone https://github.com/SFML/SFML.git ~/Library/Frameworks/SFML
-#cd SFML
-#cmake CMakeLists.txt
-
 mkdir Build
-cd SfmlLib
-cmake --version;
-
 if [[ $? == 127 ]]; then
 	echo "cmake is not installed, please install it first" ;
 	exit ;
 fi
 
+cd SfmlLib
 git clone https://github.com/SFML/SFML.git
-
 (cd SFML && cmake . && make);
+cp -R SFML/include/SFML/ /usr/local/include/SFML/
+cp -R SFML/lib/ /usr/local/lib/
 
 cd ../Build
 cmake ..
