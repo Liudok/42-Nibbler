@@ -28,9 +28,11 @@ responseType SFMLWindow::getResponse()
             switch (event.key.code)
             {
             case sf::Keyboard::Z:
+            	window_->close();
                 return toNcurses;
                 break;
             case sf::Keyboard::Num1:
+            	window_->close();
                 return toSDL;
                 break;
             case sf::Keyboard::Down:
