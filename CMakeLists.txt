@@ -18,24 +18,19 @@ set(CMAKE_FIND_LIBRARY_PREFIXES "lib")
 set(CMAKE_SHARED_LIBRARY_PREFIX "lib")
 set(CMAKE_SHARED_LIBRARY_SUFFIX ".dylib")
 
-
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/Modules" ${CMAKE_MODULE_PATH})
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
-
-message( "!!!+++++++ ${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/SFML/include/SFML/ ")
 set(${SFML_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/SFML/include/SFML/")
-message( "++++++++++ ${SFML_INCLUDE_DIR} ")
+
 find_package(SFML COMPONENTS system window graphics REQUIRED )
 if (SFML_FOUND)
-    message( "++++++++++ ${SFML_INCLUDE_DIR} ")
 	include_directories(${SFML_INCLUDE_DIR})
 else()
-    message("/n -> SFML not found")
+	message(FATAL_ERROR "Unable to configure Sfml")
 endif()
-
 
 project(Nibbler)
 

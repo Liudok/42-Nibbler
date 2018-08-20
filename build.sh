@@ -2,47 +2,37 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 EOC='\033[0m'
 
-brewPath=$(command -v brew)
+brewPath=$(command -v cmake)
 if [ "$brewPath" == "" ]
 then
-	echo "${RED}Please install brew.${EOC}"
+	echo "${RED}Please install cmake.${EOC}"
 	exit 1
 else
-	echo "${GREEN}Brew found${EOC}"
+	echo "${GREEN}Cmake found${EOC}"
 fi
 
-sdl2Installed=$(brew list | grep sdl2)
-if [ "$sdl2Installed" == "" ]
+sfmlPath=SfmlLib/SFML
+if [ ! -d "$sfmlPath" ]
 then
-	echo "Insalling sdl2..."
-	brew install sdl2
-	echo "${GREEN}sdl2 installed${EOC}"
+	echo "${GREEN}Installing sfml...${EOC}"
+	cd SfmlLib
+	git clone https://github.com/SFML/SFML.git
+	(cd SFML && cmake . && make);
+	cp -R SFML/include/SFML/ /usr/local/include/SFML/
+	cp -R SFML/lib/ /usr/local/lib/
+	cd ..
+	echo "${GREEN}Sfml installed${EOC}"
 else
-	echo "${GREEN}sdl2 found${EOC}"
+	echo "${GREEN}Sfml found${EOC}"
 fi
 
-sfmlInstalled=$(brew list | grep sfml)
-if [ "$sfmlInstalled" == "" ]
+buildPath=Build
+if [ -d "$sfmlPath" ]
 then
-	echo "Insalling sfml..."
-	brew install sfml
-	echo "${GREEN}sfml installed${EOC}"
-else
-	echo "${GREEN}sfml found${EOC}"
+	rm -rf Build
 fi
 
 mkdir Build
-if [[ $? == 127 ]]; then
-	echo "cmake is not installed, please install it first" ;
-	exit ;
-fi
-
-cd SfmlLib
-git clone https://github.com/SFML/SFML.git
-(cd SFML && cmake . && make);
-cp -R SFML/include/SFML/ /usr/local/include/SFML/
-cp -R SFML/lib/ /usr/local/lib/
-
-cd ../Build
+cd Build
 cmake ..
 cmake --build .
