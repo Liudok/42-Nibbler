@@ -37,6 +37,8 @@ while (SDL_PollEvent(&event_))
 				}
 			else if (event_.key.keysym.sym == SDLK_z)
 				return toNcurses;
+			else if (event_.key.keysym.sym == SDLK_c)
+				return toSFML;
 			else if (event_.key.keysym.sym == SDLK_x)
 				return toDummy;
 			}

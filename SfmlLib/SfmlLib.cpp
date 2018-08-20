@@ -1,6 +1,7 @@
 #include "SfmlLib.hpp"
 #include <iostream>
 #include <unistd.h>
+
 extern "C"
 {
 	IWindow* create()
@@ -11,64 +12,55 @@ extern "C"
 
 responseType SFMLWindow::getResponse()
 {
-
-
-// while (window_->isOpen())
-//     {
-        sf::Event e;
-        while (window_->pollEvent(e))
+	sf::Event event;
+	while (window_->pollEvent(event))
+    {
+        switch (event.type)
         {
-            if (e.type == sf::Event::Closed)
-            {
-                window_->close();
-            }
-        }
+        case sf::Event::Closed:
+        	window_->close();
+            return endGame;
+            break;
 
-        
-    // }
-// while (SFML_PollEvent(&event_))
-// 	{
-	// 	if (event_.type == SFML_QUIT || (event_.type == SFML_KEYDOWN && event_.key.keysym.sym == SFMLK_ESCAPE))
-	// 		return endGame;
-	// 	else if (event_.type == SFML_KEYDOWN )
-	// 	{
-	// 		if (isPaused() && event_.key.keysym.sym != SFMLK_SPACE)
-	// 			return pauseGame;
-	// 		else
-	// 		{
-	// 			paused_ = false;
-	// 		if (event_.key.keysym.sym == SFMLK_UP || event_.key.keysym.sym == SFMLK_w)
-	// 			return up;
-	// 		else if (event_.key.keysym.sym == SFMLK_DOWN || event_.key.keysym.sym == SFMLK_s)
-	// 			return down;
-	// 		else if (event_.key.keysym.sym == SFMLK_LEFT || event_.key.keysym.sym == SFMLK_a)
-	// 			return left;
-	// 		else if (event_.key.keysym.sym == SFMLK_RIGHT || event_.key.keysym.sym == SFMLK_d)
-	// 			return right;
-	// 		else if (event_.key.keysym.sym == SFMLK_SPACE)
-	// 			{
-	// 				paused_ = true;
-	// 				return pauseGame;
-	// 			}
-	// 		else if (event_.key.keysym.sym == SFMLK_z)
-	// 			return toNcurses;
-	// 		else if (event_.key.keysym.sym == SFMLK_x)
-	// 			return toDummy;
-	// 		}
-	// 	}
-	// }
-	// if (isPaused() && event_.key.keysym.sym != SFMLK_SPACE)
-	// 			return pauseGame;
+        case sf::Event::KeyPressed:
+            std::cout << "A key has been pressed" << std::endl;
+
+            switch (event.key.code)
+            {
+            case sf::Keyboard::Z:
+                return toNcurses;
+                break;
+            case sf::Keyboard::Num1:
+                return toSDL;
+                break;
+            case sf::Keyboard::Down:
+            	return down;
+            	break;
+            case sf::Keyboard::Up:
+            	return up;
+            	break;
+            case sf::Keyboard::Right:
+            	return right;
+            	break;
+            case sf::Keyboard::Left:
+            	return left;
+            	break;
+            default:
+					break;
+            }
+        default:
+        	return noResponse;
+				break;
+        }
+    }
 	return noResponse;
 }
 
 void SFMLWindow::draw(std::vector<std::vector<size_t>> const& gameState)
 {
-	 gameStateToPixels(gameState);
-	 window_->clear();
-        window_->display();
-	// SFML_RenderClear(renderer_);
-	// SFML_RenderCopy(renderer_, canvas_, NULL, NULL);
+	window_->clear();
+	gameStateToPixels(gameState);
+	window_->display();
 }
 
 void SFMLWindow::openWindow(size_t width, size_t height)
@@ -77,25 +69,6 @@ void SFMLWindow::openWindow(size_t width, size_t height)
 	height_ = height * 10 + 10;
 	std::cout << "width_ = " << width_<< "height_= "<<height_ << std::endl;
 	window_ = new sf::RenderWindow(sf::VideoMode(width_, height_), "Nibbler - SFML");
-	//sf::RenderWindow window(sf::VideoMode(640, 480), "Window");
-
-    
-	// SFML_Init(SFML_INIT_EVERYTHING);
-
-	// window_ = SFML_CreateWindow(
-	// 	"Nibbler", 
-	// 	SFML_WINDOWPOS_CENTERED,
-	// 	SFML_WINDOWPOS_CENTERED,
-	// 	width_,
-	// 	height_,
-	// 	SFML_WINDOW_OPENGL |SFML_WINDOW_INPUT_GRABBED |
-	// 									SFML_WINDOW_SHOWN);
-
-	// renderer_ = SFML_CreateRenderer(
-	// 	window_,
-	// 	-1,
-	// 	SFML_RENDERER_ACCELERATED);
-
 }
 
 
@@ -105,64 +78,51 @@ void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameS
 	{
 		for (size_t j = 0; j < width_ - 10; j += 10)
 		{
-	// 		SFML_Rect rectangle;
-
-	// 		rectangle.x = j + 10;
-	// 		rectangle.y = i + 10;
-	// 		rectangle.w = 10;
-	// 		rectangle.h = 10;
+			sf::CircleShape circle(5);
+    		circle.setPosition(sf::Vector2f(j + 10, i + 10));
 			if (gameState[i / 10][j / 10] == 0)
 			{
-	// 			SFML_SetRenderDrawColor( renderer_, 79, 132, 196, 255 );
-	// 			SFML_RenderFillRect(renderer_, &rectangle);
+				sf::RectangleShape rectangle(sf::Vector2f(100, 100));
+				rectangle.setPosition(sf::Vector2f(j + 10, i + 10));
+				rectangle.setFillColor(sf::Color(79, 132, 196));
+				window_->draw(rectangle);
 			}
-	// 		else
-	// 		{
-	// 			if (gameState[i / 10][j / 10] == 1)
-	// 				SFML_SetRenderDrawColor( renderer_, 127, 255, 212, 255 );
-	// 			else if (gameState[i / 10][j / 10] == 2)
-	// 				SFML_SetRenderDrawColor( renderer_, 64, 224, 208, 255 );
-	// 			else if (gameState[i / 10][j / 10] == 3)
-	// 				SFML_SetRenderDrawColor( renderer_, 255, 105, 180, 255 );
-	// 			else if (gameState[i / 10][j / 10] == 4)
-	// 				SFML_SetRenderDrawColor( renderer_, 248, 14, 50, 255 );
-	// 			SFML_RenderFillRect(renderer_, &rectangle);
-	// 		}
+			else
+			{
+				if (gameState[i / 10][j / 10] == 1)
+					circle.setFillColor(sf::Color(127, 255, 212));
+				else if (gameState[i / 10][j / 10] == 2)
+					circle.setFillColor(sf::Color(64, 224, 208));
+				else if (gameState[i / 10][j / 10] == 3)
+					circle.setFillColor(sf::Color(255, 105, 180));
+				else if (gameState[i / 10][j / 10] == 4)
+					circle.setFillColor(sf::Color(248, 14, 50));
+				window_->draw(circle);
+			}	
 		}
 	}
-	// drawBorders();
-	// usleep(90000);
-	// SFML_RenderPresent( renderer_ );
+	drawBorders();
+	usleep(90000);
 }
 
 void SFMLWindow::drawBorders()
 {
-	// SFML_Rect top;
-	// SFML_Rect bottom;
-	// SFML_Rect right;
-	// SFML_Rect left;
-	// SFML_SetRenderDrawColor(renderer_, 95, 158, 160, 255);
-	
-	// top.x = 0;
-	// top.y = 0;
-	// top.w = width_;
-	// top.h = 10;
-	// SFML_RenderFillRect(renderer_, &top);
-	// bottom.x = 0;
-	// bottom.y = height_ - 10;
-	// bottom.w = width_;
-	// bottom.h = 10;
-	// SFML_RenderFillRect(renderer_, &bottom);
-	// right.x = width_ - 10;
-	// right.y = 0;
-	// right.w = 10;
-	// right.h = height_;
-	// SFML_RenderFillRect(renderer_, &right);
-	// left.x = 0;
-	// left.y = 0;
-	// left.w = 10;
-	// left.h = height_;
-	// SFML_RenderFillRect(renderer_, &left);
+	sf::RectangleShape left(sf::Vector2f(10, height_));
+	left.setPosition(sf::Vector2f(0, 0));
+	left.setFillColor(sf::Color(95, 158, 160));
+	window_->draw(left);
+	sf::RectangleShape right(sf::Vector2f(10, height_));
+	right.setPosition(sf::Vector2f(width_ - 10, 0));
+	right.setFillColor(sf::Color(95, 158, 160));
+	window_->draw(right);
+	sf::RectangleShape top(sf::Vector2f(width_, 10));
+	top.setPosition(sf::Vector2f(0, 0));
+	top.setFillColor(sf::Color(95, 158, 160));
+	window_->draw(top);
+	sf::RectangleShape bottom(sf::Vector2f(10, height_));
+	bottom.setPosition(sf::Vector2f(0, height_ - 20));
+	bottom.setFillColor(sf::Color(95, 158, 160));
+	window_->draw(bottom);
 }
 
 bool SFMLWindow::isPaused()
@@ -172,8 +132,5 @@ bool SFMLWindow::isPaused()
 
 void SFMLWindow::closeWindow()
 {
-	// SFML_DestroyTexture(canvas_);
-	// SFML_DestroyRenderer(renderer_);
-	// SFML_DestroyWindow(window_);
-	// SFML_Quit();
+	window_->close();
 }

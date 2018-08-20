@@ -29,6 +29,8 @@ void LogicUnit::loopTheGame()
 		std::bind(&LogicUnit::reactToDown, this),
 		std::bind(&LogicUnit::reactToToNcurses, this),
 		std::bind(&LogicUnit::reactToToDummy, this),
+		std::bind(&LogicUnit::reactToToSDL, this),
+		std::bind(&LogicUnit::reactToToSFML, this),
 		std::bind(&LogicUnit::reactToEndGame, this),
 		std::bind(&LogicUnit::pauseTheGame, this) };
 	const auto normalLoopDuration = 700000;
@@ -120,6 +122,22 @@ void LogicUnit::reactToToNcurses()
 {
 	windows_[currentLibraryIndex_]->closeWindow();
 	currentLibraryIndex_ = ncurses;
+	windows_[currentLibraryIndex_]->openWindow(width, height);
+	windows_[currentLibraryIndex_]->draw(gameField_);
+}
+
+void LogicUnit::reactToToSDL()
+{
+	windows_[currentLibraryIndex_]->closeWindow();
+	currentLibraryIndex_ = sdl;
+	windows_[currentLibraryIndex_]->openWindow(width, height);
+	windows_[currentLibraryIndex_]->draw(gameField_);
+}
+
+void LogicUnit::reactToToSFML()
+{
+	windows_[currentLibraryIndex_]->closeWindow();
+	currentLibraryIndex_ = sfml;
 	windows_[currentLibraryIndex_]->openWindow(width, height);
 	windows_[currentLibraryIndex_]->draw(gameField_);
 }

@@ -2,9 +2,9 @@
 #include <vector>
 
 enum responseType { noResponse, left, right, up, down,
-		toNcurses, toDummy, endGame, pauseGame };
+		toNcurses, toDummy, toSDL, toSFML, endGame, pauseGame };
 
-constexpr size_t nbResponses = 9;
+constexpr size_t nbResponses = 11;
 
 enum gameFieldCellType { empty, body, head, food, collision };
 

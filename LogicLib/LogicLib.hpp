@@ -35,6 +35,8 @@ private:
 	void reactToUp();
 	void reactToDown();
 	void reactToToNcurses();
+	void reactToToSDL();
+	void reactToToSFML();
 	void reactToToDummy();
 	void reactToEndGame();
 	void pauseTheGame();
