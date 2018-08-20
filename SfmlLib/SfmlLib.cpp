@@ -1,5 +1,4 @@
 #include "SfmlLib.hpp"
-#include <iostream>
 #include <unistd.h>
 
 extern "C"
@@ -23,7 +22,6 @@ responseType SFMLWindow::getResponse()
             break;
 
         case sf::Event::KeyPressed:
-            std::cout << "A key has been pressed" << std::endl;
 
             switch (event.key.code)
             {
@@ -69,7 +67,6 @@ void SFMLWindow::openWindow(size_t width, size_t height)
 {
 	width_ = width * 10 + 10;
 	height_ = height * 10 + 10;
-	std::cout << "width_ = " << width_<< "height_= "<<height_ << std::endl;
 	window_ = new sf::RenderWindow(sf::VideoMode(width_, height_), "Nibbler - SFML");
 }
 

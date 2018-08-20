@@ -1,5 +1,4 @@
 #include "SdlLib.hpp"
-#include <iostream>
 #include <unistd.h>
 extern "C"
 {
@@ -60,7 +59,6 @@ void SDLWindow::openWindow(size_t width, size_t height)
 {
 	width_ = width * 10 + 10;
 	height_ = height * 10 + 10;
-	std::cout << "width_ = " << width_<< "height_= "<<height_ << std::endl;
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	window_ = SDL_CreateWindow(
