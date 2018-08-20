@@ -29,7 +29,10 @@ void LogicUnit::loopTheGame()
 		std::bind(&LogicUnit::reactToDown, this),
 		std::bind(&LogicUnit::reactToToNcurses, this),
 		std::bind(&LogicUnit::reactToToDummy, this),
-		std::bind(&LogicUnit::reactToEndGame, this) };
+		std::bind(&LogicUnit::reactToToSDL, this),
+		std::bind(&LogicUnit::reactToToSFML, this),
+		std::bind(&LogicUnit::reactToEndGame, this),
+		std::bind(&LogicUnit::pauseTheGame, this) };
 	const auto normalLoopDuration = 700000;
 	while (!endOfGame_){
 		const auto t0 = std::chrono::high_resolution_clock::now();
@@ -50,7 +53,7 @@ auto LogicUnit::initLibraries()
 {
 	std::array<ptrToLibraryType, nbLibraries> libraries;
 	const char* libraryNames[nbLibraries] =
-		{ "libNcursesLib.dylib", "libDummyLib.dylib", "libSdlLib.dylib"};
+		{ "libNcursesLib.dylib", "libDummyLib.dylib", "libSdlLib.dylib", "libSfmlLib.dylib"};
 	for (size_t currentLib = 0; currentLib < nbLibraries; ++currentLib){
 		libraries[currentLib] =
 			dlopen(libraryNames[currentLib], RTLD_LAZY | RTLD_LOCAL);
@@ -123,6 +126,22 @@ void LogicUnit::reactToToNcurses()
 	windows_[currentLibraryIndex_]->draw(gameField_);
 }
 
+void LogicUnit::reactToToSDL()
+{
+	windows_[currentLibraryIndex_]->closeWindow();
+	currentLibraryIndex_ = sdl;
+	windows_[currentLibraryIndex_]->openWindow(width, height);
+	windows_[currentLibraryIndex_]->draw(gameField_);
+}
+
+void LogicUnit::reactToToSFML()
+{
+	windows_[currentLibraryIndex_]->closeWindow();
+	currentLibraryIndex_ = sfml;
+	windows_[currentLibraryIndex_]->openWindow(width, height);
+	windows_[currentLibraryIndex_]->draw(gameField_);
+}
+
 void LogicUnit::reactToToDummy()
 {
 	windows_[currentLibraryIndex_]->closeWindow();
@@ -135,6 +154,16 @@ void LogicUnit::reactToEndGame()
 {
 	windows_[currentLibraryIndex_]->closeWindow();
 	endOfGame_ = true;
+}
+
+void LogicUnit::pauseTheGame()
+{
+	//snake_.move(down);
+	//snake_.fillMap(gameField_);
+	paused_ = true;
+	usleep(1000000);
+	//windows_[currentLibraryIndex_]->draw(gameField_);
+	endOfGame_ = false;
 }
 
 LogicUnit::~LogicUnit()

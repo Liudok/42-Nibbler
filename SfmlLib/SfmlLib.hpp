@@ -1,13 +1,13 @@
 #pragma once
 #include "../IWindow/IWindow.hpp"
-#include "SDL.h"
-//#include "SDL_image.h"
+#include "SFML/include/SFML/Graphics.hpp"
+#include "SFML/include/SFML/Window.hpp"
 extern "C"
 {
 	IWindow* create();
 }
 
-class SDLWindow : public IWindow
+class SFMLWindow : public IWindow
 {
 	public:
 
@@ -23,9 +23,10 @@ class SDLWindow : public IWindow
 		bool			isPaused();
 		size_t			width_;
 		size_t			height_;
-		SDL_Window		*window_ = nullptr;
-		SDL_Renderer	*renderer_;
-		SDL_Texture		*canvas_;
-		SDL_Event  		event_;
+		sf::RenderWindow	*window_;
+		// SDL_Window		*window_ = nullptr;
+		// SDL_Renderer	*renderer_;
+		// SDL_Texture		*canvas_;
+		// SDL_Event  		event_;
 		bool paused_ = false;
 };

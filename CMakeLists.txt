@@ -13,10 +13,29 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 
+set(CMAKE_FIND_LIBRARY_SUFFIXES ".dylib")
+set(CMAKE_FIND_LIBRARY_PREFIXES "lib")
+set(CMAKE_SHARED_LIBRARY_PREFIX "lib")
+set(CMAKE_SHARED_LIBRARY_SUFFIX ".dylib")
+
+
 find_package(SDL2 REQUIRED)
-#find_package(SDL2_image REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
-#include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
+
+
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+
+message( "!!!+++++++ ${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/SFML/include/SFML/ ")
+set(${SFML_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/SFML/include/SFML/")
+message( "++++++++++ ${SFML_INCLUDE_DIR} ")
+find_package(SFML COMPONENTS system window graphics REQUIRED )
+if (SFML_FOUND)
+    message( "++++++++++ ${SFML_INCLUDE_DIR} ")
+	include_directories(${SFML_INCLUDE_DIR})
+else()
+    message("/n -> SFML not found")
+endif()
+
 
 project(Nibbler)
 
@@ -48,6 +67,14 @@ file(GLOB SdlLibSources
 
 add_library(SdlLib SHARED ${SdlLibSources})
 
+file(GLOB SfmlLibSources
+	${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
+
+add_library(SfmlLib SHARED ${SfmlLibSources})
+target_link_libraries(SfmlLib ${SFML_LIBRARIES})
+
 file(GLOB TesterSources
 	${CMAKE_CURRENT_SOURCE_DIR}/Tester/*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Tester/*.hpp)
@@ -60,7 +87,7 @@ target_link_libraries(SdlLib ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
 
 target_link_libraries(NcursesLib ncurses)
 
-target_link_libraries(MyLogicLib NcursesLib DummyLib SdlLib)
+target_link_libraries(MyLogicLib NcursesLib DummyLib SdlLib SfmlLib)
 
 target_link_libraries(Nibbler MyLogicLib)
 
