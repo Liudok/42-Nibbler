@@ -1,3 +1,5 @@
+# General requirements
+
 cmake_minimum_required(VERSION 3.12)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -13,24 +15,17 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 
-set(CMAKE_FIND_LIBRARY_SUFFIXES ".dylib")
-set(CMAKE_FIND_LIBRARY_PREFIXES "lib")
-set(CMAKE_SHARED_LIBRARY_PREFIX "lib")
-set(CMAKE_SHARED_LIBRARY_SUFFIX ".dylib")
+# Sdl2 configuration
 
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/Modules" ${CMAKE_MODULE_PATH})
+# Sfml configuration
 
-set(${SFML_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/SFML/include/SFML/")
+include_directories(${SFML2_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/SFML/include)
+include_directories(${SFML2_LIB_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/SFML/lib)
 
-find_package(SFML COMPONENTS system window graphics REQUIRED )
-if (SFML_FOUND)
-	include_directories(${SFML_INCLUDE_DIR})
-else()
-	message(FATAL_ERROR "Unable to configure Sfml")
-endif()
+# Project sources and libraries
 
 project(Nibbler)
 
@@ -39,7 +34,7 @@ file(GLOB LogicSources
 	${CMAKE_CURRENT_SOURCE_DIR}/LogicLib/*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
 
-add_library(MyLogicLib STATIC ${LogicSources})
+add_library(LogicLib STATIC ${LogicSources})
 
 file(GLOB NcursesLibSources
 	${CMAKE_CURRENT_SOURCE_DIR}/NcursesLib/*.cpp
@@ -68,22 +63,27 @@ file(GLOB SfmlLibSources
 	${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
 
 add_library(SfmlLib SHARED ${SfmlLibSources})
-target_link_libraries(SfmlLib ${SFML_LIBRARIES})
 
-file(GLOB TesterSources
-	${CMAKE_CURRENT_SOURCE_DIR}/Tester/*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Tester/*.hpp)
+file(GLOB SfmlDynamicLibs ${CMAKE_CURRENT_SOURCE_DIR}/SFML/lib/*.dylib)
 
 add_executable(Nibbler main.cpp)
 
-add_executable(Tester ${TesterSources})
+# Simpler includes
 
-target_link_libraries(SdlLib ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
+target_include_directories(LogicLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
+target_include_directories(NcursesLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
+target_include_directories(DummyLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
+target_include_directories(SdlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
+target_include_directories(SfmlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
+
+# Links between project parts
+
+target_link_libraries(LogicLib NcursesLib DummyLib SdlLib SfmlLib)
 
 target_link_libraries(NcursesLib ncurses)
 
-target_link_libraries(MyLogicLib NcursesLib DummyLib SdlLib SfmlLib)
+target_link_libraries(SdlLib ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
 
-target_link_libraries(Nibbler MyLogicLib)
+target_link_libraries(SfmlLib ${SfmlDynamicLibs})
 
-target_link_libraries(Tester MyLogicLib)
+target_link_libraries(Nibbler LogicLib)

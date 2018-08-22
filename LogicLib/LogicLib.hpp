@@ -1,9 +1,8 @@
 #pragma once
-#include "../IWindow/IWindow.hpp"
+
+#include <IWindow.hpp>
 #include "Snake.hpp"
 #include <array>
-
-int sampleSum(int a, int b);
 
 class LogicUnit
 {

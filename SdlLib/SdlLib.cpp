@@ -1,5 +1,6 @@
 #include "SdlLib.hpp"
 #include <unistd.h>
+
 extern "C"
 {
 	IWindow* create()

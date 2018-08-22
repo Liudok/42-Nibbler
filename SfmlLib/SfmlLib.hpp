@@ -1,7 +1,9 @@
 #pragma once
-#include "../IWindow/IWindow.hpp"
-#include "SFML/include/SFML/Graphics.hpp"
-#include "SFML/include/SFML/Window.hpp"
+
+#include <IWindow.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+
 extern "C"
 {
 	IWindow* create();
@@ -24,9 +26,5 @@ class SFMLWindow : public IWindow
 		size_t			width_;
 		size_t			height_;
 		sf::RenderWindow	*window_;
-		// SDL_Window		*window_ = nullptr;
-		// SDL_Renderer	*renderer_;
-		// SDL_Texture		*canvas_;
-		// SDL_Event  		event_;
 		bool paused_ = false;
 };

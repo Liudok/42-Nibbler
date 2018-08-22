@@ -4,11 +4,6 @@
 #include <chrono>
 #include <unistd.h>
 
-int sampleSum(int a, int b)
-{
-	return a + b;
-}
-
 LogicUnit::LogicUnit() : libraries_(initLibraries()),
 	windows_(initWindows()),
 		gameField_(height, std::vector<size_t>(width, 0)),
@@ -158,12 +153,10 @@ void LogicUnit::reactToEndGame()
 
 void LogicUnit::pauseTheGame()
 {
-	//snake_.move(down);
-	//snake_.fillMap(gameField_);
+	const auto notTooLong = 100000;
 	paused_ = true;
-	usleep(1000000);
-	//windows_[currentLibraryIndex_]->draw(gameField_);
-	endOfGame_ = false;
+	usleep(notTooLong);
+	paused_ = false;
 }
 
 LogicUnit::~LogicUnit()

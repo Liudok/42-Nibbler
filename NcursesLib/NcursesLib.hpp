@@ -1,5 +1,6 @@
 #pragma once
-#include "../IWindow/IWindow.hpp"
+
+#include <IWindow.hpp>
 #include <ncurses.h>
 
 extern "C"

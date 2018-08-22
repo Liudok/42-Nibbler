@@ -1,7 +1,8 @@
 #pragma once
-#include "../IWindow/IWindow.hpp"
-#include "SDL.h"
-//#include "SDL_image.h"
+
+#include <IWindow.hpp>
+#include <SDL.h>
+
 extern "C"
 {
 	IWindow* create();
