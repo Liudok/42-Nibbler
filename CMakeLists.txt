@@ -15,17 +15,17 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 
-# Sdl2 configuration
+# Sdl configuration
 
-set(SdlPath ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParties/Sdl2)
-include_directories(${SFML2_INCLUDE_DIRS} ${SdlPath}/include/SDL2)
-include_directories(${SFML2_LIB_DIRS} ${SdlPath}/lib)
+set(SdlPath ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParties/SDL)
+include_directories(${SDL_INCLUDE_DIRS} ${SdlPath}/include)
+file(GLOB SdlDynamicLibs ${SdlPath}/lib/*.dylib)
 
 # Sfml configuration
 
 set(SfmlPath ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParties/SFML)
 include_directories(${SFML2_INCLUDE_DIRS} ${SfmlPath}/include)
-include_directories(${SFML2_LIB_DIRS} ${SfmlPath}/lib)
+file(GLOB SfmlDynamicLibs ${SfmlPath}/lib/*.dylib)
 
 # Project sources and libraries
 
@@ -65,10 +65,6 @@ file(GLOB SfmlLibSources
 	${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
 
 add_library(SfmlLib SHARED ${SfmlLibSources})
-
-file(GLOB SdlDynamicLibs ${SdlPath}/lib/*.dylib)
-
-file(GLOB SfmlDynamicLibs ${SfmlPath}/lib/*.dylib)
 
 add_executable(Nibbler main.cpp)
 
