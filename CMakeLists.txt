@@ -17,13 +17,15 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 
 # Sdl2 configuration
 
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
+set(SdlPath ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParties/Sdl2)
+include_directories(${SFML2_INCLUDE_DIRS} ${SdlPath}/include/SDL2)
+include_directories(${SFML2_LIB_DIRS} ${SdlPath}/lib)
 
 # Sfml configuration
 
-include_directories(${SFML2_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/SFML/include)
-include_directories(${SFML2_LIB_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/SFML/lib)
+set(SfmlPath ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParties/SFML)
+include_directories(${SFML2_INCLUDE_DIRS} ${SfmlPath}/include)
+include_directories(${SFML2_LIB_DIRS} ${SfmlPath}/lib)
 
 # Project sources and libraries
 
@@ -64,7 +66,9 @@ file(GLOB SfmlLibSources
 
 add_library(SfmlLib SHARED ${SfmlLibSources})
 
-file(GLOB SfmlDynamicLibs ${CMAKE_CURRENT_SOURCE_DIR}/SFML/lib/*.dylib)
+file(GLOB SdlDynamicLibs ${SdlPath}/lib/*.dylib)
+
+file(GLOB SfmlDynamicLibs ${SfmlPath}/lib/*.dylib)
 
 add_executable(Nibbler main.cpp)
 
@@ -82,7 +86,7 @@ target_link_libraries(LogicLib NcursesLib DummyLib SdlLib SfmlLib)
 
 target_link_libraries(NcursesLib ncurses)
 
-target_link_libraries(SdlLib ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
+target_link_libraries(SdlLib ${SdlDynamicLibs})
 
 target_link_libraries(SfmlLib ${SfmlDynamicLibs})
 

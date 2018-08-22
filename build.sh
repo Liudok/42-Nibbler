@@ -11,15 +11,26 @@ else
 	echo "${GREEN}Cmake found${EOC}"
 fi
 
-sfmlPath=SFML
-if [ ! -d "$sfmlPath" ]
+thirdPartiesPath=ThirdParties
+if [ ! -d "$thirdPartiesPath" ]
 then
-	echo "${GREEN}Installing sfml...${EOC}"
+	mkdir ThirdParties
+	cd ThirdParties
+	echo "${GREEN}Installing and building third parties...${EOC}"
+	echo "${GREEN}Please wait it may take a while${EOC}"
+	sleep 1
+	
+	git clone https://github.com/nestoroprysk/Sdl2.git
+	(cd /usr/local/opt/ && mkdir sdl2 &&
+		cd sdl2 && mkdir lib);
+	cp Sdl2/lib/libSDL2-2.0.0.dylib /usr/local/opt/sdl2/lib/
+	
 	git clone https://github.com/SFML/SFML.git
 	(cd SFML && cmake . && make);
-	echo "${GREEN}Sfml installed${EOC}"
+	echo "${GREEN}Third parties installed${EOC}"
+	cd ..
 else
-	echo "${GREEN}Sfml found${EOC}"
+	echo "${GREEN}Third parties found${EOC}"
 fi
 
 buildPath=Build

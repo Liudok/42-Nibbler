@@ -23,8 +23,8 @@ class SFMLWindow : public IWindow
 		void			gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
 		void 			drawBorders();
 		bool			isPaused();
-		size_t			width_;
-		size_t			height_;
-		sf::RenderWindow	*window_;
+		size_t			width_ = 0;
+		size_t			height_ = 0;
+		sf::RenderWindow	*window_ = nullptr;
 		bool paused_ = false;
 };
