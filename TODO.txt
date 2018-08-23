@@ -7,3 +7,16 @@
 7. sfml doesn't close a window properly
 8. food stops being shown after a while in sfml
 9. make the movement smooth in ncurses
+10. pause/continue
+11. generic snake winner
+12. new buttons for changing libs
+13. usage
+14. escape
+15. Qt gui
+16. speedup
+17. scoring
+
+Stupid:
+1. Any class that declares at least one attribute must be written in canonical form.
+2. Makefile
+3. argc/argv params of map
