@@ -26,20 +26,6 @@ responseType NcuresesWindow::getResponse()
 
 void NcuresesWindow::draw(std::vector<std::vector<size_t>> const& gameState)
 {
-	if (!window_){
-		window_ = newwin(height_ + 2, width_ + 2, 0, 0);
-		keypad(window_, TRUE);
-		nodelay(window_, TRUE);
-		box(window_, 0, 0);
-		initscr();
-		curs_set(0);
-		start_color();
-		init_pair(empty, COLOR_WHITE, COLOR_BLACK);
-		init_pair(body, COLOR_GREEN, COLOR_BLACK);
-		init_pair(head, COLOR_GREEN, COLOR_GREEN);
-		init_pair(food, COLOR_MAGENTA, COLOR_BLACK);
-		init_pair(collision, COLOR_RED, COLOR_RED);
-	}
 	drawGameState(window_, gameState);
 	wrefresh(window_);
 }
@@ -48,6 +34,18 @@ void NcuresesWindow::openWindow(size_t width, size_t height)
 {
 	width_ = width;
 	height_ = height;
+	initscr();
+	window_ = newwin(height_ + 2, width_ + 2, 0, 0);
+	keypad(window_, TRUE);
+	nodelay(window_, TRUE);
+	box(window_, 0, 0);
+	curs_set(0);
+	start_color();
+	init_pair(empty, COLOR_WHITE, COLOR_BLACK);
+	init_pair(body, COLOR_GREEN, COLOR_BLACK);
+	init_pair(head, COLOR_GREEN, COLOR_GREEN);
+	init_pair(food, COLOR_MAGENTA, COLOR_BLACK);
+	init_pair(collision, COLOR_RED, COLOR_RED);
 }
 
 void NcuresesWindow::closeWindow()
