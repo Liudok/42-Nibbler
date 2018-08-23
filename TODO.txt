@@ -4,3 +4,5 @@
 4. Nice exit for ncurses
 5. argc argv size of field
 6. Highlight of death doesn't always work in sdl and sfml
+7. sfml doesn't close a window properly
+8. food stops being shown after a while in sfml
