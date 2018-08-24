@@ -23,11 +23,11 @@ private:
 	std::vector<windowPtr> initWindows();
 	std::array<ptrToLibraryType, nbLibraries> libraries_;
 	std::vector<windowPtr> windows_;
-	libraryIndex currentLibraryIndex_ = sfml;
+	libraryIndex currentLibraryIndex_ = ncurses;
 	gameField gameField_;
 	Snake snake_;
 	bool endOfGame_ = false;
-	bool paused_ = false;
+	bool paused_ = true;
 	void reactToNoResponse();
 	void reactToLeft();
 	void reactToRight();
@@ -38,5 +38,5 @@ private:
 	void reactToToSFML();
 	void reactToToDummy();
 	void reactToEndGame();
-	void pauseTheGame();
+	void reactToPauseContinue();
 };

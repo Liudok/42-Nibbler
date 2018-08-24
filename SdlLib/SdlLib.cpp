@@ -18,7 +18,7 @@ while (SDL_PollEvent(&event_))
 		else if (event_.type == SDL_KEYDOWN )
 		{
 			if (isPaused() && event_.key.keysym.sym != SDLK_SPACE)
-				return pauseGame;
+				return pauseContinue;
 			else
 			{
 				paused_ = false;
@@ -33,7 +33,7 @@ while (SDL_PollEvent(&event_))
 			else if (event_.key.keysym.sym == SDLK_SPACE)
 				{
 					paused_ = true;
-					return pauseGame;
+					return pauseContinue;
 				}
 			else if (event_.key.keysym.sym == SDLK_z)
 				return toNcurses;
@@ -45,7 +45,7 @@ while (SDL_PollEvent(&event_))
 		}
 	}
 	if (isPaused() && event_.key.keysym.sym != SDLK_SPACE)
-				return pauseGame;
+				return pauseContinue;
 	return noResponse;
 }
 

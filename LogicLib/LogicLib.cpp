@@ -27,11 +27,12 @@ void LogicUnit::loopTheGame()
 		std::bind(&LogicUnit::reactToToSDL, this),
 		std::bind(&LogicUnit::reactToToSFML, this),
 		std::bind(&LogicUnit::reactToEndGame, this),
-		std::bind(&LogicUnit::pauseTheGame, this) };
+		std::bind(&LogicUnit::reactToPauseContinue, this) };
 	const auto normalLoopDuration = 700000;
 	while (!endOfGame_){
 		const auto t0 = std::chrono::high_resolution_clock::now();
 		const auto response = windows_[currentLibraryIndex_]->getResponse();
+		if (paused_ && response != pauseContinue) continue;
 		reactFunctions[response]();
 		const auto t1 = std::chrono::high_resolution_clock::now();
 		const auto timePassed = (t1-t0).count();
@@ -151,12 +152,9 @@ void LogicUnit::reactToEndGame()
 	endOfGame_ = true;
 }
 
-void LogicUnit::pauseTheGame()
+void LogicUnit::reactToPauseContinue()
 {
-	const auto notTooLong = 100000;
-	paused_ = true;
-	usleep(notTooLong);
-	paused_ = false;
+	paused_ = !paused_;
 }
 
 LogicUnit::~LogicUnit()

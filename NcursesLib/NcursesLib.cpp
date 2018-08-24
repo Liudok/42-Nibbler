@@ -11,7 +11,6 @@ extern "C"
 responseType NcuresesWindow::getResponse()
 {
 	const auto response = wgetch(window_);
-	flushinp();
 	switch(response){
 		case 'q': return endGame;
 		case 'a': return left;
@@ -20,6 +19,7 @@ responseType NcuresesWindow::getResponse()
 		case 's': return down;
 		case 'z': return toNcurses;
 		case 'x': return toDummy;
+		case ' ': return pauseContinue;
 		default: return noResponse;
 	}
 }
