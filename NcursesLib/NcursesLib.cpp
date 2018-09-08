@@ -15,11 +15,15 @@ responseType NcuresesWindow::getResponse()
 	switch(response){
 		case 'q': return endGame;
 		case 'a': return left;
+		case KEY_LEFT: return left;
 		case 'd': return right;
+		case KEY_RIGHT: return right;
 		case 'w': return up;
+		case KEY_UP: return up;
 		case 's': return down;
-		case 'z': return toNcurses;
-		case 'x': return toDummy;
+		case KEY_DOWN: return down;
+		case '1' : return toSFML;
+		case '2' : return toSDL;
 		default: return noResponse;
 	}
 }

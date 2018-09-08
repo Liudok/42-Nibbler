@@ -2,6 +2,7 @@
 #include <iostream>
 #include <unistd.h>
 extern "C"
+
 {
 	IWindow* create()
 	{
@@ -22,25 +23,23 @@ while (SDL_PollEvent(&event_))
 			else
 			{
 				paused_ = false;
-			if (event_.key.keysym.sym == SDLK_UP || event_.key.keysym.sym == SDLK_w)
-				return up;
-			else if (event_.key.keysym.sym == SDLK_DOWN || event_.key.keysym.sym == SDLK_s)
-				return down;
-			else if (event_.key.keysym.sym == SDLK_LEFT || event_.key.keysym.sym == SDLK_a)
-				return left;
-			else if (event_.key.keysym.sym == SDLK_RIGHT || event_.key.keysym.sym == SDLK_d)
-				return right;
-			else if (event_.key.keysym.sym == SDLK_SPACE)
+				if (event_.key.keysym.sym == SDLK_UP || event_.key.keysym.sym == SDLK_w)
+					return up;
+				else if (event_.key.keysym.sym == SDLK_DOWN || event_.key.keysym.sym == SDLK_s)
+					return down;
+				else if (event_.key.keysym.sym == SDLK_LEFT || event_.key.keysym.sym == SDLK_a)
+					return left;
+				else if (event_.key.keysym.sym == SDLK_RIGHT || event_.key.keysym.sym == SDLK_d)
+					return right;
+				else if (event_.key.keysym.sym == SDLK_SPACE)
 				{
 					paused_ = true;
 					return pauseGame;
 				}
-			else if (event_.key.keysym.sym == SDLK_z)
-				return toNcurses;
-			else if (event_.key.keysym.sym == SDLK_c)
-				return toSFML;
-			else if (event_.key.keysym.sym == SDLK_x)
-				return toDummy;
+				else if (event_.key.keysym.sym == SDLK_2)
+					return toNcurses;
+				else if (event_.key.keysym.sym == SDLK_1)
+					return toSFML;
 			}
 		}
 	}
@@ -64,7 +63,7 @@ void SDLWindow::openWindow(size_t width, size_t height)
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	window_ = SDL_CreateWindow(
-		"Nibbler", 
+		"SDL Nibbler", 
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		width_,
@@ -77,6 +76,7 @@ void SDLWindow::openWindow(size_t width, size_t height)
 		-1,
 		SDL_RENDERER_ACCELERATED);
 
+	SDL_RaiseWindow(window_);
 }
 
 

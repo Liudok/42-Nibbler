@@ -166,6 +166,16 @@ void LogicUnit::pauseTheGame()
 	endOfGame_ = false;
 }
 
+void LogicUnit::setWindowSize(size_t w, size_t h)
+{
+	height = h;
+	width = w;
+	gameField_.clear();
+	gameField_ = std::vector<std::vector<size_t>>(height, std::vector<size_t>(width, 0));
+	snake_ = Snake(gameField_[0].size(), gameField_.size());
+	snake_.fillMap(gameField_);
+}
+
 LogicUnit::~LogicUnit()
 {
 	for (auto& library : libraries_)

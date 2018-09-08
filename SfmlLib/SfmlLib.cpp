@@ -23,11 +23,9 @@ responseType SFMLWindow::getResponse()
             break;
 
         case sf::Event::KeyPressed:
-            std::cout << "A key has been pressed" << std::endl;
-
             switch (event.key.code)
             {
-            case sf::Keyboard::Z:
+            case sf::Keyboard::Num2:
             	window_->close();
                 return toNcurses;
                 break;
@@ -69,8 +67,9 @@ void SFMLWindow::openWindow(size_t width, size_t height)
 {
 	width_ = width * 10 + 10;
 	height_ = height * 10 + 10;
-	std::cout << "width_ = " << width_<< "height_= "<<height_ << std::endl;
-	window_ = new sf::RenderWindow(sf::VideoMode(width_, height_), "Nibbler - SFML");
+	std::cout << "width_ = " << width_<< "height_= "<< height_ << std::endl;
+	window_ = new sf::RenderWindow(sf::VideoMode(width_, height_), "SFML Nibbler");
+	window_->setActive(true);
 }
 
 
@@ -104,7 +103,7 @@ void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameS
 		}
 	}
 	drawBorders();
-	usleep(90000);
+	usleep(100000);
 }
 
 void SFMLWindow::drawBorders()
@@ -135,4 +134,5 @@ bool SFMLWindow::isPaused()
 void SFMLWindow::closeWindow()
 {
 	window_->close();
+	//window_->~RenderWindow();
 }
