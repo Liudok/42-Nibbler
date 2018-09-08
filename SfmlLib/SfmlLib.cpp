@@ -29,6 +29,10 @@ responseType SFMLWindow::getResponse()
             	window_->close();
                 return toNcurses;
                 break;
+            case sf::Keyboard::Escape:
+            	window_->close();
+                return endGame;
+                break;
             case sf::Keyboard::Num1:
             	window_->close();
                 return toSDL;
@@ -46,7 +50,7 @@ responseType SFMLWindow::getResponse()
             	return left;
             	break;
             default:
-					break;
+				break;
             }
         default:
         	return noResponse;

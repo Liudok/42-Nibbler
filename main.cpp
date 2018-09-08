@@ -6,6 +6,7 @@ int main(int ac, char **av)
 	if (ac > 3 || ac == 2)
 	{
 		std::cout << "./Build/Nibbler [width] [height]" << std::endl;
+		return 1;
 	}
 	try{
 		LogicUnit game;

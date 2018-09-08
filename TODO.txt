@@ -1,5 +1,5 @@
 1. When snake goes from from (0, n) to (0, m) and eats something on (0, k), this counts as a collision for snake's tail grows left
-2. Nice exit for sfml
++2. Nice exit for sfml
 +3. Nice exit for sdl
 4. Nice exit for ncurses
 +5. argc argv size of field
