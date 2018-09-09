@@ -25,14 +25,13 @@ private:
 	Point defineNewHeadPosition() const;
 	bool validNewDirection(const direction newDirection) const;
 	bool headHitBody() const;
-	Point headPos_ {3, 0};
-	std::vector<Point> body_ {{2, 0}, {1, 0}, {0, 0}, {0, 1},
-								{1, 1}, {2, 1}, {3, 1}, {4, 1},
-									{5, 1}, {6, 1}, {7, 1}, {8, 1}};
-	direction currentDirection_ = right;
 	size_t width_ = 0;
 	size_t height_ = 0;
+	Point headPos_ {width_ / 2, height_ / 2};
+	std::vector<Point> body_ {{headPos_.x - 1, headPos_.y}, {headPos_.x - 2, headPos_.y}, {headPos_.x - 3, headPos_.y}, {headPos_.x - 3, headPos_.y - 1}};
+	direction currentDirection_ = right;
+
 	bool outOfField_ = false;
 	bool hitBody_ = false;
-	Point foodPos_ {10, 10};
+	Point foodPos_ {9, 9};
 };

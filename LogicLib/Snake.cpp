@@ -1,7 +1,9 @@
 #include "Snake.hpp"
 #include <iostream>
 Snake::Snake(size_t width, size_t height)
-	: width_(width), height_(height) {}
+	: width_(width)
+	, height_(height)
+	{}
 
 void Snake::fillMap(gameField& field) const
 {
@@ -31,8 +33,7 @@ void Snake::move(const direction newDirection)
 		srand(time(NULL));
 		size_t x = rand() % width_;
 		size_t y = rand() % height_;
-		foodPos_ = {(x != 0 && x != width_ - 1) ? x : 3, (y != 0 && y != height_ - 1) ? y : 3};
-		std::cout << "foodPos_.x = " << foodPos_.x << " foodPos_.y= "<<foodPos_.y << std::endl;
+		foodPos_ = {(x != 0 && x != width_ - 1) ? x : x + 1, (y != 0 && y != height_ - 1) ? y : 3};
 	}
 	updateDirection(newDirection);
 	const auto newHeadPosition = defineNewHeadPosition();

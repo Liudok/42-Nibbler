@@ -3,9 +3,9 @@
 +3. Nice exit for sdl
 4. Nice exit for ncurses
 +5. argc argv size of field
-6. Highlight of death doesn't always work in sdl and sfml
++6. Highlight of death doesn't always work in sdl and sfml
 7. sfml doesn't close a window properly
-8. food stops being shown after a while in sfml
++8. food stops being shown after a while in sfml
 9. make the movement smooth in ncurses
 10. pause/continue
 11. generic snake winner
@@ -15,6 +15,8 @@
 15. Qt gui
 16. speedup
 17. scoring
+18. If a dynamic library does not exist or is not compatible, your program must display a relevant error message and exit neatly. - наша змейка не чувствительна к удалению либы)) это пугает)
++19. The snake starts with a size of 4 squares in the middle of the game area. The direction does not matter.
 
 Stupid:
 1. Any class that declares at least one attribute must be written in canonical form.

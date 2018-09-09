@@ -24,12 +24,12 @@ class LogicUnit
     size_t  getHeight() const;
 
   private:
-  	
+
     std::array<ptrToLibraryType, nbLibraries> initLibraries();
     std::vector<windowPtr> initWindows();
     std::array<ptrToLibraryType, nbLibraries> libraries_;
     std::vector<windowPtr> windows_;
-    libraryIndex currentLibraryIndex_ = sfml;
+    libraryIndex currentLibraryIndex_ = sdl;
     size_t     height_ = 50;
     size_t     width_ = 30;
     gameField  gameField_;

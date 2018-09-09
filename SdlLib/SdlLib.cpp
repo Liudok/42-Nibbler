@@ -109,7 +109,7 @@ void SDLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameSt
 		}
 	}
 	drawBorders();
-	usleep( 90000 );
+	usleep( 100000 );
 	SDL_RenderPresent( renderer_ );
 }
 
