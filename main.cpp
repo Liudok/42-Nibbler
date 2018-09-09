@@ -14,7 +14,7 @@ int main(int ac, char **av)
 			{
 				size_t w = static_cast<size_t>(std::stoi(av[1]));
 				size_t h = static_cast<size_t>(std::stoi(av[2]));
-				if (w > 10 && h > 10 && w < 250 && h < 140)
+				if (w > 10 && h > 10 && w < 180 && h < 86)
 					game.setWindowSize(w, h);
 				else
 				{
