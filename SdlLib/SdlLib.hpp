@@ -25,7 +25,6 @@ class SDLWindow : public IWindow
 		size_t			height_;
 		SDL_Window		*window_ = nullptr;
 		SDL_Renderer	*renderer_;
-		SDL_Texture		*canvas_;
 		SDL_Event  		event_;
 		bool paused_ = false;
 };

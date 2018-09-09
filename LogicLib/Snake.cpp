@@ -1,5 +1,5 @@
 #include "Snake.hpp"
-
+#include <iostream>
 Snake::Snake(size_t width, size_t height)
 	: width_(width), height_(height) {}
 
@@ -18,21 +18,26 @@ void Snake::fillMap(gameField& field) const
 void Snake::move(const direction newDirection)
 {
 	const size_t overflow = std::numeric_limits<size_t>::max();
-	if (headPos_ == foodPos_){
+	if (headPos_ == foodPos_)
+	{
 		auto newBodyPart = body_[body_.size() - 1];
 		--newBodyPart.x;
-		if (newBodyPart.x == overflow){
+		if (newBodyPart.x == overflow)
+		{
 			outOfField_ = true;
 			return;
 		}
 		body_.push_back(std::move(newBodyPart));
 		srand(time(NULL));
-		foodPos_ = {rand() % width_, rand() % height_};
+		size_t x = rand() % width_;
+		size_t y = rand() % height_;
+		foodPos_ = {(x != 0 && x != width_ - 1) ? x : 3, (y != 0 && y != height_ - 1) ? y : 3};
+		std::cout << "foodPos_.x = " << foodPos_.x << " foodPos_.y= "<<foodPos_.y << std::endl;
 	}
 	updateDirection(newDirection);
 	const auto newHeadPosition = defineNewHeadPosition();
-	if (newHeadPosition.x == width_ || newHeadPosition.x == overflow ||
-		newHeadPosition.y == height_ || newHeadPosition.y == overflow){
+	if (newHeadPosition.x == width_ - 1 || newHeadPosition.x == overflow ||
+		newHeadPosition.y == height_ - 1 || newHeadPosition.y == overflow){
 		outOfField_ = true;
 		return;
 	}

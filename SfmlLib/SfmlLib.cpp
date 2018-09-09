@@ -18,7 +18,7 @@ responseType SFMLWindow::getResponse()
         switch (event.type)
         {
         case sf::Event::Closed:
-        	window_->close();
+        	closeWindow();
             return endGame;
             break;
 
@@ -26,15 +26,15 @@ responseType SFMLWindow::getResponse()
             switch (event.key.code)
             {
             case sf::Keyboard::Num2:
-            	window_->close();
+            	closeWindow();
                 return toNcurses;
                 break;
             case sf::Keyboard::Escape:
-            	window_->close();
+            	closeWindow();
                 return endGame;
                 break;
             case sf::Keyboard::Num1:
-            	window_->close();
+            	closeWindow();
                 return toSDL;
                 break;
             case sf::Keyboard::Down:
@@ -69,38 +69,34 @@ void SFMLWindow::draw(std::vector<std::vector<size_t>> const& gameState)
 
 void SFMLWindow::openWindow(size_t width, size_t height)
 {
-	width_ = width * 10 + 10;
-	height_ = height * 10 + 10;
-	std::cout << "width_ = " << width_<< "height_= "<< height_ << std::endl;
-	window_ = new sf::RenderWindow(sf::VideoMode(width_, height_), "SFML Nibbler");
+	width_ = width;
+	height_ = height;
+	window_ = new sf::RenderWindow(sf::VideoMode(width_ * 30 + 30, height_ * 30 + 30), "SFML Nibbler");
 	window_->setActive(true);
 }
 
 
 void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameState)
 {
-	for (size_t i = 0; i < height_ - 10; i += 10)
+	for (size_t i = 0; i < height_; ++i)
 	{
-		for (size_t j = 0; j < width_ - 10; j += 10)
+		for (size_t j = 0; j < width_; ++j)
 		{
-			sf::CircleShape circle(5);
-    		circle.setPosition(sf::Vector2f(j + 10, i + 10));
-			if (gameState[i / 10][j / 10] == 0)
+			sf::RectangleShape rectangle(sf::Vector2f(100, 100));
+			rectangle.setPosition(sf::Vector2f(j * 30 + 30, i * 30 + 30));
+			rectangle.setFillColor(sf::Color(79, 132, 196));
+			window_->draw(rectangle);
+			sf::CircleShape circle(15);
+    		circle.setPosition(sf::Vector2f(j * 30 + 30, i * 30 + 30));
+			if (gameState[i][j] != 0)
 			{
-				sf::RectangleShape rectangle(sf::Vector2f(100, 100));
-				rectangle.setPosition(sf::Vector2f(j + 10, i + 10));
-				rectangle.setFillColor(sf::Color(79, 132, 196));
-				window_->draw(rectangle);
-			}
-			else
-			{
-				if (gameState[i / 10][j / 10] == 1)
+				if (gameState[i][j] == 1)
 					circle.setFillColor(sf::Color(127, 255, 212));
-				else if (gameState[i / 10][j / 10] == 2)
+				else if (gameState[i][j] == 2)
 					circle.setFillColor(sf::Color(64, 224, 208));
-				else if (gameState[i / 10][j / 10] == 3)
+				else if (gameState[i][j] == 3)
 					circle.setFillColor(sf::Color(255, 105, 180));
-				else if (gameState[i / 10][j / 10] == 4)
+				else if (gameState[i][j] == 4)
 					circle.setFillColor(sf::Color(248, 14, 50));
 				window_->draw(circle);
 			}	
@@ -112,20 +108,20 @@ void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameS
 
 void SFMLWindow::drawBorders()
 {
-	sf::RectangleShape left(sf::Vector2f(10, height_));
+	sf::RectangleShape left(sf::Vector2f(30, height_ * 30));
 	left.setPosition(sf::Vector2f(0, 0));
 	left.setFillColor(sf::Color(95, 158, 160));
 	window_->draw(left);
-	sf::RectangleShape right(sf::Vector2f(10, height_));
-	right.setPosition(sf::Vector2f(width_ - 10, 0));
+	sf::RectangleShape right(sf::Vector2f(30, height_ * 30 + 30));
+	right.setPosition(sf::Vector2f(width_ * 30, 0));
 	right.setFillColor(sf::Color(95, 158, 160));
 	window_->draw(right);
-	sf::RectangleShape top(sf::Vector2f(width_, 10));
+	sf::RectangleShape top(sf::Vector2f(width_ * 30, 30));
 	top.setPosition(sf::Vector2f(0, 0));
 	top.setFillColor(sf::Color(95, 158, 160));
 	window_->draw(top);
-	sf::RectangleShape bottom(sf::Vector2f(10, height_));
-	bottom.setPosition(sf::Vector2f(0, height_ - 20));
+	sf::RectangleShape bottom(sf::Vector2f(width_ * 30 + 30, 30));
+	bottom.setPosition(sf::Vector2f(0, height_ * 30));
 	bottom.setFillColor(sf::Color(95, 158, 160));
 	window_->draw(bottom);
 }
@@ -138,5 +134,4 @@ bool SFMLWindow::isPaused()
 void SFMLWindow::closeWindow()
 {
 	window_->close();
-	//window_->~RenderWindow();
 }

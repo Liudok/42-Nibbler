@@ -24,9 +24,5 @@ class SFMLWindow : public IWindow
 		size_t			width_;
 		size_t			height_;
 		sf::RenderWindow	*window_;
-		// SDL_Window		*window_ = nullptr;
-		// SDL_Renderer	*renderer_;
-		// SDL_Texture		*canvas_;
-		// SDL_Event  		event_;
 		bool paused_ = false;
 };

@@ -52,24 +52,22 @@ void SDLWindow::draw(std::vector<std::vector<size_t>> const& gameState)
 {
 	gameStateToPixels(gameState);
 	SDL_RenderClear(renderer_);
-	SDL_RenderCopy(renderer_, canvas_, NULL, NULL);
 }
 
 void SDLWindow::openWindow(size_t width, size_t height)
 {
-	width_ = width * 10 + 10;
-	height_ = height * 10 + 10;
-	std::cout << "width_ = " << width_<< "height_= "<<height_ << std::endl;
+	width_ = width;
+	height_ = height;
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	window_ = SDL_CreateWindow(
 		"SDL Nibbler", 
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		width_,
-		height_,
+		width_ * 10 + 10,
+		height_ * 10 + 10,
 		SDL_WINDOW_OPENGL |SDL_WINDOW_INPUT_GRABBED |
-										SDL_WINDOW_SHOWN);
+		SDL_WINDOW_SHOWN);
 
 	renderer_ = SDL_CreateRenderer(
 		window_,
@@ -82,37 +80,36 @@ void SDLWindow::openWindow(size_t width, size_t height)
 
 void SDLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameState)
 {
-	for (size_t i = 0; i < height_ - 10; i += 10)
+	for (size_t i = 0; i < height_; ++i)
 	{
-		for (size_t j = 0; j < width_ - 10; j += 10)
+		for (size_t j = 0; j < width_; ++j)
 		{
 			SDL_Rect rectangle;
 
-			rectangle.x = j + 10;
-			rectangle.y = i + 10;
+			rectangle.x = j * 10 + 10;
+			rectangle.y = i * 10 + 10;
 			rectangle.w = 10;
 			rectangle.h = 10;
-			if (gameState[i / 10][j / 10] == 0)
+			if (gameState[i][j] == 0)
 			{
 				SDL_SetRenderDrawColor( renderer_, 79, 132, 196, 255 );
-				SDL_RenderFillRect(renderer_, &rectangle);
 			}
 			else
 			{
-				if (gameState[i / 10][j / 10] == 1)
+				if (gameState[i][j] == 1)
 					SDL_SetRenderDrawColor( renderer_, 127, 255, 212, 255 );
-				else if (gameState[i / 10][j / 10] == 2)
+				else if (gameState[i][j] == 2)
 					SDL_SetRenderDrawColor( renderer_, 64, 224, 208, 255 );
-				else if (gameState[i / 10][j / 10] == 3)
+				else if (gameState[i][j] == 3)
 					SDL_SetRenderDrawColor( renderer_, 255, 105, 180, 255 );
-				else if (gameState[i / 10][j / 10] == 4)
+				else if (gameState[i][j] == 4)
 					SDL_SetRenderDrawColor( renderer_, 248, 14, 50, 255 );
-				SDL_RenderFillRect(renderer_, &rectangle);
 			}
+			SDL_RenderFillRect( renderer_, &rectangle );
 		}
 	}
 	drawBorders();
-	usleep(90000);
+	usleep( 90000 );
 	SDL_RenderPresent( renderer_ );
 }
 
@@ -126,23 +123,23 @@ void SDLWindow::drawBorders()
 	
 	top.x = 0;
 	top.y = 0;
-	top.w = width_;
+	top.w = width_ * 10;
 	top.h = 10;
 	SDL_RenderFillRect(renderer_, &top);
 	bottom.x = 0;
-	bottom.y = height_ - 10;
-	bottom.w = width_;
+	bottom.y = height_ * 10;
+	bottom.w = width_ * 10 + 10;
 	bottom.h = 10;
 	SDL_RenderFillRect(renderer_, &bottom);
-	right.x = width_ - 10;
+	right.x = width_ * 10;
 	right.y = 0;
 	right.w = 10;
-	right.h = height_;
+	right.h = height_ * 10 + 10;
 	SDL_RenderFillRect(renderer_, &right);
 	left.x = 0;
 	left.y = 0;
 	left.w = 10;
-	left.h = height_;
+	left.h = height_ * 10;
 	SDL_RenderFillRect(renderer_, &left);
 }
 
@@ -153,7 +150,6 @@ bool SDLWindow::isPaused()
 
 void SDLWindow::closeWindow()
 {
-	SDL_DestroyTexture(canvas_);
 	SDL_DestroyRenderer(renderer_);
 	SDL_DestroyWindow(window_);
 	SDL_Quit();

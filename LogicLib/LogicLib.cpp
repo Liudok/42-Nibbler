@@ -4,22 +4,18 @@
 #include <chrono>
 #include <unistd.h>
 
-int sampleSum(int a, int b)
-{
-	return a + b;
-}
-
-LogicUnit::LogicUnit() : libraries_(initLibraries()),
-	windows_(initWindows()),
-		gameField_(height, std::vector<size_t>(width, 0)),
-		snake_(gameField_[0].size(), gameField_.size())
+LogicUnit::LogicUnit()
+: libraries_(initLibraries())
+, windows_(initWindows())
+, gameField_(height_, std::vector<size_t>(width_, 0))
+, snake_(gameField_[0].size(), gameField_.size())
 {
 	snake_.fillMap(gameField_);
 }
 
 void LogicUnit::loopTheGame()
 {
-	windows_[currentLibraryIndex_]->openWindow(width, height);
+	windows_[currentLibraryIndex_]->openWindow(width_, height_);
 	windows_[currentLibraryIndex_]->draw(gameField_);
 	std::function<void()> reactFunctions[nbResponses] = {
 		std::bind(&LogicUnit::reactToNoResponse, this),
@@ -122,7 +118,7 @@ void LogicUnit::reactToToNcurses()
 {
 	windows_[currentLibraryIndex_]->closeWindow();
 	currentLibraryIndex_ = ncurses;
-	windows_[currentLibraryIndex_]->openWindow(width, height);
+	windows_[currentLibraryIndex_]->openWindow(width_, height_);
 	windows_[currentLibraryIndex_]->draw(gameField_);
 }
 
@@ -130,7 +126,7 @@ void LogicUnit::reactToToSDL()
 {
 	windows_[currentLibraryIndex_]->closeWindow();
 	currentLibraryIndex_ = sdl;
-	windows_[currentLibraryIndex_]->openWindow(width, height);
+	windows_[currentLibraryIndex_]->openWindow(width_, height_);
 	windows_[currentLibraryIndex_]->draw(gameField_);
 }
 
@@ -138,7 +134,7 @@ void LogicUnit::reactToToSFML()
 {
 	windows_[currentLibraryIndex_]->closeWindow();
 	currentLibraryIndex_ = sfml;
-	windows_[currentLibraryIndex_]->openWindow(width, height);
+	windows_[currentLibraryIndex_]->openWindow(width_, height_);
 	windows_[currentLibraryIndex_]->draw(gameField_);
 }
 
@@ -146,7 +142,7 @@ void LogicUnit::reactToToDummy()
 {
 	windows_[currentLibraryIndex_]->closeWindow();
 	currentLibraryIndex_ = dummy;
-	windows_[currentLibraryIndex_]->openWindow(width, height);
+	windows_[currentLibraryIndex_]->openWindow(width_, height_);
 	windows_[currentLibraryIndex_]->draw(gameField_);
 }
 
@@ -166,14 +162,43 @@ void LogicUnit::pauseTheGame()
 	endOfGame_ = false;
 }
 
+size_t  LogicUnit::getWidth() const
+{
+	return width_;
+}
+
+size_t  LogicUnit::getHeight() const
+{
+	return height_;
+}
+
 void LogicUnit::setWindowSize(size_t w, size_t h)
 {
-	height = h;
-	width = w;
+	height_ = h;
+	width_ = w;
 	gameField_.clear();
-	gameField_ = std::vector<std::vector<size_t>>(height, std::vector<size_t>(width, 0));
+	gameField_ = std::vector<std::vector<size_t>>(height_, std::vector<size_t>(width_, 0));
 	snake_ = Snake(gameField_[0].size(), gameField_.size());
 	snake_.fillMap(gameField_);
+}
+
+LogicUnit::LogicUnit(LogicUnit const & other)
+ : libraries_(initLibraries())
+ , windows_(initWindows())
+ , gameField_(other.getHeight(), std::vector<size_t>(other.getWidth(), 0))
+ , snake_(gameField_[0].size(), gameField_.size())
+{
+  setWindowSize(other.getWidth(), other.getHeight());
+}
+
+LogicUnit & LogicUnit::operator=(LogicUnit const &src)
+{
+  if (this != &src)
+  {
+	snake_ = src.snake_;
+    gameField_ = src.gameField_;
+  }
+  return (*this);
 }
 
 LogicUnit::~LogicUnit()
