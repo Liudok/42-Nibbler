@@ -1,3 +1,5 @@
+# General requirements
+
 cmake_minimum_required(VERSION 3.12)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -13,29 +15,19 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 
-set(CMAKE_FIND_LIBRARY_SUFFIXES ".dylib")
-set(CMAKE_FIND_LIBRARY_PREFIXES "lib")
-set(CMAKE_SHARED_LIBRARY_PREFIX "lib")
-set(CMAKE_SHARED_LIBRARY_SUFFIX ".dylib")
+# Sdl configuration
 
+set(SdlPath ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParties/SDL)
+include_directories(${SDL_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParties/SDL/sdl2frameworks/SDL2.framework/Headers ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParties/SDL/sdl2frameworks/SDL2_ttf.framework/Headers ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParties/SDL/sdl2frameworks/SDL2_ttf.framework ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParties/SDL/sdl2frameworks/SDL2.framework )
+file(GLOB SdlDynamicLibs ${SdlPath}/lib/*.dylib ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParties/SDL/sdl2frameworks/SDL2_ttf.framework/SDL2_ttf)
 
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
+# Sfml configuration
 
+set(SfmlPath ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParties/SFML)
+include_directories(${SFML2_INCLUDE_DIRS} ${SfmlPath}/include)
+file(GLOB SfmlDynamicLibs ${SfmlPath}/lib/*.dylib)
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
-
-message( "!!!+++++++ ${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/SFML/include/SFML/ ")
-set(${SFML_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/SFML/include/SFML/")
-message( "++++++++++ ${SFML_INCLUDE_DIR} ")
-find_package(SFML COMPONENTS system window graphics REQUIRED )
-if (SFML_FOUND)
-    message( "++++++++++ ${SFML_INCLUDE_DIR} ")
-	include_directories(${SFML_INCLUDE_DIR})
-else()
-    message("/n -> SFML not found")
-endif()
-
+# Project sources and libraries
 
 project(Nibbler)
 
@@ -44,7 +36,7 @@ file(GLOB LogicSources
 	${CMAKE_CURRENT_SOURCE_DIR}/LogicLib/*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
 
-add_library(MyLogicLib STATIC ${LogicSources})
+add_library(LogicLib STATIC ${LogicSources})
 
 file(GLOB NcursesLibSources
 	${CMAKE_CURRENT_SOURCE_DIR}/NcursesLib/*.cpp
@@ -52,13 +44,6 @@ file(GLOB NcursesLibSources
 	${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
 
 add_library(NcursesLib SHARED ${NcursesLibSources})
-
-file(GLOB DummyLibSources
-	${CMAKE_CURRENT_SOURCE_DIR}/DummyLib/*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/DummyLib/*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
-
-add_library(DummyLib SHARED ${DummyLibSources})
 
 file(GLOB SdlLibSources
 	${CMAKE_CURRENT_SOURCE_DIR}/SdlLib/*.cpp
@@ -73,22 +58,24 @@ file(GLOB SfmlLibSources
 	${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
 
 add_library(SfmlLib SHARED ${SfmlLibSources})
-target_link_libraries(SfmlLib ${SFML_LIBRARIES})
-
-file(GLOB TesterSources
-	${CMAKE_CURRENT_SOURCE_DIR}/Tester/*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Tester/*.hpp)
 
 add_executable(Nibbler main.cpp)
 
-add_executable(Tester ${TesterSources})
+# Simpler includes
 
-target_link_libraries(SdlLib ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
+target_include_directories(LogicLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
+target_include_directories(NcursesLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
+target_include_directories(SdlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
+target_include_directories(SfmlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
+
+# Links between project parts
+
+target_link_libraries(LogicLib NcursesLib SdlLib SfmlLib)
 
 target_link_libraries(NcursesLib ncurses)
 
-target_link_libraries(MyLogicLib NcursesLib DummyLib SdlLib SfmlLib)
+target_link_libraries(SdlLib ${SdlDynamicLibs})
 
-target_link_libraries(Nibbler MyLogicLib)
+target_link_libraries(SfmlLib ${SfmlDynamicLibs})
 
-target_link_libraries(Tester MyLogicLib)
+target_link_libraries(Nibbler LogicLib)

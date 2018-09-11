@@ -124,11 +124,57 @@ void SFMLWindow::drawBorders()
 	bottom.setPosition(sf::Vector2f(0, height_ * 30));
 	bottom.setFillColor(sf::Color(95, 158, 160));
 	window_->draw(bottom);
+	sf::Font font;
+	if (!font.loadFromFile("Roboto/Roboto-Bold.ttf"))
+	{
+		std::cout << "No font" <<std::endl;
+	}
+	sf::Text text;
+	text.setFont(font);
+	text.setCharacterSize(20);
+	text.setString("Score: " + std::to_string((int)score_));
+	text.setFillColor(sf::Color::Red);
+	text.setPosition(10,height_ * 30);
+	window_->draw(text);
+	text.setPosition(width_ * 30 - 100, height_ * 30);
+	text.setString("Speed: " + std::to_string((int)speed_));
+	window_->draw(text);
+}
+
+void SFMLWindow::setScore(size_t score)
+{
+	score_ = score;
+}
+
+void SFMLWindow::setSpeed(size_t speed)
+{
+	speed_ = speed;
 }
 
 bool SFMLWindow::isPaused()
 {
 	return paused_;
+}
+
+void SFMLWindow::showGameOver()
+{
+	sf::Text text;
+	sf::Font font;
+	if (!font.loadFromFile("Roboto/Roboto-Bold.ttf"))
+	{
+		std::cout << "No font" <<std::endl;
+	}
+	text.setFont(font);
+	text.setCharacterSize(55);
+	text.setString("Score: " + std::to_string((int)score_));
+	text.setFillColor(sf::Color::Green);
+	text.setPosition((width_ / 2) * 30 - 60, (height_ / 2) * 30 - 50);
+	window_->draw(text);
+	text.setString("Game over");
+	text.setFillColor(sf::Color::Red);
+	text.setPosition((width_ / 2) * 30 - 100, (height_ / 2) * 30 + 40);
+	window_->draw(text);
+	window_->display();
 }
 
 void SFMLWindow::closeWindow()

@@ -48,6 +48,12 @@ void Snake::move(const direction newDirection)
 	headPos_ = newHeadPosition;
 	if (headHitBody())
 		hitBody_ = true;
+	score_ = body_.size() - 4;
+}
+
+size_t Snake::getScore()
+{
+	return score_;
 }
 
 bool Snake::collapsed() const

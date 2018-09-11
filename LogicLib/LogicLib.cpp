@@ -37,9 +37,12 @@ void LogicUnit::loopTheGame()
 		const auto t1 = std::chrono::high_resolution_clock::now();
 		const auto timePassed = (t1-t0).count();
 		const auto delta = normalLoopDuration - timePassed;
+		windows_[currentLibraryIndex_]->setScore(snake_.getScore());
+		windows_[currentLibraryIndex_]->setSpeed(speed_ + 10 * snake_.getScore());
 		if (delta > 0)
-			usleep(delta);
+			usleep(delta - 1000 * snake_.getScore());
 	}
+	windows_[currentLibraryIndex_]->showGameOver();
 	usleep(normalLoopDuration * 3);
 	windows_[currentLibraryIndex_]->closeWindow();
 }
@@ -49,7 +52,7 @@ auto LogicUnit::initLibraries()
 {
 	std::array<ptrToLibraryType, nbLibraries> libraries;
 	const char* libraryNames[nbLibraries] =
-		{ "libNcursesLib.dylib", "libDummyLib.dylib", "libSdlLib.dylib", "libSfmlLib.dylib"};
+		{ "libNcursesLib.dylib", "libSdlLib.dylib", "libSfmlLib.dylib"};
 	for (size_t currentLib = 0; currentLib < nbLibraries; ++currentLib){
 		libraries[currentLib] =
 			dlopen(libraryNames[currentLib], RTLD_LAZY | RTLD_LOCAL);
@@ -141,7 +144,7 @@ void LogicUnit::reactToToSFML()
 void LogicUnit::reactToToDummy()
 {
 	windows_[currentLibraryIndex_]->closeWindow();
-	currentLibraryIndex_ = dummy;
+	currentLibraryIndex_ = sfml;
 	windows_[currentLibraryIndex_]->openWindow(width_, height_);
 	windows_[currentLibraryIndex_]->draw(gameField_);
 }

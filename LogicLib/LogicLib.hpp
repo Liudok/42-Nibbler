@@ -7,8 +7,8 @@ using ptrToLibraryType = void*;
 using windowPtr = std::unique_ptr<IWindow>;
 using libraryIndex = size_t;
 using gameField = std::vector<std::vector<size_t>>;
-enum libraryType { ncurses, dummy, sdl, sfml };
-static constexpr size_t nbLibraries = 4;
+enum libraryType { ncurses, sdl, sfml };
+static constexpr size_t nbLibraries = 3;
 
 class LogicUnit
 {
@@ -29,9 +29,10 @@ class LogicUnit
     std::vector<windowPtr> initWindows();
     std::array<ptrToLibraryType, nbLibraries> libraries_;
     std::vector<windowPtr> windows_;
-    libraryIndex currentLibraryIndex_ = sdl;
+    libraryIndex currentLibraryIndex_ = sfml;
     size_t     height_ = 50;
     size_t     width_ = 30;
+    size_t     speed_ = 10;
     gameField  gameField_;
     Snake      snake_;
     bool       endOfGame_ = false;

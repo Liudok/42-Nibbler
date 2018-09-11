@@ -1,5 +1,5 @@
 
-default_target: script
+all: script
 
 script:
 	sh build.sh
@@ -8,6 +8,6 @@ clean:
 	rm -rf Build
 
 fclean: clean
-	rm -rf Build
+	rm -rf ThirdParties
 
 re: fclean all

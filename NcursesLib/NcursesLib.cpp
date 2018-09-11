@@ -54,6 +54,21 @@ void NcuresesWindow::openWindow(size_t width, size_t height)
 	height_ = height;
 }
 
+void NcuresesWindow::setScore(size_t score)
+{
+	score_ = score;
+}
+
+void NcuresesWindow::setSpeed(size_t speed)
+{
+	speed_ = speed;
+}
+
+void NcuresesWindow::showGameOver()
+{
+	
+}
+
 void NcuresesWindow::closeWindow()
 {
 	delwin(window_);

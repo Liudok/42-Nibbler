@@ -148,6 +148,49 @@ bool SDLWindow::isPaused()
 	return paused_;
 }
 
+void SDLWindow::setScore(size_t score)
+{
+	score_ = score;
+}
+
+void SDLWindow::setSpeed(size_t speed)
+{
+	speed_ = speed;
+}
+
+SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
+{
+	SDL_Rect	rect;
+
+	rect.x = x * 2;
+	rect.y = y * 2;
+	rect.h = h * 2;
+	rect.w = w * 2;
+	return (rect);
+}
+
+void SDLWindow::showGameOver()
+{
+
+	SDL_Surface				*surface;
+	static const SDL_Color	color = {199, 50, 176, 0};
+	TTF_Font				*font;
+
+	TTF_Init();
+	font = TTF_OpenFont("Roboto/Roboto-Light.ttf", 20);
+	if (font == NULL)
+		return ;
+	TTF_SetFontStyle(font, TTF_STYLE_BOLD);
+	surface = TTF_RenderUTF8_Blended(font, "Game over", color);
+	SDL_Rect	rect = makeRect((width_ / 2) * 4 - 10, (height_ / 2) * 4 - 20, surface->h / 2, surface->w / 2);
+	SDL_Texture		*texture = SDL_CreateTextureFromSurface(renderer_, surface);
+	SDL_RenderCopy(renderer_, texture, NULL, &rect);
+	SDL_FreeSurface(surface);
+	TTF_CloseFont(font);
+	TTF_Quit();
+	SDL_RenderPresent( renderer_ );
+}
+
 void SDLWindow::closeWindow()
 {
 	SDL_DestroyRenderer(renderer_);
