@@ -2,7 +2,6 @@
 #include <IWindow.hpp>
 #include <SDL.h>
 
-// #include <SDL2/SDL_ttf.h>
 #include <SDL_ttf.h>
 
 extern "C"
@@ -28,11 +27,15 @@ class SDLWindow : public IWindow
 		void 			drawBorders();
 		bool			isPaused();
 		SDL_Rect        makeRect(size_t x, size_t y, size_t h, size_t w);
+		void            texture_from_text(const char *text, size_t x, size_t y, SDL_Color color);
 		size_t			width_;
 		size_t			height_;
 		SDL_Window		*window_ = nullptr;
 		SDL_Renderer	*renderer_;
-		SDL_Event  		event_;
+		SDL_Surface	    *score_surface_;
+		SDL_Rect        score_rect_;
+		SDL_Texture     *score_texture_;
+		size_t          draw_score_ = 0;
 		size_t			score_ = 0;
 		size_t			speed_ = 0;
 		bool paused_ = false;

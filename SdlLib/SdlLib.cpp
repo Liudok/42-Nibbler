@@ -12,38 +12,39 @@ extern "C"
 
 responseType SDLWindow::getResponse()
 {
-while (SDL_PollEvent(&event_))
+SDL_Event  		event;
+while (SDL_PollEvent(&event))
 	{
-		if (event_.type == SDL_QUIT || (event_.type == SDL_KEYDOWN && event_.key.keysym.sym == SDLK_ESCAPE))
+		if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
 			return endGame;
-		else if (event_.type == SDL_KEYDOWN )
+		else if (event.type == SDL_KEYDOWN )
 		{
-			if (isPaused() && event_.key.keysym.sym != SDLK_SPACE)
+			if (isPaused() && event.key.keysym.sym != SDLK_SPACE)
 				return pauseGame;
 			else
 			{
 				paused_ = false;
-				if (event_.key.keysym.sym == SDLK_UP || event_.key.keysym.sym == SDLK_w)
+				if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)
 					return up;
-				else if (event_.key.keysym.sym == SDLK_DOWN || event_.key.keysym.sym == SDLK_s)
+				else if (event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s)
 					return down;
-				else if (event_.key.keysym.sym == SDLK_LEFT || event_.key.keysym.sym == SDLK_a)
+				else if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a)
 					return left;
-				else if (event_.key.keysym.sym == SDLK_RIGHT || event_.key.keysym.sym == SDLK_d)
+				else if (event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d)
 					return right;
-				else if (event_.key.keysym.sym == SDLK_SPACE)
+				else if (event.key.keysym.sym == SDLK_SPACE)
 				{
 					paused_ = true;
 					return pauseGame;
 				}
-				else if (event_.key.keysym.sym == SDLK_2)
+				else if (event.key.keysym.sym == SDLK_2)
 					return toNcurses;
-				else if (event_.key.keysym.sym == SDLK_1)
+				else if (event.key.keysym.sym == SDLK_1)
 					return toSFML;
 			}
 		}
 	}
-	if (isPaused() && event_.key.keysym.sym != SDLK_SPACE)
+	if (isPaused() && event.key.keysym.sym != SDLK_SPACE)
 				return pauseGame;
 	return noResponse;
 }
@@ -73,8 +74,18 @@ void SDLWindow::openWindow(size_t width, size_t height)
 		window_,
 		-1,
 		SDL_RENDERER_ACCELERATED);
-
 	SDL_RaiseWindow(window_);
+    TTF_Init();
+
+    TTF_Font *font = TTF_OpenFont("Roboto/Roboto-Light.ttf", 12);
+	if (font == NULL)
+		return ;
+	TTF_SetFontStyle(font, TTF_STYLE_BOLD);
+	score_surface_ = TTF_RenderUTF8_Blended(font, "score: 0", {199, 50, 176, 0});
+	score_rect_ = makeRect(2, height_ * 5 - 2, score_surface_->h / 2, score_surface_->w / 2);
+	score_texture_ = SDL_CreateTextureFromSurface(renderer_, score_surface_);
+
+	TTF_CloseFont(font);
 }
 
 
@@ -141,6 +152,23 @@ void SDLWindow::drawBorders()
 	left.w = 10;
 	left.h = height_ * 10;
 	SDL_RenderFillRect(renderer_, &left);
+
+	if (draw_score_ != score_)
+	{
+		TTF_Font *font = TTF_OpenFont("Roboto/Roboto-Light.ttf", 12);
+		if (font == NULL)
+			return ;
+		TTF_SetFontStyle(font, TTF_STYLE_BOLD);
+		std::string score("score: " + std::to_string((int)score_));
+	    const char *text = score.c_str();
+		score_surface_ = TTF_RenderUTF8_Blended(font, text, {199, 50, 176, 0});
+		score_rect_ = makeRect(2, height_ * 5 - 2, score_surface_->h / 2, score_surface_->w / 2);
+		score_texture_ = SDL_CreateTextureFromSurface(renderer_, score_surface_);
+		draw_score_ = score_;
+		TTF_CloseFont(font);
+	}
+
+	SDL_RenderCopy(renderer_, score_texture_, NULL, &score_rect_);
 }
 
 bool SDLWindow::isPaused()
@@ -169,30 +197,35 @@ SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
 	return (rect);
 }
 
-void SDLWindow::showGameOver()
+void SDLWindow::texture_from_text(const char *text, size_t x, size_t y, SDL_Color color)
 {
-
-	SDL_Surface				*surface;
-	static const SDL_Color	color = {199, 50, 176, 0};
-	TTF_Font				*font;
-
-	TTF_Init();
-	font = TTF_OpenFont("Roboto/Roboto-Light.ttf", 20);
+    TTF_Font *font = TTF_OpenFont("Roboto/Roboto-Light.ttf", 18);
 	if (font == NULL)
 		return ;
 	TTF_SetFontStyle(font, TTF_STYLE_BOLD);
-	surface = TTF_RenderUTF8_Blended(font, "Game over", color);
-	SDL_Rect	rect = makeRect((width_ / 2) * 4 - 10, (height_ / 2) * 4 - 20, surface->h / 2, surface->w / 2);
-	SDL_Texture		*texture = SDL_CreateTextureFromSurface(renderer_, surface);
+	SDL_Surface	*surface = TTF_RenderUTF8_Blended(font, text, color);
+	SDL_Rect rect = makeRect(x, y, surface->h / 2, surface->w / 2);
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer_, surface);
 	SDL_RenderCopy(renderer_, texture, NULL, &rect);
 	SDL_FreeSurface(surface);
 	TTF_CloseFont(font);
-	TTF_Quit();
+}
+
+void SDLWindow::showGameOver()
+{
+	SDL_Color	color = {199, 50, 176, 0};
+	texture_from_text("Game over", (width_ / 2) * 4 - 10, (height_ / 2) * 4 - 20, color);
+	color = {59, 150, 116, 0};
+	std::string score("Score: " + std::to_string((int)score_));
+	const char *text = score.c_str();
+	texture_from_text(text, (width_ / 2) * 4, (height_ / 2) * 4 + 20, color);
 	SDL_RenderPresent( renderer_ );
 }
 
 void SDLWindow::closeWindow()
 {
+	SDL_FreeSurface(score_surface_);
+	TTF_Quit();
 	SDL_DestroyRenderer(renderer_);
 	SDL_DestroyWindow(window_);
 	SDL_Quit();

@@ -33,7 +33,7 @@ void Snake::move(const direction newDirection)
 		srand(time(NULL));
 		size_t x = rand() % width_;
 		size_t y = rand() % height_;
-		foodPos_ = {(x != 0 && x != width_ - 1) ? x : x + 1, (y != 0 && y != height_ - 1) ? y : 3};
+		foodPos_ = {(x != 0 && x != width_ - 1) ? x : 9, (y != 0 && y != height_ - 1) ? y : 9};
 	}
 	updateDirection(newDirection);
 	const auto newHeadPosition = defineNewHeadPosition();
