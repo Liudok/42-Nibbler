@@ -1,9 +1,16 @@
 #pragma once
+<<<<<<< HEAD
 #include <IWindow.hpp>
 #include <SDL.h>
 
 #include <SDL_ttf.h>
 
+=======
+
+#include <IWindow.hpp>
+#include <SDL.h>
+
+>>>>>>> master
 extern "C"
 {
     IWindow* create();
@@ -24,6 +31,7 @@ class SDLWindow : public IWindow
 
     private:
 
+<<<<<<< HEAD
         void            gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
         void            drawBorders();
         bool            isPaused();
@@ -40,4 +48,16 @@ class SDLWindow : public IWindow
         size_t          score_ = 0;
         size_t          speed_ = 0;
         bool            paused_ = false;
+=======
+		void			gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
+		void 			drawBorders();
+		bool			isPaused();
+		size_t			width_ = 0;
+		size_t			height_ = 0;
+		SDL_Window		*window_ = nullptr;
+		SDL_Renderer	*renderer_ = nullptr;
+		SDL_Texture		*canvas_ = nullptr;
+		SDL_Event  		event_;
+		bool paused_ = false;
+>>>>>>> master
 };

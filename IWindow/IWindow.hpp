@@ -1,8 +1,9 @@
 #pragma once
+
 #include <vector>
 
 enum responseType { noResponse, left, right, up, down,
-		toNcurses, toDummy, toSDL, toSFML, endGame, pauseGame };
+		toNcurses, toDummy, toSDL, toSFML, endGame, pauseContinue };
 
 constexpr size_t nbResponses = 11;
 

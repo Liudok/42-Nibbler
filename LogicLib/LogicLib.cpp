@@ -4,11 +4,14 @@
 #include <chrono>
 #include <unistd.h>
 
+<<<<<<< HEAD
 LogicUnit::LogicUnit()
 : libraries_(initLibraries())
 , windows_(initWindows())
 , gameField_(height_, std::vector<size_t>(width_, 0))
 , snake_(gameField_[0].size(), gameField_.size())
+=======
+>>>>>>> master
 {
 	snake_.fillMap(gameField_);
 }
@@ -28,7 +31,6 @@ void LogicUnit::loopTheGame()
 		std::bind(&LogicUnit::reactToToSDL, this),
 		std::bind(&LogicUnit::reactToToSFML, this),
 		std::bind(&LogicUnit::reactToEndGame, this),
-		std::bind(&LogicUnit::pauseTheGame, this) };
 	const auto normalLoopDuration = 700000;
 	while (!endOfGame_){
 		const auto t0 = std::chrono::high_resolution_clock::now();
@@ -155,14 +157,8 @@ void LogicUnit::reactToEndGame()
 	endOfGame_ = true;
 }
 
-void LogicUnit::pauseTheGame()
+void LogicUnit::reactToPauseContinue()
 {
-	//snake_.move(down);
-	//snake_.fillMap(gameField_);
-	paused_ = true;
-	usleep(1000000);
-	//windows_[currentLibraryIndex_]->draw(gameField_);
-	endOfGame_ = false;
 }
 
 size_t  LogicUnit::getWidth() const

@@ -22,9 +22,12 @@ then
 	sleep 1
 
 	git clone https://github.com/SDL-mirror/SDL.git
+<<<<<<< HEAD
 	cd SDL
 	git clone https://github.com/ysgard/sdl2frameworks.git
 	cd ..
+=======
+>>>>>>> master
 	mkdir SDL/lib
 	(cd SDL/lib && cmake .. && cmake --build .);
 
