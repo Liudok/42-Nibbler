@@ -19,9 +19,10 @@ then
 	cd ThirdParties
 	echo "${GREEN}${BOLD}Installing and building third parties...${EOC}"
 	echo "${GREEN}${BOLD}Please wait it may take a while${EOC}"
-	sleep 1
-
 	git clone https://github.com/SDL-mirror/SDL.git
+	cd SDL
+	git clone https://github.com/ysgard/sdl2frameworks.git
+	cd ..
 	mkdir SDL/lib
 	(cd SDL/lib && cmake .. && cmake --build .);
 

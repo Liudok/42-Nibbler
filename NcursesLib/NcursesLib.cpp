@@ -14,11 +14,15 @@ responseType NcuresesWindow::getResponse()
 	switch(response){
 		case 'q': return endGame;
 		case 'a': return left;
+		case KEY_LEFT: return left;
 		case 'd': return right;
+		case KEY_RIGHT: return right;
 		case 'w': return up;
+		case KEY_UP: return up;
 		case 's': return down;
-		case 'z': return toNcurses;
-		case 'x': return toDummy;
+		case KEY_DOWN: return down;
+		case '1' : return toSFML;
+		case '2' : return toSDL;
 		case ' ': return pauseContinue;
 		default: return noResponse;
 	}
@@ -46,6 +50,21 @@ void NcuresesWindow::openWindow(size_t width, size_t height)
 	init_pair(head, COLOR_GREEN, COLOR_GREEN);
 	init_pair(food, COLOR_MAGENTA, COLOR_BLACK);
 	init_pair(collision, COLOR_RED, COLOR_RED);
+}
+
+void NcuresesWindow::setScore(size_t score)
+{
+	score_ = score;
+}
+
+void NcuresesWindow::setSpeed(size_t speed)
+{
+	speed_ = speed;
+}
+
+void NcuresesWindow::showGameOver()
+{
+	
 }
 
 void NcuresesWindow::closeWindow()

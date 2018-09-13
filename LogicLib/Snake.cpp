@@ -1,7 +1,11 @@
 #include "Snake.hpp"
-
+#include <iostream>
 Snake::Snake(size_t width, size_t height)
-	: width_(width), height_(height) {}
+	: width_(width)
+	, height_(height)
+{
+
+}
 
 void Snake::fillMap(gameField& field) const
 {
@@ -18,21 +22,25 @@ void Snake::fillMap(gameField& field) const
 void Snake::move(const direction newDirection)
 {
 	const size_t overflow = std::numeric_limits<size_t>::max();
-	if (headPos_ == foodPos_){
+	if (headPos_ == foodPos_)
+	{
 		auto newBodyPart = body_[body_.size() - 1];
 		--newBodyPart.x;
-		if (newBodyPart.x == overflow){
+		if (newBodyPart.x == overflow)
+		{
 			outOfField_ = true;
 			return;
 		}
 		body_.push_back(std::move(newBodyPart));
 		srand(time(NULL));
-		foodPos_ = {rand() % width_, rand() % height_};
+		size_t x = rand() % width_;
+		size_t y = rand() % height_;
+		foodPos_ = {(x != 0 && x != width_ - 1) ? x : 9, (y != 0 && y != height_ - 1) ? y : 9};
 	}
 	updateDirection(newDirection);
 	const auto newHeadPosition = defineNewHeadPosition();
-	if (newHeadPosition.x == width_ || newHeadPosition.x == overflow ||
-		newHeadPosition.y == height_ || newHeadPosition.y == overflow){
+	if (newHeadPosition.x == width_ - 1 || newHeadPosition.x == overflow ||
+		newHeadPosition.y == height_ - 1 || newHeadPosition.y == overflow){
 		outOfField_ = true;
 		return;
 	}
@@ -42,6 +50,12 @@ void Snake::move(const direction newDirection)
 	headPos_ = newHeadPosition;
 	if (headHitBody())
 		hitBody_ = true;
+	score_ = body_.size() - 4;
+}
+
+size_t Snake::getScore()
+{
+	return score_;
 }
 
 bool Snake::collapsed() const
@@ -88,4 +102,28 @@ bool Snake::headHitBody() const
 		if (bodyPart == headPos_)
 			return true;
 	return false;
+}
+
+Snake::Snake(Snake const & other)
+	: width_(other.width_)
+	, height_(other.height_)
+{
+	;
+}
+
+Snake & Snake::operator=(Snake const &src)
+{
+  if (this != &src)
+  {
+  	width_ = src.width_;
+  	height_ = src.height_;
+	body_ = src.body_;
+    score_ = src.score_;
+  }
+  return (*this);
+}
+
+Snake::~Snake()
+{
+	body_.clear();
 }
