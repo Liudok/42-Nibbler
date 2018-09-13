@@ -20,3 +20,5 @@ Stupid:
 1. Any class that declares at least one attribute must be written in canonical form.
 2. Makefile
 3. argc/argv params of map
+4. argc/argv default library
+5. sounds
