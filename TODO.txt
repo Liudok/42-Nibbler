@@ -11,8 +11,7 @@
 11. generic snake winner
 +12. new buttons for changing libs
 +13. usage
-14. escape
-15. Qt gui
++14. escape
 +-16. speedup
 +17. scoring
 18. If a dynamic library does not exist or is not compatible, your program must display a relevant error message and exit neatly. - наша змейка не чувствительна к удалению либы)) это пугает)

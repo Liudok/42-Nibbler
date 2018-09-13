@@ -11,13 +11,18 @@ struct Point
     }
 };
 
+
+using gameField = std::vector<std::vector<size_t>>;
+
 class Snake
 {
     public:
 
-        using gameField = std::vector<std::vector<size_t>>;
         using direction = responseType;
         Snake(size_t width, size_t height);
+        Snake(Snake const & other);
+        ~Snake();
+        Snake &operator=(Snake const &src);
         void    fillMap(gameField&) const;
         void    move(const direction = noResponse);
         bool    collapsed() const;
@@ -38,6 +43,5 @@ class Snake
         bool outOfField_ = false;
         bool hitBody_ = false;
         Point foodPos_ {9, 9};
-
         size_t     score_ = 0;
 };

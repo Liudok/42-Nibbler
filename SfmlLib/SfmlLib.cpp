@@ -20,7 +20,6 @@ responseType SFMLWindow::getResponse()
         case sf::Event::Closed:
         	closeWindow();
             return endGame;
-            break;
 
         case sf::Event::KeyPressed:
             switch (event.key.code)
@@ -28,33 +27,32 @@ responseType SFMLWindow::getResponse()
             case sf::Keyboard::Num2:
             	closeWindow();
                 return toNcurses;
-                break;
+   
             case sf::Keyboard::Escape:
             	closeWindow();
                 return endGame;
-                break;
+   
             case sf::Keyboard::Num1:
             	closeWindow();
                 return toSDL;
-                break;
+   
             case sf::Keyboard::Down:
             	return down;
-            	break;
+
             case sf::Keyboard::Up:
             	return up;
-            	break;
+
             case sf::Keyboard::Right:
             	return right;
-            	break;
+
             case sf::Keyboard::Left:
             	return left;
-            	break;
+
             default:
 				break;
             }
         default:
         	return noResponse;
-				break;
         }
     }
 	return noResponse;
@@ -180,4 +178,9 @@ void SFMLWindow::showGameOver()
 void SFMLWindow::closeWindow()
 {
 	window_->close();
+}
+
+SFMLWindow::~SFMLWindow()
+{
+	;
 }

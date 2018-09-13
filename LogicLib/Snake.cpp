@@ -3,7 +3,9 @@
 Snake::Snake(size_t width, size_t height)
 	: width_(width)
 	, height_(height)
-	{}
+{
+
+}
 
 void Snake::fillMap(gameField& field) const
 {
@@ -100,4 +102,28 @@ bool Snake::headHitBody() const
 		if (bodyPart == headPos_)
 			return true;
 	return false;
+}
+
+Snake::Snake(Snake const & other)
+	: width_(other.width_)
+	, height_(other.height_)
+{
+	;
+}
+
+Snake & Snake::operator=(Snake const &src)
+{
+  if (this != &src)
+  {
+  	width_ = src.width_;
+  	height_ = src.height_;
+	body_ = src.body_;
+    score_ = src.score_;
+  }
+  return (*this);
+}
+
+Snake::~Snake()
+{
+	body_.clear();
 }

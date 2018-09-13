@@ -19,6 +19,7 @@ class SFMLWindow : public IWindow
 		void             setScore(size_t score) override;
 		void             setSpeed(size_t speed) override;
 		void             showGameOver() override;
+		~SFMLWindow();
 
 	private:
 

@@ -77,7 +77,7 @@ void SDLWindow::openWindow(size_t width, size_t height)
 	SDL_RaiseWindow(window_);
     TTF_Init();
 
-    TTF_Font *font = TTF_OpenFont("Roboto/Roboto-Light.ttf", 12);
+    TTF_Font *font = TTF_OpenFont("Roboto/Roboto-Light.ttf", 11);
 	if (font == NULL)
 		return ;
 	TTF_SetFontStyle(font, TTF_STYLE_BOLD);
@@ -155,14 +155,14 @@ void SDLWindow::drawBorders()
 
 	if (draw_score_ != score_)
 	{
-		TTF_Font *font = TTF_OpenFont("Roboto/Roboto-Light.ttf", 12);
+		TTF_Font *font = TTF_OpenFont("Roboto/Roboto-Light.ttf", 11);
 		if (font == NULL)
 			return ;
 		TTF_SetFontStyle(font, TTF_STYLE_BOLD);
 		std::string score("score: " + std::to_string((int)score_));
 	    const char *text = score.c_str();
 		score_surface_ = TTF_RenderUTF8_Blended(font, text, {199, 50, 176, 0});
-		score_rect_ = makeRect(2, height_ * 5 - 2, score_surface_->h / 2, score_surface_->w / 2);
+		score_rect_ = makeRect(2, height_ * 5 - 1, score_surface_->h / 2, score_surface_->w / 2);
 		score_texture_ = SDL_CreateTextureFromSurface(renderer_, score_surface_);
 		draw_score_ = score_;
 		TTF_CloseFont(font);
@@ -225,8 +225,14 @@ void SDLWindow::showGameOver()
 void SDLWindow::closeWindow()
 {
 	SDL_FreeSurface(score_surface_);
+	SDL_DestroyTexture(score_texture_);
 	TTF_Quit();
 	SDL_DestroyRenderer(renderer_);
 	SDL_DestroyWindow(window_);
 	SDL_Quit();
+}
+
+SDLWindow::~SDLWindow()
+{
+	;
 }

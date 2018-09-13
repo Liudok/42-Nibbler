@@ -6,7 +6,6 @@
 using ptrToLibraryType = void*;
 using windowPtr = std::unique_ptr<IWindow>;
 using libraryIndex = size_t;
-using gameField = std::vector<std::vector<size_t>>;
 enum libraryType { ncurses, sdl, sfml };
 static constexpr size_t nbLibraries = 3;
 
