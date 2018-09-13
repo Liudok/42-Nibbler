@@ -19,12 +19,7 @@ responseType SFMLWindow::getResponse()
         case sf::Event::Closed:
         	closeWindow();
             return endGame;
-
         case sf::Event::KeyPressed:
-<<<<<<< HEAD
-=======
-
->>>>>>> master
             switch (event.key.code)
             {
             case sf::Keyboard::Num2:
@@ -70,18 +65,11 @@ void SFMLWindow::draw(std::vector<std::vector<size_t>> const& gameState)
 
 void SFMLWindow::openWindow(size_t width, size_t height)
 {
-<<<<<<< HEAD
 	width_ = width;
 	height_ = height;
 	window_ = new sf::RenderWindow(sf::VideoMode(width_ * 30 + 30, height_ * 30 + 30), "SFML Nibbler");
 	window_->setActive(true);
-=======
-	width_ = width * 10 + 10;
-	height_ = height * 10 + 10;
-	window_ = new sf::RenderWindow(sf::VideoMode(width_, height_), "Nibbler - SFML");
->>>>>>> master
 }
-
 
 void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameState)
 {
@@ -133,9 +121,7 @@ void SFMLWindow::drawBorders()
 	window_->draw(bottom);
 	sf::Font font;
 	if (!font.loadFromFile("Roboto/Roboto-Bold.ttf"))
-	{
-		std::cout << "No font" <<std::endl;
-	}
+		throw std::runtime_error("No font found");
 	sf::Text text;
 	text.setFont(font);
 	text.setCharacterSize(20);
@@ -168,9 +154,7 @@ void SFMLWindow::showGameOver()
 	sf::Text text;
 	sf::Font font;
 	if (!font.loadFromFile("Roboto/Roboto-Bold.ttf"))
-	{
-		std::cout << "No font" <<std::endl;
-	}
+		throw std::runtime_error("No font found");
 	text.setFont(font);
 	text.setCharacterSize(55);
 	text.setString("Score: " + std::to_string((int)score_));
@@ -191,5 +175,5 @@ void SFMLWindow::closeWindow()
 
 SFMLWindow::~SFMLWindow()
 {
-	;
+
 }

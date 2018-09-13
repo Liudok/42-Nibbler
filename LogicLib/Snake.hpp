@@ -1,5 +1,6 @@
 #pragma once
 
+#include <IWindow.hpp>
 
 struct Point
 {

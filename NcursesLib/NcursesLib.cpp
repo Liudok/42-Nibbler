@@ -20,15 +20,10 @@ responseType NcuresesWindow::getResponse()
 		case 'w': return up;
 		case KEY_UP: return up;
 		case 's': return down;
-<<<<<<< HEAD
 		case KEY_DOWN: return down;
 		case '1' : return toSFML;
 		case '2' : return toSDL;
-=======
-		case 'z': return toNcurses;
-		case 'x': return toDummy;
 		case ' ': return pauseContinue;
->>>>>>> master
 		default: return noResponse;
 	}
 }
@@ -43,6 +38,18 @@ void NcuresesWindow::openWindow(size_t width, size_t height)
 {
 	width_ = width;
 	height_ = height;
+	initscr();
+	window_ = newwin(height_ + 2, width_ + 2, 0, 0);
+	keypad(window_, TRUE);
+	nodelay(window_, TRUE);
+	box(window_, 0, 0);
+	curs_set(0);
+	start_color();
+	init_pair(empty, COLOR_WHITE, COLOR_BLACK);
+	init_pair(body, COLOR_GREEN, COLOR_BLACK);
+	init_pair(head, COLOR_GREEN, COLOR_GREEN);
+	init_pair(food, COLOR_MAGENTA, COLOR_BLACK);
+	init_pair(collision, COLOR_RED, COLOR_RED);
 }
 
 void NcuresesWindow::setScore(size_t score)

@@ -1,10 +1,6 @@
 #pragma once
-<<<<<<< HEAD
-#include "../IWindow/IWindow.hpp"
-=======
 
 #include <IWindow.hpp>
->>>>>>> master
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
@@ -28,22 +24,13 @@ class SFMLWindow : public IWindow
 
 	private:
 
-<<<<<<< HEAD
 		void			  gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
 		void 			  drawBorders();
 		bool			  isPaused();
-		size_t			  width_;
-		size_t			  height_;
-		size_t			  score_;
-		size_t			  speed_ = 0;
-		sf::RenderWindow  *window_;
-=======
-		void			gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
-		void 			drawBorders();
-		bool			isPaused();
-		size_t			width_ = 0;
-		size_t			height_ = 0;
-		sf::RenderWindow	*window_ = nullptr;
->>>>>>> master
-		bool paused_ = false;
+		size_t			  width_ = 0;
+		size_t			  height_ = 0;
+		size_t			  score_ = 0;//no need to save
+		size_t			  speed_ = 0;//no need to save
+		sf::RenderWindow  *window_ = nullptr;
+		bool              paused_ = false;
 };

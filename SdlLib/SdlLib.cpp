@@ -1,5 +1,6 @@
 #include "SdlLib.hpp"
 #include <unistd.h>
+#include <string>
 
 extern "C"
 
@@ -19,12 +20,8 @@ while (SDL_PollEvent(&event))
 			return endGame;
 		else if (event.type == SDL_KEYDOWN )
 		{
-<<<<<<< HEAD
 			if (isPaused() && event.key.keysym.sym != SDLK_SPACE)
-				return pauseGame;
-=======
-			if (isPaused() && event_.key.keysym.sym != SDLK_SPACE)
->>>>>>> master
+				return pauseContinue;
 			else
 			{
 				paused_ = false;
@@ -39,6 +36,7 @@ while (SDL_PollEvent(&event))
 				else if (event.key.keysym.sym == SDLK_SPACE)
 				{
 					paused_ = true;
+					return pauseContinue;
 				}
 				else if (event.key.keysym.sym == SDLK_2)
 					return toNcurses;
@@ -47,13 +45,8 @@ while (SDL_PollEvent(&event))
 			}
 		}
 	}
-<<<<<<< HEAD
 	if (isPaused() && event.key.keysym.sym != SDLK_SPACE)
-				return pauseGame;
-=======
-	if (isPaused() && event_.key.keysym.sym != SDLK_SPACE)
-				return pauseContinue;
->>>>>>> master
+		return pauseContinue;
 	return noResponse;
 }
 
@@ -65,13 +58,8 @@ void SDLWindow::draw(std::vector<std::vector<size_t>> const& gameState)
 
 void SDLWindow::openWindow(size_t width, size_t height)
 {
-<<<<<<< HEAD
 	width_ = width;
 	height_ = height;
-=======
-	width_ = width * 10 + 10;
-	height_ = height * 10 + 10;
->>>>>>> master
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	window_ = SDL_CreateWindow(

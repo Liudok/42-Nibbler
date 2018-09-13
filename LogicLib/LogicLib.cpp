@@ -4,14 +4,11 @@
 #include <chrono>
 #include <unistd.h>
 
-<<<<<<< HEAD
 LogicUnit::LogicUnit()
-: libraries_(initLibraries())
-, windows_(initWindows())
-, gameField_(height_, std::vector<size_t>(width_, 0))
-, snake_(gameField_[0].size(), gameField_.size())
-=======
->>>>>>> master
+	: libraries_(initLibraries())
+	, windows_(initWindows())
+	, gameField_(height_, std::vector<size_t>(width_, 0))
+	, snake_(gameField_[0].size(), gameField_.size())
 {
 	snake_.fillMap(gameField_);
 }
@@ -31,10 +28,12 @@ void LogicUnit::loopTheGame()
 		std::bind(&LogicUnit::reactToToSDL, this),
 		std::bind(&LogicUnit::reactToToSFML, this),
 		std::bind(&LogicUnit::reactToEndGame, this),
+		std::bind(&LogicUnit::reactToPauseContinue, this) };
 	const auto normalLoopDuration = 700000;
 	while (!endOfGame_){
 		const auto t0 = std::chrono::high_resolution_clock::now();
 		const auto response = windows_[currentLibraryIndex_]->getResponse();
+		if (paused_ && response != pauseContinue) continue;
 		reactFunctions[response]();
 		const auto t1 = std::chrono::high_resolution_clock::now();
 		const auto timePassed = (t1-t0).count();
@@ -159,6 +158,7 @@ void LogicUnit::reactToEndGame()
 
 void LogicUnit::reactToPauseContinue()
 {
+	paused_ = !paused_;
 }
 
 size_t  LogicUnit::getWidth() const
@@ -181,7 +181,7 @@ void LogicUnit::setWindowSize(size_t w, size_t h)
 	snake_.fillMap(gameField_);
 }
 
-LogicUnit::LogicUnit(LogicUnit const & other)
+LogicUnit::LogicUnit(LogicUnit const& other)
  : libraries_(initLibraries())
  , windows_(initWindows())
  , gameField_(other.getHeight(), std::vector<size_t>(other.getWidth(), 0))
@@ -190,14 +190,14 @@ LogicUnit::LogicUnit(LogicUnit const & other)
   setWindowSize(other.getWidth(), other.getHeight());
 }
 
-LogicUnit & LogicUnit::operator=(LogicUnit const &src)
+LogicUnit & LogicUnit::operator=(LogicUnit const& src)
 {
   if (this != &src)
   {
 	snake_ = src.snake_;
     gameField_ = src.gameField_;
   }
-  return (*this);
+  return *this;
 }
 
 LogicUnit::~LogicUnit()
