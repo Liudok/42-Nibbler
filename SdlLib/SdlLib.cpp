@@ -20,33 +20,22 @@ while (SDL_PollEvent(&event))
 			return endGame;
 		else if (event.type == SDL_KEYDOWN )
 		{
-			if (isPaused() && event.key.keysym.sym != SDLK_SPACE)
+			if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)
+				return up;
+			else if (event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s)
+				return down;
+			else if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a)
+				return left;
+			else if (event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d)
+				return right;
+			else if (event.key.keysym.sym == SDLK_SPACE)
 				return pauseContinue;
-			else
-			{
-				paused_ = false;
-				if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)
-					return up;
-				else if (event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s)
-					return down;
-				else if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a)
-					return left;
-				else if (event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d)
-					return right;
-				else if (event.key.keysym.sym == SDLK_SPACE)
-				{
-					paused_ = true;
-					return pauseContinue;
-				}
-				else if (event.key.keysym.sym == SDLK_2)
-					return toNcurses;
-				else if (event.key.keysym.sym == SDLK_1)
-					return toSFML;
-			}
+			else if (event.key.keysym.sym == SDLK_2)
+				return toNcurses;
+			else if (event.key.keysym.sym == SDLK_1)
+				return toSFML;
 		}
 	}
-	if (isPaused() && event.key.keysym.sym != SDLK_SPACE)
-		return pauseContinue;
 	return noResponse;
 }
 
@@ -172,11 +161,6 @@ void SDLWindow::drawBorders()
 	SDL_RenderCopy(renderer_, score_texture_, NULL, &score_rect_);
 }
 
-bool SDLWindow::isPaused()
-{
-	return paused_;
-}
-
 void SDLWindow::setScore(size_t score)
 {
 	score_ = score;
@@ -235,5 +219,5 @@ void SDLWindow::closeWindow()
 
 SDLWindow::~SDLWindow()
 {
-	;
+	
 }

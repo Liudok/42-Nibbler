@@ -25,7 +25,6 @@ class SDLWindow : public IWindow
 
         void            gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
         void            drawBorders();
-        bool            isPaused();
         SDL_Rect        makeRect(size_t x, size_t y, size_t h, size_t w);
         void            texture_from_text(const char *text, size_t x, size_t y, SDL_Color color);
         size_t          width_;
@@ -38,6 +37,5 @@ class SDLWindow : public IWindow
         size_t          draw_score_ = 0;
         size_t          score_ = 0;
         size_t          speed_ = 0;
-        bool            paused_ = false;
 
 };

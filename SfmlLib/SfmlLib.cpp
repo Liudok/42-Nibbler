@@ -46,6 +46,9 @@ responseType SFMLWindow::getResponse()
             case sf::Keyboard::Left:
             	return left;
 
+            case sf::Keyboard::Space:
+            	return pauseContinue;
+
             default:
 				break;
             }
