@@ -28,7 +28,7 @@ responseType NcuresesWindow::getResponse()
 	}
 }
 
-void NcuresesWindow::draw(std::vector<std::vector<size_t>> const& gameState)
+void NcuresesWindow::draw(field const& gameState, size_t, size_t)
 {
 	drawGameState(window_, gameState);
 	wrefresh(window_);
@@ -52,16 +52,6 @@ void NcuresesWindow::openWindow(size_t width, size_t height)
 	init_pair(collision, COLOR_RED, COLOR_RED);
 }
 
-void NcuresesWindow::setScore(size_t score)
-{
-	score_ = score;
-}
-
-void NcuresesWindow::setSpeed(size_t speed)
-{
-	speed_ = speed;
-}
-
 void NcuresesWindow::showGameOver()
 {
 	
@@ -75,7 +65,7 @@ void NcuresesWindow::closeWindow()
 }
 
 void NcuresesWindow::drawGameState(WINDOW* window_,
-	std::vector<std::vector<size_t>> const& gameState)
+	field const& gameState)
 {
 	for (size_t i = 0; i < height_; ++i){
 		for (size_t j = 0; j < width_; ++j){

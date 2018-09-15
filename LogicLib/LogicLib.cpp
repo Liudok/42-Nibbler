@@ -16,7 +16,7 @@ LogicUnit::LogicUnit()
 void LogicUnit::loopTheGame()
 {
 	windows_[currentLibraryIndex_]->openWindow(width_, height_);
-	windows_[currentLibraryIndex_]->draw(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
 	std::function<void()> reactFunctions[nbResponses] = {
 		std::bind(&LogicUnit::reactToNoResponse, this),
 		std::bind(&LogicUnit::reactToLeft, this),
@@ -38,8 +38,6 @@ void LogicUnit::loopTheGame()
 		const auto t1 = std::chrono::high_resolution_clock::now();
 		const auto timePassed = (t1-t0).count();
 		const auto delta = normalLoopDuration - timePassed;
-		windows_[currentLibraryIndex_]->setScore(snake_.getScore());
-		windows_[currentLibraryIndex_]->setSpeed(speed_ + 10 * snake_.getScore());
 		if (delta > 0)
 			usleep(delta - 1000 * snake_.getScore());
 	}
@@ -82,7 +80,7 @@ void LogicUnit::reactToNoResponse()
 {
 	snake_.move();
 	snake_.fillMap(gameField_);
-	windows_[currentLibraryIndex_]->draw(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
 	endOfGame_ = snake_.collapsed();
 }
 
@@ -90,7 +88,7 @@ void LogicUnit::reactToLeft()
 {
 	snake_.move(left);
 	snake_.fillMap(gameField_);
-	windows_[currentLibraryIndex_]->draw(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
 	endOfGame_ = snake_.collapsed();
 }
 
@@ -98,7 +96,7 @@ void LogicUnit::reactToRight()
 {
 	snake_.move(right);
 	snake_.fillMap(gameField_);
-	windows_[currentLibraryIndex_]->draw(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
 	endOfGame_ = snake_.collapsed();
 }
 
@@ -106,7 +104,7 @@ void LogicUnit::reactToUp()
 {
 	snake_.move(up);
 	snake_.fillMap(gameField_);
-	windows_[currentLibraryIndex_]->draw(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
 	endOfGame_ = snake_.collapsed();
 }
 
@@ -114,7 +112,7 @@ void LogicUnit::reactToDown()
 {
 	snake_.move(down);
 	snake_.fillMap(gameField_);
-	windows_[currentLibraryIndex_]->draw(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
 	endOfGame_ = snake_.collapsed();
 }
 
@@ -123,7 +121,7 @@ void LogicUnit::reactToToNcurses()
 	windows_[currentLibraryIndex_]->closeWindow();
 	currentLibraryIndex_ = ncurses;
 	windows_[currentLibraryIndex_]->openWindow(width_, height_);
-	windows_[currentLibraryIndex_]->draw(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
 }
 
 void LogicUnit::reactToToSDL()
@@ -131,7 +129,7 @@ void LogicUnit::reactToToSDL()
 	windows_[currentLibraryIndex_]->closeWindow();
 	currentLibraryIndex_ = sdl;
 	windows_[currentLibraryIndex_]->openWindow(width_, height_);
-	windows_[currentLibraryIndex_]->draw(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
 }
 
 void LogicUnit::reactToToSFML()
@@ -139,7 +137,7 @@ void LogicUnit::reactToToSFML()
 	windows_[currentLibraryIndex_]->closeWindow();
 	currentLibraryIndex_ = sfml;
 	windows_[currentLibraryIndex_]->openWindow(width_, height_);
-	windows_[currentLibraryIndex_]->draw(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
 }
 
 void LogicUnit::reactToToDummy()
@@ -147,7 +145,7 @@ void LogicUnit::reactToToDummy()
 	windows_[currentLibraryIndex_]->closeWindow();
 	currentLibraryIndex_ = sfml;
 	windows_[currentLibraryIndex_]->openWindow(width_, height_);
-	windows_[currentLibraryIndex_]->draw(gameField_);
+	windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
 }
 
 void LogicUnit::reactToEndGame()

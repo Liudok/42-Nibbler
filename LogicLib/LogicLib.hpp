@@ -32,11 +32,12 @@ class LogicUnit
     libraryIndex currentLibraryIndex_ = sfml;
     size_t     height_ = 50;
     size_t     width_ = 30;
-    size_t     speed_ = 10;
     gameField  gameField_;
     Snake      snake_;
     bool       endOfGame_ = false;
     bool       paused_ = false;
+    size_t            score_ = 0;
+        size_t            speed_ = 10;
     void       reactToNoResponse();
     void       reactToLeft();
     void       reactToRight();

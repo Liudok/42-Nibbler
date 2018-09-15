@@ -3,7 +3,6 @@
 #include <string>
 
 extern "C"
-
 {
 	IWindow* create()
 	{
@@ -39,7 +38,7 @@ while (SDL_PollEvent(&event))
 	return noResponse;
 }
 
-void SDLWindow::draw(std::vector<std::vector<size_t>> const& gameState)
+void SDLWindow::draw(field const& gameState, size_t, size_t)
 {
 	gameStateToPixels(gameState);
 	SDL_RenderClear(renderer_);
@@ -67,7 +66,7 @@ void SDLWindow::openWindow(size_t width, size_t height)
 	SDL_RaiseWindow(window_);
     TTF_Init();
 
-    TTF_Font *font = TTF_OpenFont("Roboto/Roboto-Light.ttf", 11);
+    TTF_Font *font = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 11);
 	if (font == NULL)
 		return ;
 	TTF_SetFontStyle(font, TTF_STYLE_BOLD);
@@ -78,6 +77,26 @@ void SDLWindow::openWindow(size_t width, size_t height)
 	TTF_CloseFont(font);
 }
 
+void SDLWindow::closeWindow()
+{
+	SDL_FreeSurface(score_surface_);
+	SDL_DestroyTexture(score_texture_);
+	TTF_Quit();
+	SDL_DestroyRenderer(renderer_);
+	SDL_DestroyWindow(window_);
+	SDL_Quit();
+}
+
+void SDLWindow::showGameOver()
+{
+	SDL_Color	color = {199, 50, 176, 0};
+	textureFromText("Game over", (width_ / 2) * 4 - 10, (height_ / 2) * 4 - 20, color);
+	color = {59, 150, 116, 0};
+	std::string score("Score: " + std::to_string((int)score_));
+	const char *text = score.c_str();
+	textureFromText(text, (width_ / 2) * 4, (height_ / 2) * 4 + 20, color);
+	SDL_RenderPresent( renderer_ );
+}
 
 void SDLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameState)
 {
@@ -145,7 +164,7 @@ void SDLWindow::drawBorders()
 
 	if (draw_score_ != score_)
 	{
-		TTF_Font *font = TTF_OpenFont("Roboto/Roboto-Light.ttf", 11);
+		TTF_Font *font = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 11);
 		if (font == NULL)
 			return ;
 		TTF_SetFontStyle(font, TTF_STYLE_BOLD);
@@ -161,16 +180,6 @@ void SDLWindow::drawBorders()
 	SDL_RenderCopy(renderer_, score_texture_, NULL, &score_rect_);
 }
 
-void SDLWindow::setScore(size_t score)
-{
-	score_ = score;
-}
-
-void SDLWindow::setSpeed(size_t speed)
-{
-	speed_ = speed;
-}
-
 SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
 {
 	SDL_Rect	rect;
@@ -182,9 +191,9 @@ SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
 	return (rect);
 }
 
-void SDLWindow::texture_from_text(const char *text, size_t x, size_t y, SDL_Color color)
+void SDLWindow::textureFromText(const char *text, size_t x, size_t y, SDL_Color color)
 {
-    TTF_Font *font = TTF_OpenFont("Roboto/Roboto-Light.ttf", 18);
+    TTF_Font *font = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 18);
 	if (font == NULL)
 		return ;
 	TTF_SetFontStyle(font, TTF_STYLE_BOLD);
@@ -194,27 +203,6 @@ void SDLWindow::texture_from_text(const char *text, size_t x, size_t y, SDL_Colo
 	SDL_RenderCopy(renderer_, texture, NULL, &rect);
 	SDL_FreeSurface(surface);
 	TTF_CloseFont(font);
-}
-
-void SDLWindow::showGameOver()
-{
-	SDL_Color	color = {199, 50, 176, 0};
-	texture_from_text("Game over", (width_ / 2) * 4 - 10, (height_ / 2) * 4 - 20, color);
-	color = {59, 150, 116, 0};
-	std::string score("Score: " + std::to_string((int)score_));
-	const char *text = score.c_str();
-	texture_from_text(text, (width_ / 2) * 4, (height_ / 2) * 4 + 20, color);
-	SDL_RenderPresent( renderer_ );
-}
-
-void SDLWindow::closeWindow()
-{
-	SDL_FreeSurface(score_surface_);
-	SDL_DestroyTexture(score_texture_);
-	TTF_Quit();
-	SDL_DestroyRenderer(renderer_);
-	SDL_DestroyWindow(window_);
-	SDL_Quit();
 }
 
 SDLWindow::~SDLWindow()
