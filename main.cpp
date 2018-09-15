@@ -1,34 +1,34 @@
 #include "LogicLib/LogicLib.hpp"
 #include <iostream>
 
+bool validWindowSize(size_t w, size_t h);
+
 int main(int ac, char **av)
 {
-    if (ac > 3 || ac == 2)
+    if (ac != 3)
     {
-        std::cout << "./Build/Nibbler [width] [height]" << std::endl;
+        std::cerr << "./Build/Nibbler [width] [height]" << std::endl;
         return 1;
     }
     try{
-        LogicUnit game;
-        if (ac == 3)
-            {
-                size_t w = static_cast<size_t>(std::stoi(av[1]));
-                size_t h = static_cast<size_t>(std::stoi(av[2]));
-                if (w > 10 && h > 10 && w < 180 && h < 86)
-                    game.setWindowSize(w, h);
-                else
-                {
-                    std::cout << "Wrong window size" << std::endl;
-                    return 1;
-                }
-            }
-        else
-            game.setWindowSize(30, 50);
+        const auto width = std::stoul(av[1]);
+        const auto height = std::stoul(av[2]);
+        if (!validWindowSize(width, height))
+        {
+            std::cerr << "Invalid size of the field" << std::endl;
+            return 2;
+        }
+        LogicUnit game(width, height);
         game.loopTheGame();
     }
     catch (std::exception& e){
         std::cerr << "ERROR: " << e.what() << std::endl;
-        return 1;
+        return 3;
     }
     return 0;
+}
+
+bool validWindowSize(size_t w, size_t h)
+{
+    return w > 10 && h > 10 && w < 180 && h < 86;
 }

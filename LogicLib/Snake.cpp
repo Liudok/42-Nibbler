@@ -53,7 +53,12 @@ void Snake::move(const direction newDirection)
     score_ = body_.size() - 4;
 }
 
-size_t Snake::getScore()
+size_t Snake::getSpeed() const
+{
+    return speed_;
+}
+
+size_t Snake::getScore() const
 {
     return score_;
 }
@@ -108,7 +113,7 @@ Snake::Snake(Snake const & other)
     : width_(other.width_)
     , height_(other.height_)
 {
-    ;
+    
 }
 
 Snake & Snake::operator=(Snake const &src)

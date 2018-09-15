@@ -27,7 +27,8 @@ class Snake
         void    fillMap(gameField&) const;
         void    move(const direction = noResponse);
         bool    collapsed() const;
-        size_t  getScore();
+        size_t  getSpeed() const;
+        size_t  getScore() const;
 
     private:
 
@@ -44,5 +45,7 @@ class Snake
         bool outOfField_ = false;
         bool hitBody_ = false;
         Point foodPos_ {9, 9};
+        size_t     speed_ = 10;
         size_t     score_ = 0;
+
 };

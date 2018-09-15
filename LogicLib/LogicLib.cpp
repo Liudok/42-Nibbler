@@ -4,31 +4,59 @@
 #include <chrono>
 #include <unistd.h>
 
-LogicUnit::LogicUnit()
+LogicUnit::LogicUnit(size_t height, size_t width)
     : libraries_(initLibraries())
     , windows_(initWindows())
+    , width_(width)
+    , height_(height)
     , gameField_(height_, std::vector<size_t>(width_, 0))
     , snake_(gameField_[0].size(), gameField_.size())
 {
     snake_.fillMap(gameField_);
 }
 
+LogicUnit::LogicUnit(LogicUnit const& other)
+ : libraries_(initLibraries())
+ , windows_(initWindows())
+ , gameField_(other.getHeight(), std::vector<size_t>(other.getWidth(), 0))
+ , snake_(gameField_[0].size(), gameField_.size())
+{
+
+}
+
+LogicUnit& LogicUnit::operator=(LogicUnit const& src)
+{
+  if (this != &src)
+  {
+    snake_ = src.snake_;
+    gameField_ = src.gameField_;
+  }
+  return *this;
+}
+
+LogicUnit::~LogicUnit()
+{
+    for (auto& library : libraries_)
+        dlclose(library);
+}
+
 void LogicUnit::loopTheGame()
 {
     windows_[currentLibraryIndex_]->openWindow(width_, height_);
-    windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
+    windows_[currentLibraryIndex_]->draw(gameField_,
+        snake_.getScore(), snake_.getSpeed());
     std::function<void()> reactFunctions[nbResponses] = {
-        std::bind(&LogicUnit::reactToNoResponse, this),
-        std::bind(&LogicUnit::reactToLeft, this),
-        std::bind(&LogicUnit::reactToRight, this),
-        std::bind(&LogicUnit::reactToUp, this),
-        std::bind(&LogicUnit::reactToDown, this),
-        std::bind(&LogicUnit::reactToToNcurses, this),
-        std::bind(&LogicUnit::reactToToDummy, this),
-        std::bind(&LogicUnit::reactToToSDL, this),
-        std::bind(&LogicUnit::reactToToSFML, this),
-        std::bind(&LogicUnit::reactToEndGame, this),
-        std::bind(&LogicUnit::reactToPauseContinue, this) };
+        [this]{ reactToNoResponse(); },
+        [this]{ reactToLeft(); },
+        [this]{ reactToRight(); },
+        [this]{ reactToUp(); },
+        [this]{ reactToDown(); },
+        [this]{ reactToToNcurses(); },
+        [this]{ reactToToSDL(); },
+        [this]{ reactToToSFML(); },
+        [this]{ reactToPauseContinue(); },
+        [this]{ reactToEndGame(); },
+    };
     const auto normalLoopDuration = 700000;
     while (!endOfGame_){
         const auto t0 = std::chrono::high_resolution_clock::now();
@@ -80,7 +108,8 @@ void LogicUnit::reactToNoResponse()
 {
     snake_.move();
     snake_.fillMap(gameField_);
-    windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
+    windows_[currentLibraryIndex_]->draw(gameField_,
+        snake_.getScore(), snake_.getSpeed());
     endOfGame_ = snake_.collapsed();
 }
 
@@ -88,7 +117,8 @@ void LogicUnit::reactToLeft()
 {
     snake_.move(left);
     snake_.fillMap(gameField_);
-    windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
+    windows_[currentLibraryIndex_]->draw(gameField_,
+        snake_.getScore(), snake_.getSpeed());
     endOfGame_ = snake_.collapsed();
 }
 
@@ -96,7 +126,8 @@ void LogicUnit::reactToRight()
 {
     snake_.move(right);
     snake_.fillMap(gameField_);
-    windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
+    windows_[currentLibraryIndex_]->draw(gameField_,
+        snake_.getScore(), snake_.getSpeed());
     endOfGame_ = snake_.collapsed();
 }
 
@@ -104,7 +135,8 @@ void LogicUnit::reactToUp()
 {
     snake_.move(up);
     snake_.fillMap(gameField_);
-    windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
+    windows_[currentLibraryIndex_]->draw(gameField_,
+        snake_.getScore(), snake_.getSpeed());
     endOfGame_ = snake_.collapsed();
 }
 
@@ -112,7 +144,8 @@ void LogicUnit::reactToDown()
 {
     snake_.move(down);
     snake_.fillMap(gameField_);
-    windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
+    windows_[currentLibraryIndex_]->draw(gameField_,
+        snake_.getScore(), snake_.getSpeed());
     endOfGame_ = snake_.collapsed();
 }
 
@@ -121,7 +154,8 @@ void LogicUnit::reactToToNcurses()
     windows_[currentLibraryIndex_]->closeWindow();
     currentLibraryIndex_ = ncurses;
     windows_[currentLibraryIndex_]->openWindow(width_, height_);
-    windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
+    windows_[currentLibraryIndex_]->draw(gameField_,
+        snake_.getScore(), snake_.getSpeed());
 }
 
 void LogicUnit::reactToToSDL()
@@ -129,7 +163,8 @@ void LogicUnit::reactToToSDL()
     windows_[currentLibraryIndex_]->closeWindow();
     currentLibraryIndex_ = sdl;
     windows_[currentLibraryIndex_]->openWindow(width_, height_);
-    windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
+    windows_[currentLibraryIndex_]->draw(gameField_,
+        snake_.getScore(), snake_.getSpeed());
 }
 
 void LogicUnit::reactToToSFML()
@@ -137,15 +172,8 @@ void LogicUnit::reactToToSFML()
     windows_[currentLibraryIndex_]->closeWindow();
     currentLibraryIndex_ = sfml;
     windows_[currentLibraryIndex_]->openWindow(width_, height_);
-    windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
-}
-
-void LogicUnit::reactToToDummy()
-{
-    windows_[currentLibraryIndex_]->closeWindow();
-    currentLibraryIndex_ = sfml;
-    windows_[currentLibraryIndex_]->openWindow(width_, height_);
-    windows_[currentLibraryIndex_]->draw(gameField_, score_, speed_);
+    windows_[currentLibraryIndex_]->draw(gameField_,
+        snake_.getScore(), snake_.getSpeed());
 }
 
 void LogicUnit::reactToEndGame()
@@ -167,39 +195,4 @@ size_t  LogicUnit::getWidth() const
 size_t  LogicUnit::getHeight() const
 {
     return height_;
-}
-
-void LogicUnit::setWindowSize(size_t w, size_t h)
-{
-    height_ = h;
-    width_ = w;
-    gameField_.clear();
-    gameField_ = std::vector<std::vector<size_t>>(height_, std::vector<size_t>(width_, 0));
-    snake_ = Snake(gameField_[0].size(), gameField_.size());
-    snake_.fillMap(gameField_);
-}
-
-LogicUnit::LogicUnit(LogicUnit const& other)
- : libraries_(initLibraries())
- , windows_(initWindows())
- , gameField_(other.getHeight(), std::vector<size_t>(other.getWidth(), 0))
- , snake_(gameField_[0].size(), gameField_.size())
-{
-  setWindowSize(other.getWidth(), other.getHeight());
-}
-
-LogicUnit & LogicUnit::operator=(LogicUnit const& src)
-{
-  if (this != &src)
-  {
-    snake_ = src.snake_;
-    gameField_ = src.gameField_;
-  }
-  return *this;
-}
-
-LogicUnit::~LogicUnit()
-{
-    for (auto& library : libraries_)
-        dlclose(library);
 }
