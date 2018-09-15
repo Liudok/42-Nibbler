@@ -47,7 +47,7 @@ class Snake
         bool outOfField_ = false;
         bool hitBody_ = false;
         Point foodPos_ {9, 9};
-        size_t speed_ = 0;
+        size_t speed_ = 10;
         size_t score_ = 0;
 
 };
