@@ -33,7 +33,6 @@ responseType SFMLWindow::getResponse()
             case sf::Keyboard::Num1:
             	closeWindow();
                 return toSDL;
-   
             case sf::Keyboard::Down:
             	return down;
 

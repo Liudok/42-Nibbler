@@ -12,24 +12,15 @@ else
 	echo "${GREEN}Cmake found${EOC}"
 fi
 
-thirdPartiesPath=ThirdParties
+thirdPartiesPath=NibblerThirdParties
 if [ ! -d "$thirdPartiesPath" ]
 then
-	mkdir ThirdParties
-	cd ThirdParties
-	echo "${GREEN}${BOLD}Installing and building third parties...${EOC}"
-	echo "${GREEN}${BOLD}Please wait it may take a while${EOC}"
-	git clone https://github.com/SDL-mirror/SDL.git
-	cd SDL
-	git clone https://github.com/ysgard/sdl2frameworks.git
-	cd ..
-	mkdir SDL/lib
-	(cd SDL/lib && cmake .. && cmake --build .);
-
-	git clone https://github.com/SFML/SFML.git
-	(cd SFML && cmake . && cmake --build .);
-	echo "${GREEN}${BOLD}Third parties installed${EOC}"
-	cd ..
+	git clone https://github.com/nestoroprysk/NibblerThirdParties.git
+	if [ ! -d "$thirdPartiesPath" ]
+	then
+		echo "${RED}${BOLD}Unable to clone third parties.${EOC}"
+		exit 2
+	fi
 else
 	echo "${GREEN}Third parties found${EOC}"
 fi
