@@ -6,29 +6,29 @@
 
 extern "C"
 {
-	IWindow* create();
+    IWindow* create();
 }
 
 class SFMLWindow : public IWindow
 {
-	public:
+    public:
 
-		responseType	 getResponse() override;
-		void			 draw(field const&, size_t score, size_t speed) override;
-		void			 openWindow(size_t width, size_t height) override;
-		void			 closeWindow() override;
-		void             showGameOver() override;
-		~SFMLWindow();
+        responseType     getResponse() override;
+        void             draw(field const&, size_t score, size_t speed) override;
+        void             openWindow(size_t width, size_t height) override;
+        void             closeWindow() override;
+        void             showGameOver() override;
+        ~SFMLWindow();
 
-	private:
+    private:
 
-		void			  gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
-		void 			  drawBorders();
-		bool			  isPaused();
-		size_t			  width_ = 0;
-		size_t			  height_ = 0;
-		sf::RenderWindow  *window_ = nullptr;
-		size_t			  score_ = 0;
-		size_t			  speed_ = 0;
+        void              gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
+        void              drawBorders();
+        bool              isPaused();
+        size_t            width_ = 0;
+        size_t            height_ = 0;
+        sf::RenderWindow  *window_ = nullptr;
+        size_t            score_ = 0;
+        size_t            speed_ = 0;
 
 };
