@@ -77,7 +77,8 @@ void Snake::move(const direction newDirection)
     headPos_ = newHeadPosition;
     if (headHitBody())
         hitBody_ = true;
-    score_ = body_.size() - 4;
+    score_ = body_.size();
+    speed_ = score_ / 5;
 }
 
 size_t Snake::getSpeed() const

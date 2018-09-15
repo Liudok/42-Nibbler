@@ -65,9 +65,11 @@ void LogicUnit::loopTheGame()
         reactFunctions[response]();
         const auto t1 = std::chrono::high_resolution_clock::now();
         const auto timePassed = (t1-t0).count();
-        const auto delta = normalLoopDuration - timePassed;
+        const auto delta =
+            normalLoopDuration - timePassed -
+                - 1000 * snake_.getScore();
         if (delta > 0)
-            usleep(delta - 1000 * snake_.getScore());
+            usleep(delta);
     }
     windows_[currentLibraryIndex_]->showGameOver();
     usleep(normalLoopDuration * 3);
