@@ -18,24 +18,26 @@ using gameField = std::vector<std::vector<size_t>>;
 class Snake
 {
     public:
-
-        using direction = responseType;
+    
         Snake(size_t width, size_t height);
         Snake(Snake const & other);
+        Snake& operator=(Snake const& src);
         ~Snake();
-        Snake &operator=(Snake const &src);
-        void    fillMap(gameField&) const;
-        void    move(const direction = noResponse);
-        bool    collapsed() const;
-        size_t  getSpeed() const;
-        size_t  getScore() const;
+
+        using direction = responseType;
+
+        void fillMap(gameField&) const;
+        void move(const direction = noResponse);
+        bool collapsed() const;
+        size_t getSpeed() const;
+        size_t getScore() const;
 
     private:
 
-        void    updateDirection(const direction newDirection);
-        Point   defineNewHeadPosition() const;
-        bool    validNewDirection(const direction newDirection) const;
-        bool    headHitBody() const;
+        void updateDirection(const direction newDirection);
+        Point defineNewHeadPosition() const;
+        bool validNewDirection(const direction newDirection) const;
+        bool headHitBody() const;
         size_t width_ = 0;
         size_t height_ = 0;
         Point headPos_ {width_ / 2, height_ / 2};
@@ -45,7 +47,7 @@ class Snake
         bool outOfField_ = false;
         bool hitBody_ = false;
         Point foodPos_ {9, 9};
-        size_t     speed_ = 10;
-        size_t     score_ = 0;
+        size_t speed_ = 10;
+        size_t score_ = 0;
 
 };

@@ -1,8 +1,35 @@
 #include "Snake.hpp"
 #include <iostream>
+
 Snake::Snake(size_t width, size_t height)
     : width_(width)
     , height_(height)
+{
+    
+}
+
+
+Snake::Snake(Snake const & other)
+    : width_(other.width_)
+    , height_(other.height_)
+{
+    
+}
+
+Snake& Snake::operator=(Snake const& rhs)
+{
+  if (this != &rhs)
+  {
+    width_ = rhs.width_;
+    height_ = rhs.height_;
+    body_ = rhs.body_;
+    speed_ = rhs.speed_;
+    score_ = rhs.score_;
+  }
+  return *this;
+}
+
+Snake::~Snake()
 {
 
 }
@@ -107,28 +134,4 @@ bool Snake::headHitBody() const
         if (bodyPart == headPos_)
             return true;
     return false;
-}
-
-Snake::Snake(Snake const & other)
-    : width_(other.width_)
-    , height_(other.height_)
-{
-    
-}
-
-Snake & Snake::operator=(Snake const &src)
-{
-  if (this != &src)
-  {
-    width_ = src.width_;
-    height_ = src.height_;
-    body_ = src.body_;
-    score_ = src.score_;
-  }
-  return (*this);
-}
-
-Snake::~Snake()
-{
-    body_.clear();
 }
