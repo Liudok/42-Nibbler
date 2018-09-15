@@ -1,13 +1,12 @@
-
 all: script
 
 script:
-    sh build.sh
+	sh build.sh
 
 clean:
-    rm -rf Build
+	rm -rf Build
 
 fclean: clean
-    rm -rf NibblerThirdParties
+	rm -rf NibblerThirdParties
 
 re: fclean all
