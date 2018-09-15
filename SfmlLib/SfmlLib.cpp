@@ -58,8 +58,10 @@ responseType SFMLWindow::getResponse()
     return noResponse;
 }
 
-void SFMLWindow::draw(field const& gameState, size_t, size_t)
+void SFMLWindow::draw(field const& gameState, size_t score, size_t speed)
 {
+    score_ = score;
+    speed_ = speed;
     window_->clear();
     gameStateToPixels(gameState);
     window_->display();

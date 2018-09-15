@@ -12,7 +12,7 @@ extern "C"
 
 responseType SDLWindow::getResponse()
 {
-SDL_Event       event;
+SDL_Event event;
 while (SDL_PollEvent(&event))
     {
         if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
@@ -38,8 +38,9 @@ while (SDL_PollEvent(&event))
     return noResponse;
 }
 
-void SDLWindow::draw(field const& gameState, size_t, size_t)
+void SDLWindow::draw(field const& gameState, size_t score, size_t)
 {
+    score_ = score;
     gameStateToPixels(gameState);
     SDL_RenderClear(renderer_);
 }
@@ -98,7 +99,7 @@ void SDLWindow::showGameOver()
     SDL_RenderPresent( renderer_ );
 }
 
-void SDLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameState)
+void SDLWindow::gameStateToPixels(field const& gameState)
 {
     for (size_t i = 0; i < height_; ++i)
     {
