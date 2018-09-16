@@ -19,8 +19,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 
 set(Sdl2Path ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties/SDL2.framework)
 set(Sdl2TtfPath ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties/SDL2_ttf.framework)
-include_directories(${Sdl2Path}/Headers ${Sdl2TtfPath}/Headers)
-file(GLOB SdlDynamicLibs ${Sdl2Path}/SDL2 ${Sdl2TtfPath}/SDL2_ttf)
+set(Sdl2Mixer ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties/SDL2_mixer.framework)
+include_directories(${Sdl2Path}/Headers ${Sdl2TtfPath}/Headers ${Sdl2Mixer}/Headers)
+file(GLOB SdlDynamicLibs ${Sdl2Path}/SDL2 ${Sdl2TtfPath}/SDL2_ttf ${Sdl2Mixer}/SDL2_mixer)
 
 # Sfml configuration
 
