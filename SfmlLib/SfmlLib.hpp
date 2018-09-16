@@ -1,12 +1,15 @@
 #pragma once
 
 #include <IWindow.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
 
 extern "C"
 {
     IWindow* create();
+}
+
+namespace sf
+{
+    class RenderWindow;
 }
 
 class SFMLWindow : public IWindow
@@ -22,7 +25,7 @@ class SFMLWindow : public IWindow
 
     private:
 
-        void              gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
+        void              gameStateToPixels(field const&);
         void              drawBorders();
         bool              isPaused();
         size_t            width_ = 0;
