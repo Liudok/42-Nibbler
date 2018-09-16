@@ -1,4 +1,4 @@
-#include "LogicLib.hpp"
+#include "LogicUnit.hpp"
 #include <dlfcn.h>
 #include <iostream>
 #include <chrono>

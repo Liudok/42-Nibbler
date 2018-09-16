@@ -1,4 +1,4 @@
-#include "LogicLib/LogicLib.hpp"
+#include "LogicLib/LogicUnit.hpp"
 #include <iostream>
 
 bool validWindowSize(size_t w, size_t h);

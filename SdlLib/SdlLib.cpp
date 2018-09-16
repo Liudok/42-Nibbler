@@ -13,27 +13,25 @@ extern "C"
 responseType SDLWindow::getResponse()
 {
     SDL_Event event;
-    while (SDL_PollEvent(&event))
+    SDL_PollEvent(&event);
+    if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
+        return endGame;
+    else if (event.type == SDL_KEYDOWN)
     {
-        if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
-            return endGame;
-        else if (event.type == SDL_KEYDOWN )
-        {
-            if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)
-                return up;
-            else if (event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s)
-                return down;
-            else if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a)
-                return left;
-            else if (event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d)
-                return right;
-            else if (event.key.keysym.sym == SDLK_SPACE)
-                return pauseContinue;
-            else if (event.key.keysym.sym == SDLK_3)
-                return toNcurses;
-            else if (event.key.keysym.sym == SDLK_2)
-                return toSFML;
-        }
+        if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)
+            return up;
+        else if (event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s)
+            return down;
+        else if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a)
+            return left;
+        else if (event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d)
+            return right;
+        else if (event.key.keysym.sym == SDLK_SPACE)
+            return pauseContinue;
+        else if (event.key.keysym.sym == SDLK_3)
+            return toNcurses;
+        else if (event.key.keysym.sym == SDLK_2)
+            return toSFML;
     }
     return noResponse;
 }
