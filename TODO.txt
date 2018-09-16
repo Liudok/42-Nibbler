@@ -2,7 +2,7 @@ Nestor:
 - comment ===DONE===
 - when snake goes from from (0, n) to (0, m) and eats something on (0, k), this counts as a collision for snake's tail grows left ===DONE===
 - less food ===DONE===
-- obstacles
+- obstacles ===IN PROGRESS===
 - default field size
 - usage: map size, obstacles mode, insane mode, Bob Marley mode, granny mode
 - repair pause
