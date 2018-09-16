@@ -14,39 +14,36 @@ extern "C"
 responseType SFMLWindow::getResponse()
 {
     sf::Event event;
-    while (window_->pollEvent(event))
+    window_->pollEvent(event);
+    switch (event.type)
     {
-        switch (event.type)
+    case sf::Event::Closed:
+        return endGame;
+    case sf::Event::KeyPressed:
+        switch (event.key.code)
         {
-        case sf::Event::Closed:
+        case sf::Keyboard::Num3:
+            return toNcurses;
+        case sf::Keyboard::Escape:
             return endGame;
-        case sf::Event::KeyPressed:
-            switch (event.key.code)
-            {
-            case sf::Keyboard::Num3:
-                return toNcurses;
-            case sf::Keyboard::Escape:
-                return endGame;
-            case sf::Keyboard::Num1:
-                return toSDL;
-            case sf::Keyboard::Down:
-                return down;
-            case sf::Keyboard::Up:
-                return up;
-            case sf::Keyboard::Right:
-                return right;
-            case sf::Keyboard::Left:
-                return left;
-            case sf::Keyboard::Space:
-                return pauseContinue;
-            default:
-                break;
-            }
+        case sf::Keyboard::Num1:
+            return toSDL;
+        case sf::Keyboard::Down:
+            return down;
+        case sf::Keyboard::Up:
+            return up;
+        case sf::Keyboard::Right:
+            return right;
+        case sf::Keyboard::Left:
+            return left;
+        case sf::Keyboard::Space:
+            return pauseContinue;
         default:
-            return noResponse;
+            break;
         }
+    default:
+        return noResponse;
     }
-    return noResponse;
 }
 
 void SFMLWindow::draw(field const& gameState, size_t score, size_t speed)
