@@ -29,9 +29,9 @@ responseType SDLWindow::getResponse()
                 return right;
             else if (event.key.keysym.sym == SDLK_SPACE)
                 return pauseContinue;
-            else if (event.key.keysym.sym == SDLK_2)
+            else if (event.key.keysym.sym == SDLK_3)
                 return toNcurses;
-            else if (event.key.keysym.sym == SDLK_1)
+            else if (event.key.keysym.sym == SDLK_2)
                 return toSFML;
         }
     }
@@ -66,14 +66,10 @@ void SDLWindow::openWindow(size_t width, size_t height)
         SDL_RENDERER_ACCELERATED);
     SDL_RaiseWindow(window_);
     TTF_Init();
-    font_ = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 11);
 }
 
 void SDLWindow::closeWindow()
 {
-    TTF_CloseFont(font_);
-    SDL_FreeSurface(scoreSurface_);
-    SDL_DestroyTexture(scoreTexture_);
     TTF_Quit();
     SDL_DestroyRenderer(renderer_);
     SDL_DestroyWindow(window_);
@@ -82,12 +78,12 @@ void SDLWindow::closeWindow()
 
 void SDLWindow::showGameOver()
 {
-    SDL_Color   color = {199, 50, 176, 0};
-    textureFromText("Game over", (width_ / 2) * 4 - 10, (height_ / 2) * 4 - 20, color);
+    SDL_Color color = {199, 50, 176, 0};
+    showText("Game over", (width_ / 2) * 4 - 5, (height_ / 2) * 4, color);
     color = {59, 150, 116, 0};
     std::string score("Score: " + std::to_string((int)score_));
     const char *text = score.c_str();
-    textureFromText(text, (width_ / 2) * 4, (height_ / 2) * 4 + 20, color);
+    showText(text, (width_ / 2) * 4, (height_ / 2) * 4 + 20, color);
     SDL_RenderPresent(renderer_);
 }
 
@@ -161,8 +157,6 @@ void SDLWindow::drawBorders()
 
     const auto score = "score: " + std::to_string(score_);
     showText(score.c_str(), 2, height_ * 5 - 1, {199, 50, 176, 0});
-
-    SDL_RenderCopy(renderer_, scoreTexture_, NULL, &scoreRect_);
 }
 
 SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
@@ -175,20 +169,15 @@ SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
     return result;
 }
 
-void SDLWindow::textureFromText(const char* text, size_t x, size_t y, SDL_Color color)
-{
-    TTF_CloseFont(font_);
-    font_ = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 18);
-    showText(text, x, y, color);
-}
-
 void  SDLWindow::showText(const char *text, size_t x, size_t y, SDL_Color color)
 {
-    if (!font_) return ;
-    TTF_SetFontStyle(font_, TTF_STYLE_BOLD);
-    auto surface = TTF_RenderUTF8_Blended(font_, text, color);
+    TTF_Font        *font = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 11);
+    if (font == nullptr) return ;
+    TTF_SetFontStyle(font, TTF_STYLE_BOLD);
+    auto surface = TTF_RenderUTF8_Blended(font, text, color);
     auto rect = makeRect(x, y, surface->h / 2, surface->w / 2);
     auto texture = SDL_CreateTextureFromSurface(renderer_, surface);
     SDL_RenderCopy(renderer_, texture, NULL, &rect);
+    SDL_DestroyTexture(texture);
     SDL_FreeSurface(surface);
 }

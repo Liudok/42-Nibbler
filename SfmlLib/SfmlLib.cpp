@@ -22,7 +22,7 @@ responseType SFMLWindow::getResponse()
         case sf::Event::KeyPressed:
             switch (event.key.code)
             {
-            case sf::Keyboard::Num2:
+            case sf::Keyboard::Num3:
                 closeWindow();
                 return toNcurses;
    
@@ -115,12 +115,12 @@ void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameS
             {
                 if (gameState[i][j] == 1)
                     circle.setFillColor(sf::Color(127, 255, 212));
+                else if (gameState[i][j] == collision)
+                	circle.setFillColor(sf::Color::Red);
                 else if (gameState[i][j] == 2)
                     circle.setFillColor(sf::Color(64, 224, 208));
                 else if (gameState[i][j] == 3)
                     circle.setFillColor(sf::Color(255, 105, 180));
-                else if (gameState[i][j] == 4)
-                    circle.setFillColor(sf::Color(248, 14, 50));
                 window_->draw(circle);
             }   
         }

@@ -10,10 +10,10 @@ Nestor:
 - Makefile
 
 Liuda:
-- Nice exit for sdl
++- Nice exit for sdl
 - in SFML: 1 when paused
 - Highlight of death doesn't always work in sfml
-- new buttons for changing libs
++- new buttons for changing libs
 - openGl/glut/...
 - sounds
 
