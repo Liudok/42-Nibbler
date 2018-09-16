@@ -1,6 +1,7 @@
 #pragma once
 
 #include <IWindow.hpp>
+#include <list>
 
 struct Point
 {
@@ -38,6 +39,9 @@ class Snake
         Point defineNewHeadPosition() const;
         bool validNewDirection(const direction newDirection) const;
         bool headHitBody() const;
+
+        Point generateFood() const;
+
         size_t width_ = 0;
         size_t height_ = 0;
         Point headPos_ {width_ / 2, height_ / 2};
@@ -46,7 +50,7 @@ class Snake
 
         bool outOfField_ = false;
         bool hitBody_ = false;
-        Point foodPos_ {9, 9};
+        std::list<Point> foodPos_;
         double speed_ = 1.0;
         size_t score_ = 0;
 

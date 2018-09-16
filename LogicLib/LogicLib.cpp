@@ -10,7 +10,7 @@ LogicUnit::LogicUnit(size_t height, size_t width)
     , width_(width)
     , height_(height)
     , gameField_(height_, std::vector<size_t>(width_, 0))
-    , snake_(gameField_[0].size(), gameField_.size())
+    , snake_(width_, height_)
 {
     snake_.fillMap(gameField_);
 }

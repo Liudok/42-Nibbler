@@ -101,6 +101,8 @@ void SFMLWindow::showGameOver()
 
 void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameState)
 {
+    srand(time(NULL));
+    const auto randColor = [](){ return rand() % 255; };
     for (size_t i = 0; i < height_; ++i)
     {
         for (size_t j = 0; j < width_; ++j)
@@ -113,14 +115,14 @@ void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameS
             circle.setPosition(sf::Vector2f(j * 30 + 30, i * 30 + 30));
             if (gameState[i][j] != 0)
             {
-                if (gameState[i][j] == 1)
+                if (gameState[i][j] == empty)
                     circle.setFillColor(sf::Color(127, 255, 212));
-                else if (gameState[i][j] == 2)
-                    circle.setFillColor(sf::Color(64, 224, 208));
-                else if (gameState[i][j] == 3)
-                    circle.setFillColor(sf::Color(255, 105, 180));
-                else if (gameState[i][j] == 4)
-                    circle.setFillColor(sf::Color(248, 14, 50));
+                else if (gameState[i][j] == body)
+                    circle.setFillColor(sf::Color(randColor(), 208, randColor()));
+                else if (gameState[i][j] == head)
+                    circle.setFillColor(sf::Color(255, 255, randColor()));
+                else if (gameState[i][j] == food)
+                    circle.setFillColor(sf::Color(randColor(), randColor(), randColor()));
                 window_->draw(circle);
             }   
         }

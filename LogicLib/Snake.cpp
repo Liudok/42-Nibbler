@@ -5,11 +5,12 @@ Snake::Snake(size_t width, size_t height)
     : width_(width)
     , height_(height)
 {
-    
+    srand(time(NULL));
+    foodPos_.push_back(generateFood());
 }
 
 
-Snake::Snake(Snake const & other)
+Snake::Snake(Snake const& other)
     : width_(other.width_)
     , height_(other.height_)
 {
@@ -39,7 +40,8 @@ void Snake::fillMap(gameField& field) const
     for(auto& line : field)
         for (auto& cell : line)
             cell = empty;
-    field[foodPos_.y][foodPos_.x] = food;
+    for (auto const& foodPiece : foodPos_)
+        field[foodPiece.y][foodPiece.x] = food;
     for (auto const& bodyPart : body_)
         field[bodyPart.y][bodyPart.x] = body;
     field[headPos_.y][headPos_.x] =
@@ -49,23 +51,25 @@ void Snake::fillMap(gameField& field) const
 void Snake::move(const direction newDirection)
 {
     const size_t overflow = std::numeric_limits<size_t>::max();
-    if (headPos_ == foodPos_)
-    {
-        speed_ += 0.05;
-        score_ += 50;
-        auto newBodyPart = body_[body_.size() - 1];
-        --newBodyPart.x;
-        if (newBodyPart.x == overflow)
-        {
-            outOfField_ = true;
-            return;
+    for (auto const& foodPiece : foodPos_){
+        if (headPos_ == foodPiece){
+            speed_ += 0.05;
+            score_ += 50;
+            auto newBodyPart = body_[body_.size() - 1];
+            --newBodyPart.x;
+            if (newBodyPart.x == overflow)
+            {
+                outOfField_ = true;
+                return;
+            }
+            body_.push_back(std::move(newBodyPart));
+            for (size_t i = 0; i < (score_ + 1) / 50; ++i)
+                foodPos_.push_back(generateFood());
+            foodPos_.remove(foodPiece);
+            break;
         }
-        body_.push_back(std::move(newBodyPart));
-        srand(time(NULL));
-        size_t x = rand() % width_;
-        size_t y = rand() % height_;
-        foodPos_ = {(x != 0 && x != width_ - 1) ? x : 9, (y != 0 && y != height_ - 1) ? y : 9};
     }
+    
     updateDirection(newDirection);
     const auto newHeadPosition = defineNewHeadPosition();
     if (newHeadPosition.x == width_ - 1 || newHeadPosition.x == overflow ||
@@ -135,4 +139,13 @@ bool Snake::headHitBody() const
         if (bodyPart == headPos_)
             return true;
     return false;
+}
+
+Point Snake::generateFood() const
+{
+    size_t y = rand() % height_;
+    size_t x = rand() % width_;
+    Point result = {(x != 0 && x != width_ - 1) ? x : 9,
+        (y != 0 && y != height_ - 1) ? y : 9};
+    return result;
 }
