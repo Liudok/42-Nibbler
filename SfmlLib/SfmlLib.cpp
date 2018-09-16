@@ -1,7 +1,5 @@
 #include "SfmlLib.hpp"
 #include <unistd.h>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
 
 extern "C"
 {
@@ -73,8 +71,7 @@ void SFMLWindow::openWindow(size_t width, size_t height)
 {
     width_ = width;
     height_ = height;
-    window_ = std::make_unique<sf::RenderWindow>(
-        sf::VideoMode(width_ * 30 + 30, height_ * 30 + 30), "SFML Nibbler");
+    window_ = new sf::RenderWindow(sf::VideoMode(width_ * 30 + 30, height_ * 30 + 30), "SFML Nibbler");//try unique pointer
     window_->setActive(true);
 }
 
@@ -102,7 +99,7 @@ void SFMLWindow::showGameOver()
     window_->display();
 }
 
-void SFMLWindow::gameStateToPixels(field const& gameState)
+void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameState)
 {
     for (size_t i = 0; i < height_; ++i)
     {
@@ -116,18 +113,14 @@ void SFMLWindow::gameStateToPixels(field const& gameState)
             circle.setPosition(sf::Vector2f(j * 30 + 30, i * 30 + 30));
             if (gameState[i][j] != 0)
             {
-                if (gameState[i][j] == body)
+                if (gameState[i][j] == 1)
                     circle.setFillColor(sf::Color(127, 255, 212));
                 else if (gameState[i][j] == collision)
                 	circle.setFillColor(sf::Color::Red);
                 else if (gameState[i][j] == 2)
                     circle.setFillColor(sf::Color(64, 224, 208));
-                else if (gameState[i][j] == food)
+                else if (gameState[i][j] == 3)
                     circle.setFillColor(sf::Color(255, 105, 180));
-                else if (gameState[i][j] == obstacle)
-                    circle.setFillColor(sf::Color(0, 0, 0));
-                else if (gameState[i][j] == collision)
-                    circle.setFillColor(sf::Color(248, 14, 50));
                 window_->draw(circle);
             }   
         }
