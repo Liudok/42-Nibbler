@@ -39,13 +39,9 @@ class LogicUnit
     Snake      snake_;
 
     void       reactToNoResponse();
-    void       reactToLeft();
-    void       reactToRight();
-    void       reactToUp();
-    void       reactToDown();
-    void       reactToToNcurses();
+    void       reactToNewDirection(responseType);
+    void       reactToNewLibrary(libraryType);
     void       reactToToSDL();
-    void       reactToToSFML();
     void       reactToEndGame();
     void       reactToPauseContinue();
 

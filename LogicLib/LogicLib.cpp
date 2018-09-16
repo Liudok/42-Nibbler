@@ -47,13 +47,13 @@ void LogicUnit::loopTheGame()
         snake_.getScore(), snake_.getSpeed());
     std::function<void()> reactFunctions[nbResponses] = {
         [this]{ reactToNoResponse(); },
-        [this]{ reactToLeft(); },
-        [this]{ reactToRight(); },
-        [this]{ reactToUp(); },
-        [this]{ reactToDown(); },
-        [this]{ reactToToNcurses(); },
-        [this]{ reactToToSDL(); },
-        [this]{ reactToToSFML(); },
+        [this]{ reactToNewDirection(left); },
+        [this]{ reactToNewDirection(right); },
+        [this]{ reactToNewDirection(up); },
+        [this]{ reactToNewDirection(down); },
+        [this]{ reactToNewLibrary(ncurses); },
+        [this]{ reactToNewLibrary(sdl); },
+        [this]{ reactToNewLibrary(sfml); },
         [this]{ reactToPauseContinue(); },
         [this]{ reactToEndGame(); },
     };
@@ -111,64 +111,19 @@ void LogicUnit::reactToNoResponse()
     endOfGame_ = snake_.collapsed();
 }
 
-void LogicUnit::reactToLeft()
+void LogicUnit::reactToNewDirection(responseType newDirection)
 {
-    snake_.move(left);
+    snake_.move(newDirection);
     snake_.fillMap(gameField_);
     windows_[currentLibraryIndex_]->draw(gameField_,
         snake_.getScore(), snake_.getSpeed());
     endOfGame_ = snake_.collapsed();
 }
 
-void LogicUnit::reactToRight()
-{
-    snake_.move(right);
-    snake_.fillMap(gameField_);
-    windows_[currentLibraryIndex_]->draw(gameField_,
-        snake_.getScore(), snake_.getSpeed());
-    endOfGame_ = snake_.collapsed();
-}
-
-void LogicUnit::reactToUp()
-{
-    snake_.move(up);
-    snake_.fillMap(gameField_);
-    windows_[currentLibraryIndex_]->draw(gameField_,
-        snake_.getScore(), snake_.getSpeed());
-    endOfGame_ = snake_.collapsed();
-}
-
-void LogicUnit::reactToDown()
-{
-    snake_.move(down);
-    snake_.fillMap(gameField_);
-    windows_[currentLibraryIndex_]->draw(gameField_,
-        snake_.getScore(), snake_.getSpeed());
-    endOfGame_ = snake_.collapsed();
-}
-
-void LogicUnit::reactToToNcurses()
+void LogicUnit::reactToNewLibrary(libraryType newLibrary)
 {
     windows_[currentLibraryIndex_]->closeWindow();
-    currentLibraryIndex_ = ncurses;
-    windows_[currentLibraryIndex_]->openWindow(width_, height_);
-    windows_[currentLibraryIndex_]->draw(gameField_,
-        snake_.getScore(), snake_.getSpeed());
-}
-
-void LogicUnit::reactToToSDL()
-{
-    windows_[currentLibraryIndex_]->closeWindow();
-    currentLibraryIndex_ = sdl;
-    windows_[currentLibraryIndex_]->openWindow(width_, height_);
-    windows_[currentLibraryIndex_]->draw(gameField_,
-        snake_.getScore(), snake_.getSpeed());
-}
-
-void LogicUnit::reactToToSFML()
-{
-    windows_[currentLibraryIndex_]->closeWindow();
-    currentLibraryIndex_ = sfml;
+    currentLibraryIndex_ = newLibrary;
     windows_[currentLibraryIndex_]->openWindow(width_, height_);
     windows_[currentLibraryIndex_]->draw(gameField_,
         snake_.getScore(), snake_.getSpeed());
