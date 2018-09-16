@@ -63,8 +63,7 @@ void Snake::move(const direction newDirection)
                 return;
             }
             body_.push_back(std::move(newBodyPart));
-            for (size_t i = 0; i < (score_ + 1) / 50; ++i)
-                foodPos_.push_back(generateFood());
+            foodPos_.push_back(generateFood());
             foodPos_.remove(foodPiece);
             break;
         }

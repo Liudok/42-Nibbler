@@ -1,49 +1,22 @@
-1. When snake goes from from (0, n) to (0, m) and eats something on (0, k), this counts as a collision for snake's tail grows left
-<<<<<<< HEAD
-+2. Nice exit for sfml
-+3. Nice exit for sdl
-4. Nice exit for ncurses
-+5. argc argv size of field
-+6. Highlight of death doesn't always work in sdl and sfml
-7. sfml doesn't close a window properly
-+8. food stops being shown after a while in sfml
-9. make the movement smooth in ncurses
-10. pause/continue
-11. generic snake winner
-+12. new buttons for changing libs
-+13. usage
-+14. escape
-+-16. speedup
-+17. scoring
-18. If a dynamic library does not exist or is not compatible, your program must display a relevant error message and exit neatly. - наша змейка не чувствительна к удалению либы)) это пугает)
-+19. The snake starts with a size of 4 squares in the middle of the game area. The direction does not matter.
+Nestor:
+- comment
+- when snake goes from from (0, n) to (0, m) and eats something on (0, k), this counts as a collision for snake's tail grows left
+- less food
+- obstacles
+- default field size
+- usage: map size, obstacles mode, insane mode, Bob Marley mode
+- repair pause
+- Any class that declares at least one attribute must be written in canonical form.
+- Makefile
 
-Stupid:
-1. Any class that declares at least one attribute must be written in canonical form.
-+2. Makefile
-+3. argc/argv params of map
-=======
-2. Nice exit for sfml
-3. Nice exit for sdl
-4. Nice exit for ncurses
-5. argc argv size of field
-6. Highlight of death doesn't always work in sdl and sfml
-7. sfml doesn't close a window properly
-8. food stops being shown after a while in sfml
-9. make the movement smooth in ncurses
-10. pause/continue
-11. generic snake winner
-12. new buttons for changing libs
-13. usage
-14. escape
-15. Qt gui
-16. speedup
-17. scoring
+Liuda:
+- Nice exit for sdl
+- in SFML: 1 when paused
+- Highlight of death doesn't always work in sfml
+- new buttons for changing libs
+- openGl/glut/...
+- sounds
 
-Stupid:
-1. Any class that declares at least one attribute must be written in canonical form.
-2. Makefile
-3. argc/argv params of map
-4. argc/argv default library
-5. sounds
->>>>>>> master
+Investigate:
+- If a dynamic library does not exist or is not compatible, your program must display a relevant error message and exit neatly.
+- no 0 or width - 1 for food

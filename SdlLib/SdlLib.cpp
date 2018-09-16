@@ -67,7 +67,7 @@ void SDLWindow::openWindow(size_t width, size_t height)
     SDL_RaiseWindow(window_);
     TTF_Init();
 
-    font_ = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 11);
+    font_ = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 11);//use in other places
     if (!font_) return ;
     TTF_SetFontStyle(font_, TTF_STYLE_BOLD);
     score_surface_ = TTF_RenderUTF8_Blended(font_, "score: 0", {199, 50, 176, 0});
