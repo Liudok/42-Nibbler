@@ -1,5 +1,7 @@
 #include "SfmlLib.hpp"
 #include <unistd.h>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
 extern "C"
 {
@@ -71,7 +73,8 @@ void SFMLWindow::openWindow(size_t width, size_t height)
 {
     width_ = width;
     height_ = height;
-    window_ = new sf::RenderWindow(sf::VideoMode(width_ * 30 + 30, height_ * 30 + 30), "SFML Nibbler");//try unique pointer
+    window_ = std::make_unique<sf::RenderWindow>(
+         sf::VideoMode(width_ * 30 + 30, height_ * 30 + 30), "SFML Nibbler");
     window_->setActive(true);
 }
 
@@ -84,7 +87,7 @@ void SFMLWindow::showGameOver()
 {
     sf::Text text;
     sf::Font font;
-    if (!font.loadFromFile("../NibblerThirdParties/TextFonts/Roboto-Bold.ttf"))
+    if (!font.loadFromFile("NibblerThirdParties/TextFonts/Roboto-Bold.ttf"))
         throw std::runtime_error("No font found");
     text.setFont(font);
     text.setCharacterSize(55);
@@ -147,7 +150,7 @@ void SFMLWindow::drawBorders()
     bottom.setFillColor(sf::Color(95, 158, 160));
     window_->draw(bottom);
     sf::Font font;
-    if (!font.loadFromFile("../NibblerThirdParties/TextFonts/Roboto-Bold.ttf"))
+    if (!font.loadFromFile("NibblerThirdParties/TextFonts/Roboto-Bold.ttf"))
         throw std::runtime_error("No font found");
     sf::Text text;
     text.setFont(font);
