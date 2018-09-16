@@ -26,4 +26,8 @@ Investigate:
 
 New:
 - Nice position for text in sdl
+- Nice position for text in sfml
 - Font path issues
+- Leaks in SFML
+- SDL does not respond after clicked outside
+- Leaks in executable
