@@ -1,5 +1,5 @@
 Nestor:
-- comment
+- comment DONE
 - when snake goes from from (0, n) to (0, m) and eats something on (0, k), this counts as a collision for snake's tail grows left
 - less food
 - obstacles

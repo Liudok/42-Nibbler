@@ -68,7 +68,7 @@ void LogicUnit::loopTheGame()
         usleep(countUsleep(timePassed));
     }
     windows_[currentLibraryIndex_]->showGameOver();
-    usleep(500'000);
+    usleep(1'000'000);
     windows_[currentLibraryIndex_]->closeWindow();
 }
 
