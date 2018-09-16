@@ -18,8 +18,7 @@ int main(int ac, char **av)
             std::cerr << "Invalid size of the field" << std::endl;
             return 2;
         }
-        LogicUnit game(width, height);
-        game.loopTheGame();
+        while (LogicUnit(width, height).loopTheGame());
     }
     catch (std::exception& e){
         std::cerr << "ERROR: " << e.what() << std::endl;
