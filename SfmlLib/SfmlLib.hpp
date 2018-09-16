@@ -27,8 +27,8 @@ class SFMLWindow : public IWindow
         bool              isPaused();
         size_t            width_ = 0;
         size_t            height_ = 0;
-        sf::RenderWindow  *window_ = nullptr;
         size_t            score_ = 0;
         size_t            speed_ = 0;
+        std::unique_ptr<sf::RenderWindow> window_;
 
 };

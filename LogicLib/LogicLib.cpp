@@ -19,7 +19,7 @@ LogicUnit::LogicUnit(LogicUnit const& other)
  : libraries_(initLibraries())
  , windows_(initWindows())
  , gameField_(other.getHeight(), std::vector<size_t>(other.getWidth(), 0))
- , snake_(gameField_[0].size(), gameField_.size())
+ , snake_(width_, height_)
 {
 
 }
