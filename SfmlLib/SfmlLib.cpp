@@ -116,13 +116,15 @@ void SFMLWindow::gameStateToPixels(field const& gameState)
             circle.setPosition(sf::Vector2f(j * 30 + 30, i * 30 + 30));
             if (gameState[i][j] != 0)
             {
-                if (gameState[i][j] == 1)
+                if (gameState[i][j] == body)
                     circle.setFillColor(sf::Color(127, 255, 212));
-                else if (gameState[i][j] == 2)
+                else if (gameState[i][j] == head)
                     circle.setFillColor(sf::Color(64, 224, 208));
-                else if (gameState[i][j] == 3)
+                else if (gameState[i][j] == food)
                     circle.setFillColor(sf::Color(255, 105, 180));
-                else if (gameState[i][j] == 4)
+                else if (gameState[i][j] == obstacle)
+                    circle.setFillColor(sf::Color(0, 0, 0));
+                else if (gameState[i][j] == collision)
                     circle.setFillColor(sf::Color(248, 14, 50));
                 window_->draw(circle);
             }   

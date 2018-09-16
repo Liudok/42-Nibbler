@@ -6,7 +6,7 @@ Snake::Snake(size_t width, size_t height)
     , height_(height)
 {
     srand(time(NULL));
-    foodPos_.insert(generateFood());
+    foodPos_.insert(generatePoint());
 }
 
 Snake::Snake(Snake const& other)
@@ -43,6 +43,8 @@ void Snake::fillMap(gameField& field) const
         field[foodPiece.y][foodPiece.x] = food;
     for (auto const& bodyPart : body_)
         field[bodyPart.y][bodyPart.x] = body;
+    for (auto const& o : obstacles_)
+        field[o.y][o.x] = obstacle;
     field[headPos_.y][headPos_.x] =
         collapsed() ? collision : head;
 }
@@ -64,6 +66,8 @@ void Snake::move(const direction newDirection)
     headPos_ = newHeadPosition;
     if (headHitBody())
         hitBody_ = true;
+    if (headHitObstacle())
+        hitObstacle_ = true;
 }
 
 double Snake::getSpeed() const
@@ -78,7 +82,7 @@ size_t Snake::getScore() const
 
 bool Snake::collapsed() const
 {
-    return outOfField_ || hitBody_;
+    return outOfField_ || hitBody_ || hitObstacle_;
 }
 
 void Snake::updateDirection(const direction newDirection)
@@ -122,6 +126,14 @@ bool Snake::headHitBody() const
     return false;
 }
 
+bool Snake::headHitObstacle() const
+{
+    for (auto const& o : obstacles_)
+        if (o == headPos_)
+            return true;
+    return false;
+}
+
 void Snake::processCollisionWithFood()
 {
     static std::forward_list<Point> futureBodyParts;
@@ -136,15 +148,17 @@ void Snake::processCollisionWithFood()
             const auto newBodyPart = body_[body_.size() - 1];
             futureBodyParts.push_front(std::move(newBodyPart));
             const size_t priorSize = foodPos_.size();
-            while (foodPos_.size() == priorSize)
-                foodPos_.insert(generateFood());
+            size_t loop = 0;
+            const auto loopLimit = 1000;
+            while (foodPos_.size() != priorSize * 3 && ++loop < loopLimit)
+                foodPos_.insert(generatePoint());
             foodPos_.erase(foodPiece);
             return;
         }
     }
 }
 
-Point Snake::generateFood() const
+Point Snake::generatePoint() const
 {
     size_t y = rand() % height_;
     size_t x = rand() % width_;
