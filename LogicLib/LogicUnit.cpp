@@ -15,21 +15,21 @@ LogicUnit::LogicUnit(size_t height, size_t width)
     snake_.fillMap(gameField_);
 }
 
-LogicUnit::LogicUnit(LogicUnit const& other)
+LogicUnit::LogicUnit(LogicUnit const& rhs)
  : libraries_(initLibraries())
  , windows_(initWindows())
- , gameField_(other.getHeight(), std::vector<size_t>(other.getWidth(), 0))
+ , gameField_(rhs.gameField_)
  , snake_(width_, height_)
 {
 
 }
 
-LogicUnit& LogicUnit::operator=(LogicUnit const& src)
+LogicUnit& LogicUnit::operator=(LogicUnit const& rhs)
 {
-  if (this != &src)
+  if (this != &rhs)
   {
-    snake_ = src.snake_;
-    gameField_ = src.gameField_;
+    snake_ = rhs.snake_;
+    gameField_ = rhs.gameField_;
   }
   return *this;
 }
@@ -140,16 +140,6 @@ void LogicUnit::reactToEndGame()
 void LogicUnit::reactToPauseContinue()
 {
     paused_ = !paused_;
-}
-
-size_t  LogicUnit::getWidth() const
-{
-    return width_;
-}
-
-size_t  LogicUnit::getHeight() const
-{
-    return height_;
 }
 
 size_t LogicUnit::countUsleep(int timePassed)

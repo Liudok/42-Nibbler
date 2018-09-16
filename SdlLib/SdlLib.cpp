@@ -1,6 +1,7 @@
 #include "SdlLib.hpp"
 #include <unistd.h>
 #include <string>
+#include <functional>
 
 extern "C"
 {
@@ -36,9 +37,10 @@ responseType SDLWindow::getResponse()
     return noResponse;
 }
 
-void SDLWindow::draw(field const& gameState, size_t score, size_t)
+void SDLWindow::draw(field const& gameState, size_t score, size_t speed)
 {
     score_ = score;
+    speed_ = speed;
     gameStateToPixels(gameState);
     SDL_RenderClear(renderer_);
 }
@@ -53,8 +55,8 @@ void SDLWindow::openWindow(size_t width, size_t height)
         "SDL Nibbler", 
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        width_ * 10 + 10,
-        height_ * 10 + 10,
+        width_ * zoomFactor + 2 * zoomFactor,
+        height_ * zoomFactor + 2 * zoomFactor,
         SDL_WINDOW_OPENGL |SDL_WINDOW_INPUT_GRABBED |
         SDL_WINDOW_SHOWN);
 
@@ -92,31 +94,24 @@ SDLWindow::~SDLWindow()
 
 void SDLWindow::gameStateToPixels(field const& gameState)
 {
+    std::function<void()> setColor[nbGameFieldCellTypes] = {
+        [this](){ return SDL_SetRenderDrawColor(renderer_, 79, 132, 196, 255); },
+        [this](){ return SDL_SetRenderDrawColor(renderer_, 127, 255, 212, 255); },
+        [this](){ return SDL_SetRenderDrawColor(renderer_, 64, 224, 208, 255); },
+        [this](){ return SDL_SetRenderDrawColor(renderer_, 255, 105, 180, 255); },
+        [this](){ return SDL_SetRenderDrawColor(renderer_, 248, 14, 50, 255); },
+        [this](){ return SDL_SetRenderDrawColor(renderer_, 11, 111, 144, 244); }
+    };
     for (size_t i = 0; i < height_; ++i)
     {
         for (size_t j = 0; j < width_; ++j)
         {
             SDL_Rect rectangle;
-
-            rectangle.x = j * 10 + 10;
-            rectangle.y = i * 10 + 10;
-            rectangle.w = 10;
-            rectangle.h = 10;
-            if (gameState[i][j] == 0)
-            {
-                SDL_SetRenderDrawColor(renderer_, 79, 132, 196, 255);
-            }
-            else
-            {
-                if (gameState[i][j] == 1)
-                    SDL_SetRenderDrawColor(renderer_, 127, 255, 212, 255);
-                else if (gameState[i][j] == 2)
-                    SDL_SetRenderDrawColor(renderer_, 64, 224, 208, 255);
-                else if (gameState[i][j] == 3)
-                    SDL_SetRenderDrawColor(renderer_, 255, 105, 180, 255);
-                else if (gameState[i][j] == 4)
-                    SDL_SetRenderDrawColor(renderer_, 248, 14, 50, 255);
-            }
+            rectangle.x = (j + 1) * zoomFactor;
+            rectangle.y = (i + 1) * zoomFactor;
+            rectangle.w = zoomFactor;
+            rectangle.h = zoomFactor;
+            setColor[gameState[i][j]]();
             SDL_RenderFillRect(renderer_, &rectangle);
         }
     }
@@ -134,27 +129,28 @@ void SDLWindow::drawBorders()
 
     top.x = 0;
     top.y = 0;
-    top.w = width_ * 10;
-    top.h = 10;
+    top.w = width_ * zoomFactor;
+    top.h = zoomFactor;
     SDL_RenderFillRect(renderer_, &top);
     bottom.x = 0;
-    bottom.y = height_ * 10;
-    bottom.w = width_ * 10 + 10;
-    bottom.h = 10;
+    bottom.y = (height_ + 1) * zoomFactor;
+    bottom.w = (width_ + 1) * zoomFactor;
+    bottom.h = zoomFactor;
     SDL_RenderFillRect(renderer_, &bottom);
-    right.x = width_ * 10;
+    right.x = (width_ + 1) * zoomFactor;
     right.y = 0;
-    right.w = 10;
-    right.h = height_ * 10 + 10;
+    right.w = zoomFactor;
+    right.h = (height_ + 1) * zoomFactor;
     SDL_RenderFillRect(renderer_, &right);
     left.x = 0;
     left.y = 0;
-    left.w = 10;
-    left.h = height_ * 10;
+    left.w = zoomFactor;
+    left.h = height_ * zoomFactor;
     SDL_RenderFillRect(renderer_, &left);
 
     const auto score = "score: " + std::to_string(score_);
-    showText(score.c_str(), 2, height_ * 5 - 1, {199, 50, 176, 0});
+    showText(score.c_str(), 0, 0, {199, 50, 176, 0});
+    showText(score.c_str(), (width_ / 2.4) * zoomFactor, 0, {199, 50, 176, 0});
 }
 
 SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
@@ -169,8 +165,8 @@ SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
 
 void  SDLWindow::showText(const char *text, size_t x, size_t y, SDL_Color color)
 {
-    TTF_Font        *font = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 11);
-    if (font == nullptr) return ;
+    TTF_Font* font = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 11);
+    if (!font) throw std::runtime_error("No font found.");
     TTF_SetFontStyle(font, TTF_STYLE_BOLD);
     auto surface = TTF_RenderUTF8_Blended(font, text, color);
     auto rect = makeRect(x, y, surface->h / 2, surface->w / 2);
@@ -178,4 +174,5 @@ void  SDLWindow::showText(const char *text, size_t x, size_t y, SDL_Color color)
     SDL_RenderCopy(renderer_, texture, NULL, &rect);
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(surface);
+    TTF_CloseFont(font);
 }

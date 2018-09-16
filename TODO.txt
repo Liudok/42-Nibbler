@@ -22,3 +22,7 @@ Liuda:
 Investigate:
 - If a dynamic library does not exist or is not compatible, your program must display a relevant error message and exit neatly.
 - no 0 or width - 1 for food
+
+New:
+- Nice position for text in sdl
+- Font path issues

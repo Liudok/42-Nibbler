@@ -6,7 +6,8 @@ Snake::Snake(size_t width, size_t height)
     , height_(height)
 {
     srand(time(NULL));
-    foodPos_.insert(generatePoint());
+    foodPos_.insert({0,0});
+    foodPos_.insert({width-1,height-1});
 }
 
 Snake::Snake(Snake const& other)
@@ -55,8 +56,8 @@ void Snake::move(const direction newDirection)
     updateDirection(newDirection);
     const auto newHeadPosition = defineNewHeadPosition();
     const auto overflow = std::numeric_limits<size_t>::max();
-    if (newHeadPosition.x == width_ - 1 || newHeadPosition.x == overflow ||
-        newHeadPosition.y == height_ - 1 || newHeadPosition.y == overflow){
+    if (newHeadPosition.x == width_ || newHeadPosition.x == overflow ||
+        newHeadPosition.y == height_ || newHeadPosition.y == overflow){
         outOfField_ = true;
         return;
     }
@@ -160,9 +161,5 @@ void Snake::processCollisionWithFood()
 
 Point Snake::generatePoint() const
 {
-    size_t y = rand() % height_;
-    size_t x = rand() % width_;
-    Point result = {(x != 0 && x != width_ - 1) ? x : 9,
-        (y != 0 && y != height_ - 1) ? y : 9};
-    return result;
+    return {rand() % width_, rand() % height_};
 }

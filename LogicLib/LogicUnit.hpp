@@ -14,8 +14,6 @@ class LogicUnit
     ~LogicUnit();
 
     bool    loopTheGame();
-    size_t  getWidth() const;
-    size_t  getHeight() const;
 
   private:
 

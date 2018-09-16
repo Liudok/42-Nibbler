@@ -9,6 +9,8 @@ constexpr size_t nbResponses = 10;
 
 enum gameFieldCellType { empty, body, head, food, obstacle, collision };
 
+constexpr size_t nbGameFieldCellTypes = 6;
+
 using field = std::vector<std::vector<size_t>>;
 
 class IWindow
