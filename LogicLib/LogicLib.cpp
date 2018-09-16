@@ -19,7 +19,7 @@ LogicUnit::LogicUnit(LogicUnit const& other)
  : libraries_(initLibraries())
  , windows_(initWindows())
  , gameField_(other.getHeight(), std::vector<size_t>(other.getWidth(), 0))
- , snake_(gameField_[0].size(), gameField_.size())
+ , snake_(width_, height_)
 {
 
 }
@@ -40,7 +40,7 @@ LogicUnit::~LogicUnit()
         dlclose(library);
 }
 
-void LogicUnit::loopTheGame()
+bool LogicUnit::loopTheGame()
 {
     windows_[currentLibraryIndex_]->openWindow(width_, height_);
     windows_[currentLibraryIndex_]->draw(gameField_,
@@ -70,6 +70,8 @@ void LogicUnit::loopTheGame()
     windows_[currentLibraryIndex_]->showGameOver();
     usleep(1'000'000);
     windows_[currentLibraryIndex_]->closeWindow();
+    const auto repeat = snake_.collapsed();
+    return repeat;
 }
 
 auto LogicUnit::initLibraries()

@@ -1,4 +1,5 @@
 #pragma once
+
 #include <IWindow.hpp>
 #include <SDL.h>
 #include <SDL_ttf.h>

@@ -1,14 +1,13 @@
 #include "Snake.hpp"
-#include <iostream>
+#include <forward_list>
 
 Snake::Snake(size_t width, size_t height)
     : width_(width)
     , height_(height)
 {
     srand(time(NULL));
-    foodPos_.push_back(generateFood());
+    foodPos_.insert(generatePoint());
 }
-
 
 Snake::Snake(Snake const& other)
     : width_(other.width_)
@@ -44,33 +43,18 @@ void Snake::fillMap(gameField& field) const
         field[foodPiece.y][foodPiece.x] = food;
     for (auto const& bodyPart : body_)
         field[bodyPart.y][bodyPart.x] = body;
+    for (auto const& o : obstacles_)
+        field[o.y][o.x] = obstacle;
     field[headPos_.y][headPos_.x] =
         collapsed() ? collision : head;
 }
 
 void Snake::move(const direction newDirection)
 {
-    const size_t overflow = std::numeric_limits<size_t>::max();
-    for (auto const& foodPiece : foodPos_){
-        if (headPos_ == foodPiece){
-            speed_ += 0.05;
-            score_ += 50;
-            auto newBodyPart = body_[body_.size() - 1];
-            --newBodyPart.x;
-            if (newBodyPart.x == overflow)
-            {
-                outOfField_ = true;
-                return;
-            }
-            body_.push_back(std::move(newBodyPart));
-            foodPos_.push_back(generateFood());
-            foodPos_.remove(foodPiece);
-            break;
-        }
-    }
-    
+    processCollisionWithFood();
     updateDirection(newDirection);
     const auto newHeadPosition = defineNewHeadPosition();
+    const auto overflow = std::numeric_limits<size_t>::max();
     if (newHeadPosition.x == width_ - 1 || newHeadPosition.x == overflow ||
         newHeadPosition.y == height_ - 1 || newHeadPosition.y == overflow){
         outOfField_ = true;
@@ -82,6 +66,8 @@ void Snake::move(const direction newDirection)
     headPos_ = newHeadPosition;
     if (headHitBody())
         hitBody_ = true;
+    if (headHitObstacle())
+        hitObstacle_ = true;
 }
 
 double Snake::getSpeed() const
@@ -96,7 +82,7 @@ size_t Snake::getScore() const
 
 bool Snake::collapsed() const
 {
-    return outOfField_ || hitBody_;
+    return outOfField_ || hitBody_ || hitObstacle_;
 }
 
 void Snake::updateDirection(const direction newDirection)
@@ -140,7 +126,39 @@ bool Snake::headHitBody() const
     return false;
 }
 
-Point Snake::generateFood() const
+bool Snake::headHitObstacle() const
+{
+    for (auto const& o : obstacles_)
+        if (o == headPos_)
+            return true;
+    return false;
+}
+
+void Snake::processCollisionWithFood()
+{
+    static std::forward_list<Point> futureBodyParts;
+    if (!futureBodyParts.empty()){
+        body_.push_back(futureBodyParts.front());
+        futureBodyParts.pop_front();
+    }
+    for (auto const& foodPiece : foodPos_){
+        if (headPos_ == foodPiece){
+            speed_ += 0.05;
+            score_ += 50;
+            const auto newBodyPart = body_[body_.size() - 1];
+            futureBodyParts.push_front(std::move(newBodyPart));
+            const size_t priorSize = foodPos_.size();
+            size_t loop = 0;
+            const auto loopLimit = 1000;
+            while (foodPos_.size() != priorSize * 3 && ++loop < loopLimit)
+                foodPos_.insert(generatePoint());
+            foodPos_.erase(foodPiece);
+            return;
+        }
+    }
+}
+
+Point Snake::generatePoint() const
 {
     size_t y = rand() % height_;
     size_t x = rand() % width_;

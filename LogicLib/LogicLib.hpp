@@ -13,7 +13,7 @@ class LogicUnit
     LogicUnit &operator=(LogicUnit const &src);
     ~LogicUnit();
 
-    void    loopTheGame();
+    bool    loopTheGame();
     size_t  getWidth() const;
     size_t  getHeight() const;
 
