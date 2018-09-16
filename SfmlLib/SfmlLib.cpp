@@ -1,5 +1,7 @@
 #include "SfmlLib.hpp"
 #include <unistd.h>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
 extern "C"
 {
@@ -100,7 +102,7 @@ void SFMLWindow::showGameOver()
     window_->display();
 }
 
-void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameState)
+void SFMLWindow::gameStateToPixels(field const& gameState)
 {
     for (size_t i = 0; i < height_; ++i)
     {
