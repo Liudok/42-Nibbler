@@ -55,8 +55,8 @@ void SDLWindow::openWindow(size_t width, size_t height)
         "SDL Nibbler", 
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        width_ * zoomFactor + 2 * zoomFactor,
-        height_ * zoomFactor + 2 * zoomFactor,
+        width_ * zoomFactor_ + 2 * zoomFactor_,
+        height_ * zoomFactor_ + 2 * zoomFactor_,
         SDL_WINDOW_OPENGL |SDL_WINDOW_INPUT_GRABBED |
         SDL_WINDOW_SHOWN);
 
@@ -107,10 +107,10 @@ void SDLWindow::gameStateToPixels(field const& gameState)
         for (size_t j = 0; j < width_; ++j)
         {
             SDL_Rect rectangle;
-            rectangle.x = (j + 1) * zoomFactor;
-            rectangle.y = (i + 1) * zoomFactor;
-            rectangle.w = zoomFactor;
-            rectangle.h = zoomFactor;
+            rectangle.x = (j + 1) * zoomFactor_;
+            rectangle.y = (i + 1) * zoomFactor_;
+            rectangle.w = zoomFactor_;
+            rectangle.h = zoomFactor_;
             setColor[gameState[i][j]]();
             SDL_RenderFillRect(renderer_, &rectangle);
         }
@@ -129,28 +129,28 @@ void SDLWindow::drawBorders()
 
     top.x = 0;
     top.y = 0;
-    top.w = width_ * zoomFactor;
-    top.h = zoomFactor;
+    top.w = width_ * zoomFactor_;
+    top.h = zoomFactor_;
     SDL_RenderFillRect(renderer_, &top);
     bottom.x = 0;
-    bottom.y = (height_ + 1) * zoomFactor;
-    bottom.w = (width_ + 1) * zoomFactor;
-    bottom.h = zoomFactor;
+    bottom.y = (height_ + 1) * zoomFactor_;
+    bottom.w = (width_ + 1) * zoomFactor_;
+    bottom.h = zoomFactor_;
     SDL_RenderFillRect(renderer_, &bottom);
-    right.x = (width_ + 1) * zoomFactor;
+    right.x = (width_ + 1) * zoomFactor_;
     right.y = 0;
-    right.w = zoomFactor;
-    right.h = (height_ + 1) * zoomFactor;
+    right.w = zoomFactor_;
+    right.h = (height_ + 1) * zoomFactor_;
     SDL_RenderFillRect(renderer_, &right);
     left.x = 0;
     left.y = 0;
-    left.w = zoomFactor;
-    left.h = height_ * zoomFactor;
+    left.w = zoomFactor_;
+    left.h = height_ * zoomFactor_;
     SDL_RenderFillRect(renderer_, &left);
 
     const auto score = "score: " + std::to_string(score_);
     showText(score.c_str(), 0, 0, {199, 50, 176, 0});
-    showText(score.c_str(), (width_ / 2.4) * zoomFactor, 0, {199, 50, 176, 0});
+    showText(score.c_str(), (width_ / 2.4) * zoomFactor_, 0, {199, 50, 176, 0});
 }
 
 SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)

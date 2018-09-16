@@ -28,6 +28,8 @@ class SFMLWindow : public IWindow
         void              gameStateToPixels(field const&);
         void              drawBorders();
         bool              isPaused();
+
+        const size_t      zoomFactor_ = 30;
         size_t            width_ = 0;
         size_t            height_ = 0;
         size_t            score_ = 0;

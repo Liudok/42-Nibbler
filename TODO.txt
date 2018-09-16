@@ -10,6 +10,7 @@ Nestor:
 - Makefile
 - unordered_set
 - runtime error when trying to use mixer
+- full field ==DONE==
 
 Liuda:
 +- Nice exit for sdl

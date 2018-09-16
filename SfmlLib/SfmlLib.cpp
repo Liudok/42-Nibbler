@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <functional>
 
 extern "C"
 {
@@ -60,7 +61,7 @@ void SFMLWindow::openWindow(size_t width, size_t height)
     width_ = width;
     height_ = height;
     window_ = std::make_unique<sf::RenderWindow>(
-         sf::VideoMode(width_ * 30 + 30, height_ * 30 + 30), "SFML Nibbler");
+         sf::VideoMode((width_ + 2) * zoomFactor_, (height_ + 2) * zoomFactor_), "SFML Nibbler");
     window_->setActive(true);
 }
 
@@ -79,39 +80,45 @@ void SFMLWindow::showGameOver()
     text.setCharacterSize(55);
     text.setString("Score: " + std::to_string((int)score_));
     text.setFillColor(sf::Color::Green);
-    text.setPosition((width_ / 2) * 30 - 60, (height_ / 2) * 30 - 50);
+    text.setPosition((width_ / 2) * zoomFactor_ - 60, (height_ / 2) * zoomFactor_ - 50);
     window_->draw(text);
     text.setString("Game over");
     text.setFillColor(sf::Color::Red);
-    text.setPosition((width_ / 2) * 30 - 100, (height_ / 2) * 30 + 40);
+    text.setPosition((width_ / 2) * zoomFactor_ - 100, (height_ / 2) * zoomFactor_ + 40);
     window_->draw(text);
     window_->display();
 }
 
+SFMLWindow::~SFMLWindow()
+{
+    
+}
+
 void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameState)
 {
+    std::function<void(sf::CircleShape&)> setColor[nbGameFieldCellTypes] = {
+        [](sf::CircleShape&){},
+        [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(127, 255, 212)); },
+        [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(64, 224, 208)); },
+        [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(255, 105, 180)); },
+        [](sf::CircleShape& circle){ circle.setFillColor(sf::Color::Red); },
+        [](sf::CircleShape& circle){ circle.setFillColor(sf::Color::Green); }
+    };
     for (size_t i = 0; i < height_; ++i)
     {
         for (size_t j = 0; j < width_; ++j)
         {
             sf::RectangleShape rectangle(sf::Vector2f(100, 100));
-            rectangle.setPosition(sf::Vector2f(j * 30 + 30, i * 30 + 30));
+            rectangle.setPosition(sf::Vector2f((j + 1) * zoomFactor_, (i + 1) * zoomFactor_));
             rectangle.setFillColor(sf::Color(79, 132, 196));
             window_->draw(rectangle);
-            sf::CircleShape circle(15);
-            circle.setPosition(sf::Vector2f(j * 30 + 30, i * 30 + 30));
-            if (gameState[i][j] != 0)
+            if (gameState[i][j] != empty)
             {
-                if (gameState[i][j] == 1)
-                    circle.setFillColor(sf::Color(127, 255, 212));
-                else if (gameState[i][j] == collision)
-                	circle.setFillColor(sf::Color::Red);
-                else if (gameState[i][j] == 2)
-                    circle.setFillColor(sf::Color(64, 224, 208));
-                else if (gameState[i][j] == 3)
-                    circle.setFillColor(sf::Color(255, 105, 180));
+                sf::CircleShape circle(15);
+                circle.setPosition(sf::Vector2f((j + 1) * zoomFactor_, (i + 1) * zoomFactor_));
+                setColor[gameState[i][j]](circle);
                 window_->draw(circle);
-            }   
+            }
         }
     }
     drawBorders();
@@ -119,22 +126,26 @@ void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameS
 
 void SFMLWindow::drawBorders()
 {
-    sf::RectangleShape left(sf::Vector2f(30, height_ * 30));
+    sf::RectangleShape left(sf::Vector2f(zoomFactor_, (height_ + 1) * zoomFactor_));
     left.setPosition(sf::Vector2f(0, 0));
-    left.setFillColor(sf::Color(95, 158, 160));
+    left.setFillColor(veryNiceColor);
     window_->draw(left);
-    sf::RectangleShape right(sf::Vector2f(30, height_ * 30 + 30));
-    right.setPosition(sf::Vector2f(width_ * 30, 0));
+
+    sf::RectangleShape right(sf::Vector2f(zoomFactor_, (height_ + 2) * zoomFactor_));
+    right.setPosition(sf::Vector2f((width_ + 1) * zoomFactor_, 0));
     right.setFillColor(sf::Color(95, 158, 160));
     window_->draw(right);
-    sf::RectangleShape top(sf::Vector2f(width_ * 30, 30));
+
+    sf::RectangleShape top(sf::Vector2f((width_ + 1) * zoomFactor_, zoomFactor_));
     top.setPosition(sf::Vector2f(0, 0));
     top.setFillColor(sf::Color(95, 158, 160));
     window_->draw(top);
-    sf::RectangleShape bottom(sf::Vector2f(width_ * 30 + 30, 30));
-    bottom.setPosition(sf::Vector2f(0, height_ * 30));
+
+    sf::RectangleShape bottom(sf::Vector2f((width_ + 1) * zoomFactor_, zoomFactor_));
+    bottom.setPosition(sf::Vector2f(0, (height_ + 1) * zoomFactor_));
     bottom.setFillColor(sf::Color(95, 158, 160));
     window_->draw(bottom);
+
     sf::Font font;
     if (!font.loadFromFile("NibblerThirdParties/TextFonts/Roboto-Bold.ttf"))
         throw std::runtime_error("No font found");
@@ -143,14 +154,10 @@ void SFMLWindow::drawBorders()
     text.setCharacterSize(20);
     text.setString("Score: " + std::to_string((int)score_));
     text.setFillColor(sf::Color::Red);
-    text.setPosition(10,height_ * 30);
+    text.setPosition(zoomFactor_, (height_ + 1) * zoomFactor_);
     window_->draw(text);
-    text.setPosition(width_ * 30 - 100, height_ * 30);
+    text.setPosition(width_ * zoomFactor_ - 3 * zoomFactor_,
+        (height_ + 1) * zoomFactor_);
     text.setString("Speed: " + std::to_string((int)speed_));
     window_->draw(text);
-}
-
-SFMLWindow::~SFMLWindow()
-{
-    
 }

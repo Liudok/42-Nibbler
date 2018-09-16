@@ -27,7 +27,7 @@ class LogicUnit
     std::vector<windowPtr> initWindows();
     std::array<ptrToLibraryType, nbLibraries> libraries_;
     std::vector<windowPtr> windows_;
-    libraryIndex currentLibraryIndex_ = sdl;
+    libraryIndex currentLibraryIndex_ = sfml;
 
     size_t     width_ = 30;
     size_t     height_ = 50;
