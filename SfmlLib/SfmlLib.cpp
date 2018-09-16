@@ -19,37 +19,26 @@ responseType SFMLWindow::getResponse()
         switch (event.type)
         {
         case sf::Event::Closed:
-            closeWindow();
             return endGame;
         case sf::Event::KeyPressed:
             switch (event.key.code)
             {
             case sf::Keyboard::Num3:
-                closeWindow();
                 return toNcurses;
-   
             case sf::Keyboard::Escape:
-                closeWindow();
                 return endGame;
-   
             case sf::Keyboard::Num1:
-                closeWindow();
                 return toSDL;
             case sf::Keyboard::Down:
                 return down;
-
             case sf::Keyboard::Up:
                 return up;
-
             case sf::Keyboard::Right:
                 return right;
-
             case sf::Keyboard::Left:
                 return left;
-
             case sf::Keyboard::Space:
                 return pauseContinue;
-
             default:
                 break;
             }
