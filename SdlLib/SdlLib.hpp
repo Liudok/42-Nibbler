@@ -32,6 +32,7 @@ class SDLWindow : public IWindow
         SDL_Surface     *score_surface_ = nullptr;
         SDL_Rect        score_rect_;
         SDL_Texture     *score_texture_ = nullptr;
+        TTF_Font        *font_ = nullptr;
         size_t          draw_score_ = 0;//-
         size_t          score_ = 0;
 };

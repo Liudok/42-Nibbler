@@ -67,19 +67,17 @@ void SDLWindow::openWindow(size_t width, size_t height)
     SDL_RaiseWindow(window_);
     TTF_Init();
 
-    TTF_Font *font = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 11);
-    if (font == NULL)
-        return ;
-    TTF_SetFontStyle(font, TTF_STYLE_BOLD);
-    score_surface_ = TTF_RenderUTF8_Blended(font, "score: 0", {199, 50, 176, 0});
+    font_ = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 11);
+    if (!font_) return ;
+    TTF_SetFontStyle(font_, TTF_STYLE_BOLD);
+    score_surface_ = TTF_RenderUTF8_Blended(font_, "score: 0", {199, 50, 176, 0});
     score_rect_ = makeRect(2, height_ * 5 - 2, score_surface_->h / 2, score_surface_->w / 2);
     score_texture_ = SDL_CreateTextureFromSurface(renderer_, score_surface_);
-
-    TTF_CloseFont(font);
 }
 
 void SDLWindow::closeWindow()
 {
+    TTF_CloseFont(font_);
     SDL_FreeSurface(score_surface_);
     SDL_DestroyTexture(score_texture_);
     TTF_Quit();
@@ -113,25 +111,24 @@ void SDLWindow::gameStateToPixels(field const& gameState)
             rectangle.h = 10;
             if (gameState[i][j] == 0)
             {
-                SDL_SetRenderDrawColor( renderer_, 79, 132, 196, 255 );
+                SDL_SetRenderDrawColor(renderer_, 79, 132, 196, 255);
             }
             else
             {
                 if (gameState[i][j] == 1)
-                    SDL_SetRenderDrawColor( renderer_, 127, 255, 212, 255 );
+                    SDL_SetRenderDrawColor(renderer_, 127, 255, 212, 255);
                 else if (gameState[i][j] == 2)
-                    SDL_SetRenderDrawColor( renderer_, 64, 224, 208, 255 );
+                    SDL_SetRenderDrawColor(renderer_, 64, 224, 208, 255);
                 else if (gameState[i][j] == 3)
-                    SDL_SetRenderDrawColor( renderer_, 255, 105, 180, 255 );
+                    SDL_SetRenderDrawColor(renderer_, 255, 105, 180, 255);
                 else if (gameState[i][j] == 4)
-                    SDL_SetRenderDrawColor( renderer_, 248, 14, 50, 255 );
+                    SDL_SetRenderDrawColor(renderer_, 248, 14, 50, 255);
             }
-            SDL_RenderFillRect( renderer_, &rectangle );
+            SDL_RenderFillRect(renderer_, &rectangle);
         }
     }
     drawBorders();
-    usleep( 100000 );
-    SDL_RenderPresent( renderer_ );
+    SDL_RenderPresent(renderer_);
 }
 
 void SDLWindow::drawBorders()
@@ -141,7 +138,7 @@ void SDLWindow::drawBorders()
     SDL_Rect right;
     SDL_Rect left;
     SDL_SetRenderDrawColor(renderer_, 95, 158, 160, 255);
-    
+
     top.x = 0;
     top.y = 0;
     top.w = width_ * 10;

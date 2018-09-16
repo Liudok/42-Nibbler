@@ -51,6 +51,8 @@ void Snake::move(const direction newDirection)
     const size_t overflow = std::numeric_limits<size_t>::max();
     if (headPos_ == foodPos_)
     {
+        speed_ += 0.05;
+        score_ += 50;
         auto newBodyPart = body_[body_.size() - 1];
         --newBodyPart.x;
         if (newBodyPart.x == overflow)
@@ -77,10 +79,9 @@ void Snake::move(const direction newDirection)
     headPos_ = newHeadPosition;
     if (headHitBody())
         hitBody_ = true;
-    score_ = body_.size() - 4;
 }
 
-size_t Snake::getSpeed() const
+double Snake::getSpeed() const
 {
     return speed_;
 }

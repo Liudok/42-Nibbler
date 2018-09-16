@@ -29,7 +29,7 @@ class LogicUnit
     std::vector<windowPtr> initWindows();
     std::array<ptrToLibraryType, nbLibraries> libraries_;
     std::vector<windowPtr> windows_;
-    libraryIndex currentLibraryIndex_ = sfml;
+    libraryIndex currentLibraryIndex_ = sdl;
 
     size_t     width_ = 30;
     size_t     height_ = 50;
@@ -48,5 +48,7 @@ class LogicUnit
     void       reactToToSFML();
     void       reactToEndGame();
     void       reactToPauseContinue();
+
+    size_t     countUsleep(int timePassed);
 
 };

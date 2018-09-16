@@ -57,20 +57,18 @@ void LogicUnit::loopTheGame()
         [this]{ reactToPauseContinue(); },
         [this]{ reactToEndGame(); },
     };
-    const auto normalLoopDuration = 700000;
     while (!endOfGame_){
-        const auto t0 = std::chrono::high_resolution_clock::now();
+        const auto t0 = std::chrono::steady_clock::now();
         const auto response = windows_[currentLibraryIndex_]->getResponse();
         if (paused_ && response != pauseContinue) continue;
         reactFunctions[response]();
-        const auto t1 = std::chrono::high_resolution_clock::now();
-        const auto timePassed = (t1-t0).count();
-        const auto delta = normalLoopDuration - timePassed;
-        if (delta > 0)
-            usleep(delta - 1000 * snake_.getScore());
+        const auto t1 = std::chrono::steady_clock::now();
+        const auto timePassed =
+            std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count();
+        usleep(countUsleep(timePassed));
     }
     windows_[currentLibraryIndex_]->showGameOver();
-    usleep(normalLoopDuration * 3);
+    usleep(500'000);
     windows_[currentLibraryIndex_]->closeWindow();
 }
 
@@ -195,4 +193,11 @@ size_t  LogicUnit::getWidth() const
 size_t  LogicUnit::getHeight() const
 {
     return height_;
+}
+
+size_t LogicUnit::countUsleep(int timePassed)
+{
+    const auto loopNormalDuration = 100'000;
+    const auto delta = loopNormalDuration - timePassed;
+    return (delta < 0) ? 0 : delta / snake_.getSpeed();
 }

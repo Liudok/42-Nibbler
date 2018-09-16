@@ -126,7 +126,6 @@ void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameS
         }
     }
     drawBorders();
-    usleep(100000);
 }
 
 void SFMLWindow::drawBorders()
