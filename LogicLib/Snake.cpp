@@ -149,9 +149,7 @@ void Snake::processCollisionWithFood()
             const auto newBodyPart = body_[body_.size() - 1];
             futureBodyParts.push_front(std::move(newBodyPart));
             const size_t priorSize = foodPos_.size();
-            size_t loop = 0;
-            const auto loopLimit = 1000;
-            while (foodPos_.size() != priorSize * 3 && ++loop < loopLimit)
+            while (foodPos_.size() == priorSize)
                 foodPos_.insert(generatePoint());
             foodPos_.erase(foodPiece);
             return;

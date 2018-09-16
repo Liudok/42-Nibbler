@@ -27,7 +27,7 @@ class SDLWindow : public IWindow
         SDL_Rect        makeRect(size_t x, size_t y, size_t h, size_t w);
         void            showText(const char *text, size_t x, size_t y, SDL_Color color);
 
-        const size_t    zoomFactor_ = 10;
+        const size_t    zoomFactor_ = 14;
         size_t          width_ = 0;
         size_t          height_ = 0;
         SDL_Window      *window_ = nullptr;

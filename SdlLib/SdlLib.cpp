@@ -129,28 +129,32 @@ void SDLWindow::drawBorders()
 
     top.x = 0;
     top.y = 0;
-    top.w = width_ * zoomFactor_;
+    top.w = (width_ + 1) * zoomFactor_;
     top.h = zoomFactor_;
     SDL_RenderFillRect(renderer_, &top);
+    
     bottom.x = 0;
     bottom.y = (height_ + 1) * zoomFactor_;
-    bottom.w = (width_ + 1) * zoomFactor_;
+    bottom.w = (width_ + 2) * zoomFactor_;
     bottom.h = zoomFactor_;
     SDL_RenderFillRect(renderer_, &bottom);
+    
     right.x = (width_ + 1) * zoomFactor_;
     right.y = 0;
     right.w = zoomFactor_;
     right.h = (height_ + 1) * zoomFactor_;
     SDL_RenderFillRect(renderer_, &right);
+    
     left.x = 0;
     left.y = 0;
     left.w = zoomFactor_;
-    left.h = height_ * zoomFactor_;
+    left.h = (height_ + 1) * zoomFactor_;
     SDL_RenderFillRect(renderer_, &left);
 
     const auto score = "score: " + std::to_string(score_);
     showText(score.c_str(), 0, 0, {199, 50, 176, 0});
-    showText(score.c_str(), (width_ / 2.4) * zoomFactor_, 0, {199, 50, 176, 0});
+    const auto speed = "speed: " + std::to_string(speed_);
+    showText(speed.c_str(), (width_ / 2.4) * zoomFactor_, 0, {199, 50, 176, 0});
 }
 
 SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)

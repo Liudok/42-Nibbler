@@ -126,6 +126,8 @@ void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameS
 
 void SFMLWindow::drawBorders()
 {
+    const sf::Color veryNiceColor(95, 158, 160);
+
     sf::RectangleShape left(sf::Vector2f(zoomFactor_, (height_ + 1) * zoomFactor_));
     left.setPosition(sf::Vector2f(0, 0));
     left.setFillColor(veryNiceColor);
@@ -133,17 +135,17 @@ void SFMLWindow::drawBorders()
 
     sf::RectangleShape right(sf::Vector2f(zoomFactor_, (height_ + 2) * zoomFactor_));
     right.setPosition(sf::Vector2f((width_ + 1) * zoomFactor_, 0));
-    right.setFillColor(sf::Color(95, 158, 160));
+    right.setFillColor(veryNiceColor);
     window_->draw(right);
 
     sf::RectangleShape top(sf::Vector2f((width_ + 1) * zoomFactor_, zoomFactor_));
     top.setPosition(sf::Vector2f(0, 0));
-    top.setFillColor(sf::Color(95, 158, 160));
+    top.setFillColor(veryNiceColor);
     window_->draw(top);
 
     sf::RectangleShape bottom(sf::Vector2f((width_ + 1) * zoomFactor_, zoomFactor_));
     bottom.setPosition(sf::Vector2f(0, (height_ + 1) * zoomFactor_));
-    bottom.setFillColor(sf::Color(95, 158, 160));
+    bottom.setFillColor(veryNiceColor);
     window_->draw(bottom);
 
     sf::Font font;
