@@ -1,7 +1,7 @@
 #pragma once
 
 #include <IWindow.hpp>
-#include <list>
+#include <unordered_set>
 
 struct Point
 {
@@ -9,10 +9,18 @@ struct Point
     size_t y = 0;
     bool operator==(Point const& rhs) const
     {
-        return this->x == rhs.x && this->y == rhs.y;
+        return x == rhs.x && y == rhs.y;
     }
+
 };
 
+struct PointHashBySum
+{
+    size_t operator()(Point const& point) const
+    {
+        return std::hash<size_t>()(point.x * point.y);
+    }
+};
 
 using gameField = std::vector<std::vector<size_t>>;
 
@@ -39,18 +47,21 @@ class Snake
         Point defineNewHeadPosition() const;
         bool validNewDirection(const direction newDirection) const;
         bool headHitBody() const;
+        void processCollisionWithFood();
 
         Point generateFood() const;
 
         size_t width_ = 0;
         size_t height_ = 0;
         Point headPos_ {width_ / 2, height_ / 2};
-        std::vector<Point> body_ {{headPos_.x - 1, headPos_.y}, {headPos_.x - 2, headPos_.y}, {headPos_.x - 3, headPos_.y}, {headPos_.x - 3, headPos_.y - 1}};
+        std::vector<Point> body_ {{headPos_.x - 1, headPos_.y},
+            {headPos_.x - 2, headPos_.y}, {headPos_.x - 3, headPos_.y},
+                {headPos_.x - 3, headPos_.y - 1}};
         direction currentDirection_ = right;
 
         bool outOfField_ = false;
         bool hitBody_ = false;
-        std::list<Point> foodPos_;
+        std::unordered_set<Point, PointHashBySum> foodPos_;
         double speed_ = 1.0;
         size_t score_ = 0;
 
