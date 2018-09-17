@@ -13,6 +13,22 @@ extern "C"
 
 responseType GlfwWindow::getResponse()
 {
+
+    do{
+        // Clear the screen. It's not mentioned before Tutorial 02, but it can cause flickering, so it's there nonetheless.
+        glClear( GL_COLOR_BUFFER_BIT );
+
+        // Draw nothing, see you in tutorial 2 !
+
+
+        // Swap buffers
+        glfwSwapBuffers(window_);
+        glfwPollEvents();
+
+    } // Check if the ESC key was pressed or the window_ was closed
+    while( glfwGetKey(window_, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
+           glfwWindowShouldClose(window_) == 0 );
+
     while (!glfwWindowShouldClose(window_))
     {
         /* Swap front and back buffers */
@@ -20,6 +36,22 @@ responseType GlfwWindow::getResponse()
         /* Poll for and process events */
         glfwPollEvents();
     }
+//    if (key == GLFW_KEY_P && action == GLFW_PRESS)
+//        g_action = PAUSE;
+//    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+//        g_action = RIGHT;
+//    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
+//        g_action = LEFT;
+//    if (key == GLFW_KEY_UP && action == GLFW_PRESS)
+//        g_action = UP;
+//    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+//        g_action = DOWN;
+//    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+//        g_action = QUIT;
+//    if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+//        g_action = LIB1;
+//    if (key == GLFW_KEY_2 && action == GLFW_PRESS)
+//        g_action = LIB2;
 //    SDL_Event event;
 //    SDL_PollEvent(&event);
 //    if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
@@ -54,6 +86,8 @@ void GlfwWindow::draw(field const& gameState, size_t score, size_t speed)
 
 void GlfwWindow::openWindow(size_t width, size_t height)
 {
+
+
     width_ = width;
     height_ = height;
 
@@ -71,7 +105,7 @@ void GlfwWindow::openWindow(size_t width, size_t height)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Open a window and create its OpenGL context
-    window_ = glfwCreateWindow( 1024, 768, "Tutorial 01", NULL, NULL);
+    window_ = glfwCreateWindow( width_, height_, "GLFW Nibbler", NULL, NULL);
     if( window_ == NULL ){
         fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
         glfwTerminate();
@@ -79,33 +113,21 @@ void GlfwWindow::openWindow(size_t width, size_t height)
     }
     glfwMakeContextCurrent(window_);
 
-    // Initialize GLEW
-//    if (glewInit() != GLEW_OK) {
-//        fprintf(stderr, "Failed to initialize GLEW\n");
-//        glfwTerminate();
-//        return ;
-//    }
-
     // Ensure we can capture the escape key being pressed below
     glfwSetInputMode(window_, GLFW_STICKY_KEYS, GL_TRUE);
+
+
+//    glMatrixMode(GL_PROJECTION);
+//    glLoadIdentity();
+//    glOrtho(0.0f, _winWidth, _winHeight, 0.0f, 0.0f, 1.0f);
+//
+//    glfwSetKeyCallback(_window, &key_callback);
+
 
     // Dark blue background
     glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
-    do{
-        // Clear the screen. It's not mentioned before Tutorial 02, but it can cause flickering, so it's there nonetheless.
-        glClear( GL_COLOR_BUFFER_BIT );
 
-        // Draw nothing, see you in tutorial 2 !
-
-
-        // Swap buffers
-        glfwSwapBuffers(window_);
-        glfwPollEvents();
-
-    } // Check if the ESC key was pressed or the window_ was closed
-    while( glfwGetKey(window_, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-           glfwWindowShouldClose(window_) == 0 );
 }
 
 void GlfwWindow::closeWindow()
