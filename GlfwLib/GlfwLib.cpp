@@ -90,11 +90,11 @@ void GlfwWindow::openWindow(size_t width, size_t height)
     glfwSetInputMode(window_, GLFW_STICKY_KEYS, GL_TRUE);
 
     // Dark blue background
-    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+    // glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
     do{
         // Clear the screen. It's not mentioned before Tutorial 02, but it can cause flickering, so it's there nonetheless.
-        glClear( GL_COLOR_BUFFER_BIT );
+        // glClear( GL_COLOR_BUFFER_BIT );
 
         // Draw nothing, see you in tutorial 2 !
 

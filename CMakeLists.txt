@@ -13,7 +13,7 @@ if (NOT APPLE)
             "The project may be built only in macOS for now. Sorry :(")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 
 # Sdl configuration
 
@@ -30,9 +30,12 @@ file(GLOB SfmlDynamicLibs ${SfmlPath}/lib/*.dylib)
 
 # Glfw configuration
 
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
 set(GlfwPath ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties/GLFW)
-include_directories(${GlfwPath}/include)
-file(GLOB GlfwDynamicLibs ${GlfwPath}/lib/*.a)
+add_subdirectory(${GlfwPath})
 
 # Project sources and libraries
 
@@ -89,5 +92,5 @@ target_link_libraries(LogicLib NcursesLib SdlLib SfmlLib GlfwLib)
 target_link_libraries(NcursesLib ncurses)
 target_link_libraries(SdlLib ${SdlDynamicLibs})
 target_link_libraries(SfmlLib ${SfmlDynamicLibs})
-target_link_libraries(GlfwLib ${GlfwDynamicLibs})
+target_link_libraries(GlfwLib glfw)
 target_link_libraries(Nibbler LogicLib)
