@@ -14,7 +14,6 @@ if (NOT APPLE)
 endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lglfw3 -framework CoreVideo -framework OpenGL -framework IOKit -framework Cocoa")
 
 # Sdl configuration
 
@@ -31,9 +30,12 @@ file(GLOB SfmlDynamicLibs ${SfmlPath}/lib/*.dylib)
 
 # Glfw configuration
 
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
 set(GlfwPath ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties/GLFW)
-include_directories(${GlfwPath}/include)
-file(GLOB GlfwDynamicLibs ${GlfwPath}/lib/*.a)
+add_subdirectory(${GlfwPath})
 
 # Project sources and libraries
 
@@ -46,12 +48,6 @@ file(GLOB LogicSources
 
 add_library(LogicLib STATIC ${LogicSources})
 
-file(GLOB NcursesLibSources
-        ${CMAKE_CURRENT_SOURCE_DIR}/NcursesLib/*.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/NcursesLib/*.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
-
-add_library(NcursesLib SHARED ${NcursesLibSources})
 
 file(GLOB SdlLibSources
         ${CMAKE_CURRENT_SOURCE_DIR}/SdlLib/*.cpp
@@ -79,16 +75,14 @@ add_executable(Nibbler main.cpp)
 # Simpler includes
 
 target_include_directories(LogicLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
-target_include_directories(NcursesLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
 target_include_directories(SdlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
 target_include_directories(SfmlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
 target_include_directories(GlfwLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
 
 # Links between project parts
 
-target_link_libraries(LogicLib NcursesLib SdlLib SfmlLib GlfwLib)
-target_link_libraries(NcursesLib ncurses)
+target_link_libraries(LogicLib SdlLib SfmlLib GlfwLib)
 target_link_libraries(SdlLib ${SdlDynamicLibs})
 target_link_libraries(SfmlLib ${SfmlDynamicLibs})
-target_link_libraries(GlfwLib ${GlfwDynamicLibs})
+target_link_libraries(GlfwLib glfw "-framework OpenGL")
 target_link_libraries(Nibbler LogicLib)

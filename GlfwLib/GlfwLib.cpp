@@ -11,68 +11,32 @@ extern "C"
     }
 }
 
+#define SQUARE_SIZE 10
+//#include FT_FREETYPE_H
+
 responseType GlfwWindow::getResponse()
 {
+    glfwPollEvents();
 
-    do{
-        // Clear the screen. It's not mentioned before Tutorial 02, but it can cause flickering, so it's there nonetheless.
-        glClear( GL_COLOR_BUFFER_BIT );
-
-        // Draw nothing, see you in tutorial 2 !
-
-
-        // Swap buffers
-        glfwSwapBuffers(window_);
-        glfwPollEvents();
-
-    } // Check if the ESC key was pressed or the window_ was closed
-    while( glfwGetKey(window_, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-           glfwWindowShouldClose(window_) == 0 );
-
-    while (!glfwWindowShouldClose(window_))
+    if ( glfwGetKey(window_, GLFW_KEY_ESCAPE ) == GLFW_PRESS)
+        return endGame;
+    else
     {
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window_);
-        /* Poll for and process events */
-        glfwPollEvents();
+        if (glfwGetKey(window_, GLFW_KEY_UP )  == GLFW_PRESS || glfwGetKey(window_,GLFW_KEY_UP)  == GLFW_PRESS)
+            return up;
+        else if (glfwGetKey(window_, GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_DOWN ) == GLFW_PRESS)
+            return down;
+        else if (glfwGetKey(window_, GLFW_KEY_LEFT)  == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_A) == GLFW_PRESS)
+            return left;
+        else if (glfwGetKey(window_, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_RIGHT) == GLFW_PRESS)
+            return right;
+        else if (glfwGetKey(window_, GLFW_KEY_P ) == GLFW_PRESS)
+            return pauseContinue;
+        else if (glfwGetKey(window_, GLFW_KEY_1 ) == GLFW_PRESS)
+            return toSDL;
+        else if (glfwGetKey(window_, GLFW_KEY_2 ) == GLFW_PRESS)
+            return toSFML;
     }
-//    if (key == GLFW_KEY_P && action == GLFW_PRESS)
-//        g_action = PAUSE;
-//    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
-//        g_action = RIGHT;
-//    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
-//        g_action = LEFT;
-//    if (key == GLFW_KEY_UP && action == GLFW_PRESS)
-//        g_action = UP;
-//    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
-//        g_action = DOWN;
-//    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-//        g_action = QUIT;
-//    if (key == GLFW_KEY_1 && action == GLFW_PRESS)
-//        g_action = LIB1;
-//    if (key == GLFW_KEY_2 && action == GLFW_PRESS)
-//        g_action = LIB2;
-//    SDL_Event event;
-//    SDL_PollEvent(&event);
-//    if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
-//        return endGame;
-//    else if (event.type == SDL_KEYDOWN)
-//    {
-//        if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)
-//            return up;
-//        else if (event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s)
-//            return down;
-//        else if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a)
-//            return left;
-//        else if (event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d)
-//            return right;
-//        else if (event.key.keysym.sym == SDLK_SPACE)
-//            return pauseContinue;
-//        else if (event.key.keysym.sym == SDLK_3)
-//            return toNcurses;
-//        else if (event.key.keysym.sym == SDLK_2)
-//            return toSFML;
-//    }
     return noResponse;
 }
 
@@ -81,16 +45,13 @@ void GlfwWindow::draw(field const& gameState, size_t score, size_t speed)
     score_ = score;
     speed_ = speed;
     gameStateToPixels(gameState);
- //   SDL_RenderClear(renderer_);
+    glfwSwapBuffers(window_);
 }
 
 void GlfwWindow::openWindow(size_t width, size_t height)
 {
-
-
     width_ = width;
     height_ = height;
-
 
     if( !glfwInit() )
     {
@@ -98,36 +59,36 @@ void GlfwWindow::openWindow(size_t width, size_t height)
         return ;
     }
 
- //   glfwWindowHint(GLFW_SAMPLES, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    // Open a window and create its OpenGL context
-    window_ = glfwCreateWindow( width_, height_, "GLFW Nibbler", NULL, NULL);
-    if( window_ == NULL ){
+    window_ = glfwCreateWindow( width_ * zoomFactor_, height_ * zoomFactor_, "GLFW Nibbler", NULL, NULL);
+    if( !window_)
+    {
         fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
         glfwTerminate();
         return ;
     }
     glfwMakeContextCurrent(window_);
 
-    // Ensure we can capture the escape key being pressed below
     glfwSetInputMode(window_, GLFW_STICKY_KEYS, GL_TRUE);
 
-
-//    glMatrixMode(GL_PROJECTION);
-//    glLoadIdentity();
-//    glOrtho(0.0f, _winWidth, _winHeight, 0.0f, 0.0f, 1.0f);
-//
-//    glfwSetKeyCallback(_window, &key_callback);
-
-
-    // Dark blue background
-    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-
-
+    glClearColor(0.1f, 0.2f, 0.4f, 0.0f);
+    //Init FreeType
+//    FT_Library ft;
+//    if (FT_Init_FreeType(&ft)) {
+//        fprintf(stderr, "FATAL: Could not init FreeType");
+//        return 1;
+//    }
+//    //Init Arial FreeType Face
+//    FT_Face arial;
+//    if (FT_New_Face(ft, "Arial", 0, &arial))
+//    {
+//        fprintf(stderr, "FATAL: Could not init font \"Arial\"");
+//        return 1;
+//    }
 }
 
 void GlfwWindow::closeWindow()
@@ -146,6 +107,9 @@ void GlfwWindow::showGameOver()
 //    SDL_RenderPresent(renderer_);
 }
 
+
+
+
 GlfwWindow::~GlfwWindow()
 {
     
@@ -153,7 +117,33 @@ GlfwWindow::~GlfwWindow()
 
 void GlfwWindow::gameStateToPixels(field const& gameState)
 {
-//    std::function<void()> setColor[nbGameFieldCellTypes] = {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+
+    int width, height;
+
+    glfwGetFramebufferSize ( window_, &width, &height );
+
+    float   ratio = width / (float) height;
+
+    glViewport(0, 0, width, height);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glRotatef((float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f);
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.f, 0.f, 0.f);
+    glVertex3f(-0.6f, -0.4f, 0.f);
+    glColor3f(0.f, 1.f, 0.f);
+    glVertex3f(0.6f, -0.4f, 0.f);
+    glColor3f(0.f, 0.f, 1.f);
+    glVertex3f(0.f, 0.6f, 0.f);
+    glEnd();
+
+    //    std::function<void()> setColor[nbGameFieldCellTypes] = {
 //        [this](){ return SDL_SetRenderDrawColor(renderer_, 79, 132, 196, 255); },
 //        [this](){ return SDL_SetRenderDrawColor(renderer_, 127, 255, 212, 255); },
 //        [this](){ return SDL_SetRenderDrawColor(renderer_, 64, 224, 208, 255); },
@@ -176,7 +166,7 @@ void GlfwWindow::gameStateToPixels(field const& gameState)
         }
     }
 //    drawBorders();
-//    SDL_RenderPresent(renderer_);
+
 }
 
 void GlfwWindow::drawBorders()
@@ -217,26 +207,35 @@ void GlfwWindow::drawBorders()
 //    showText(speed.c_str(), (width_ / 2.4) * zoomFactor_, 0, {199, 50, 176, 0});
 }
 
-//SDL_Rect GlfwWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
+//void		GlfwWindow::makeRect(int x, int y, int width, int height)
 //{
-//    SDL_Rect result;
-//    result.x = x * 2;
-//    result.y = y * 2;
-//    result.h = h * 2;
-//    result.w = w * 2;
-//    return result;
+//    glBegin(GL_QUADS);
+//    glVertex2f((GLfloat)x, (GLfloat)y);
+//    glVertex2f((GLfloat)x + width, (GLfloat)y);
+//    glVertex2f((GLfloat)x + width, (GLfloat)y + height);
+//    glVertex2f((GLfloat)x, (GLfloat)y + height);
+//    glEnd();
 //}
-//
-//void  GlfwWindow::showText(const char *text, size_t x, size_t y, SDL_Color color)
-//{
-//    TTF_Font* font = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 11);
-//    if (!font) throw std::runtime_error("No font found.");
-//    TTF_SetFontStyle(font, TTF_STYLE_BOLD);
-//    auto surface = TTF_RenderUTF8_Blended(font, text, color);
-//    auto rect = makeRect(x, y, surface->h / 2, surface->w / 2);
-//    auto texture = SDL_CreateTextureFromSurface(renderer_, surface);
-//    SDL_RenderCopy(renderer_, texture, NULL, &rect);
-//    SDL_DestroyTexture(texture);
-//    SDL_FreeSurface(surface);
-//    TTF_CloseFont(font);
-//}
+
+
+void GlfwWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
+{
+    x = x * SQUARE_SIZE * 2;
+    y = y * SQUARE_SIZE * 2;
+    glRecti(x, y, w, h);
+}
+
+void  GlfwWindow::showText(const char *text, size_t x, size_t y)
+{
+    int     len;
+    int     i;
+
+    glRasterPos2f(x, y);
+    len = strlen(text);
+    i = 0;
+    while (i < len)
+    {
+      //  glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, text[i]);
+        i++;
+    }
+}

@@ -20,7 +20,7 @@ class LogicUnit
     using ptrToLibraryType = void*;
     using windowPtr = std::unique_ptr<IWindow>;
     using libraryIndex = size_t;
-    enum libraryType { ncurses, sdl, sfml };
+    enum libraryType { glfw, sdl, sfml };
     static constexpr size_t nbLibraries = 3;
 
     std::array<ptrToLibraryType, nbLibraries> initLibraries();

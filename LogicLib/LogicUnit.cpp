@@ -51,7 +51,7 @@ bool LogicUnit::loopTheGame()
         [this]{ reactToNewDirection(right); },
         [this]{ reactToNewDirection(up); },
         [this]{ reactToNewDirection(down); },
-        [this]{ reactToNewLibrary(ncurses); },
+        [this]{ reactToNewLibrary(glfw); },
         [this]{ reactToNewLibrary(sdl); },
         [this]{ reactToNewLibrary(sfml); },
         [this]{ reactToPauseContinue(); },
@@ -79,7 +79,7 @@ auto LogicUnit::initLibraries()
 {
     std::array<ptrToLibraryType, nbLibraries> libraries;
     const char* libraryNames[nbLibraries] =
-        { "libNcursesLib.dylib", "libSdlLib.dylib", "libSfmlLib.dylib"};
+        { "libGlfwLib.dylib", "libSdlLib.dylib", "libSfmlLib.dylib"};
     for (size_t currentLib = 0; currentLib < nbLibraries; ++currentLib){
         libraries[currentLib] =
             dlopen(libraryNames[currentLib], RTLD_LAZY | RTLD_LOCAL);

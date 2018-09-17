@@ -1,7 +1,7 @@
 all: script
 
 script:
-	sh build.sh
+#	sh build.sh
 	cd Build && make && cd ..
 
 clean:

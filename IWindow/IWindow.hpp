@@ -3,7 +3,7 @@
 #include <vector>
 
 enum responseType { noResponse, left, right, up, down,
-        toNcurses, toSDL, toSFML, pauseContinue, endGame };
+        toGlwf, toSDL, toSFML, pauseContinue, endGame };
 
 constexpr size_t nbResponses = 10;
 

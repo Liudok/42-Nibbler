@@ -30,7 +30,7 @@ responseType SDLWindow::getResponse()
         else if (event.key.keysym.sym == SDLK_SPACE)
             return pauseContinue;
         else if (event.key.keysym.sym == SDLK_3)
-            return toNcurses;
+            return toGlwf;
         else if (event.key.keysym.sym == SDLK_2)
             return toSFML;
     }
