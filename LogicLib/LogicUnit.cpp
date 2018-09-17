@@ -4,13 +4,12 @@
 #include <chrono>
 #include <unistd.h>
 
-LogicUnit::LogicUnit(size_t height, size_t width)
+LogicUnit::LogicUnit(NibblerParameters params)
     : libraries_(initLibraries())
     , windows_(initWindows())
-    , width_(width)
-    , height_(height)
-    , gameField_(height_, std::vector<size_t>(width_, 0))
-    , snake_(width_, height_)
+    , params_(params)
+    , gameField_(params_.height, std::vector<size_t>(params_.width, 0))
+    , snake_(params)
 {
     snake_.fillMap(gameField_);
 }
@@ -19,7 +18,7 @@ LogicUnit::LogicUnit(LogicUnit const& rhs)
  : libraries_(initLibraries())
  , windows_(initWindows())
  , gameField_(rhs.gameField_)
- , snake_(width_, height_)
+ , snake_(params_)
 {
 
 }
@@ -42,7 +41,7 @@ LogicUnit::~LogicUnit()
 
 bool LogicUnit::loopTheGame()
 {
-    windows_[currentLibraryIndex_]->openWindow(width_, height_);
+    windows_[currentLibraryIndex_]->openWindow(params_.width, params_.height);
     windows_[currentLibraryIndex_]->draw(gameField_,
         snake_.getScore(), snake_.getSpeed());
     std::function<void()> reactFunctions[nbResponses] = {
@@ -126,7 +125,7 @@ void LogicUnit::reactToNewLibrary(libraryType newLibrary)
 {
     windows_[currentLibraryIndex_]->closeWindow();
     currentLibraryIndex_ = newLibrary;
-    windows_[currentLibraryIndex_]->openWindow(width_, height_);
+    windows_[currentLibraryIndex_]->openWindow(params_.width, params_.height);
     windows_[currentLibraryIndex_]->draw(gameField_,
         snake_.getScore(), snake_.getSpeed());
 }
@@ -144,7 +143,9 @@ void LogicUnit::reactToPauseContinue()
 
 size_t LogicUnit::countUsleep(int timePassed)
 {
-    const auto loopNormalDuration = 100'000;
+    const auto loopNormalDuration = 100'000 *
+        ((params_.mode == granny) ? 3 : 1) /
+        ((params_.mode == insane) ? 3 : 1);
     const auto delta = loopNormalDuration - timePassed;
     return (delta < 0) ? 0 : delta / snake_.getSpeed();
 }

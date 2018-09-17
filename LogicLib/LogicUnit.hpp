@@ -8,12 +8,12 @@ class LogicUnit
 {
   public:
 
-    LogicUnit(size_t width, size_t height);
+    LogicUnit(NibblerParameters);
     LogicUnit(LogicUnit const&);
     LogicUnit &operator=(LogicUnit const &src);
     ~LogicUnit();
 
-    bool    loopTheGame();
+    bool loopTheGame();
 
   private:
 
@@ -29,8 +29,8 @@ class LogicUnit
     std::vector<windowPtr> windows_;
     libraryIndex currentLibraryIndex_ = sfml;
 
-    size_t     width_ = 30;
-    size_t     height_ = 50;
+    NibblerParameters params_{40, 50, classic};
+
     bool       endOfGame_ = false;
     bool       paused_ = false;
     gameField  gameField_;

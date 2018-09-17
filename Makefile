@@ -2,6 +2,7 @@ all: script
 
 script:
 	cd Build && make && cd ..
+	@sh usage.sh
 
 clean:
 	rm -rf Build

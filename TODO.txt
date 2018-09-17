@@ -5,10 +5,9 @@ Nestor:
 - full field ===DONE===
 - obstacles ===DONE==
 - superfood ===DONE===
+- default field size ===DONE===
+- usage: map size, obstacles mode, insane mode, Bob Marley mode, granny mode ===DONE===
 
-- default field size ===IN PROGRESS===
-
-- usage: map size, obstacles mode, insane mode, Bob Marley mode, granny mode
 - repair pause
 - Any class that declares at least one attribute must be written in canonical form.
 - Makefile
@@ -35,3 +34,4 @@ New:
 - Leaks in SFML
 - SDL does not respond after clicked outside
 - Leaks in executable
+- replace width-height with NibblerParameters

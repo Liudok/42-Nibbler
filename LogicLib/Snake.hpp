@@ -23,7 +23,7 @@ class Snake
 {
     public:
     
-        Snake(size_t width, size_t height);
+        Snake(NibblerParameters);
         Snake(Snake const & other);
         Snake& operator=(Snake const& src);
         ~Snake();
@@ -46,9 +46,9 @@ class Snake
 
         SnakeUtils::Point generatePoint(gameFieldCellType) const;
 
-        size_t width_ = 0;
-        size_t height_ = 0;
-        SnakeUtils::Point headPos_ {width_ / 2, height_ / 2};
+        NibblerParameters params_{40,50,classic};
+
+        SnakeUtils::Point headPos_ {params_.width / 2, params_.height / 2};
         std::vector<SnakeUtils::Point> body_ {{headPos_.x - 1, headPos_.y},
             {headPos_.x - 2, headPos_.y}, {headPos_.x - 3, headPos_.y},
                 {headPos_.x - 3, headPos_.y - 1}};

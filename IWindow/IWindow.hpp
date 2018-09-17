@@ -11,6 +11,17 @@ enum gameFieldCellType { empty, body, head, food, superFood, obstacle, collision
 
 constexpr size_t nbGameFieldCellTypes = 7;
 
+enum GameMode {classic, granny, insane, rasta};
+
+constexpr size_t nbGameModes = 4;
+
+struct NibblerParameters
+{
+    size_t width = 30;
+    size_t height = 40;
+    GameMode mode = classic;
+};
+
 using gameField = std::vector<std::vector<size_t>>;
 
 class IWindow

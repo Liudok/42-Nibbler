@@ -12,31 +12,26 @@ size_t SnakeUtils::PointHashBySum::operator()
     return std::hash<size_t>()(point.x * point.y);
 }
 
-Snake::Snake(size_t width, size_t height)
-    : width_(width)
-    , height_(height)
+Snake::Snake(NibblerParameters params) : params_(params)
 {
     srand(time(NULL));
     fieldObjects_.insert({0,0,food});
-    fieldObjects_.insert({width-1,height-1,food});
+    fieldObjects_.insert({params_.width-1,params_.height-1,food});
     fieldObjects_.insert({8,8,superFood});
     fieldObjects_.insert({6,6,obstacle});
     fieldObjects_.insert({7,7,obstacle});
 }
 
-Snake::Snake(Snake const& other)
-    : width_(other.width_)
-    , height_(other.height_)
+Snake::Snake(Snake const& other) : params_(other.params_)
 {
-    
+
 }
 
 Snake& Snake::operator=(Snake const& rhs)
 {
   if (this != &rhs)
   {
-    width_ = rhs.width_;
-    height_ = rhs.height_;
+    params_ = rhs.params_;
     body_ = rhs.body_;
     speed_ = rhs.speed_;
     score_ = rhs.score_;
@@ -70,8 +65,8 @@ void Snake::move(const direction newDirection)
     updateDirection(newDirection);
     const auto newHeadPosition = defineNewHeadPosition();
     const auto overflow = std::numeric_limits<size_t>::max();
-    if (newHeadPosition.x == width_ || newHeadPosition.x == overflow ||
-        newHeadPosition.y == height_ || newHeadPosition.y == overflow){
+    if (newHeadPosition.x == params_.width || newHeadPosition.x == overflow ||
+        newHeadPosition.y == params_.height || newHeadPosition.y == overflow){
         outOfField_ = true;
         return;
     }
@@ -181,5 +176,5 @@ void Snake::processCollisionwithFieldObjects()
 
 SnakeUtils::Point Snake::generatePoint(gameFieldCellType t) const
 {
-    return {rand() % width_, rand() % height_, t};
+    return {rand() % params_.width, rand() % params_.height, t};
 }
