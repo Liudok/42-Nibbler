@@ -47,7 +47,7 @@ responseType SFMLWindow::getResponse()
     }
 }
 
-void SFMLWindow::draw(field const& gameState, size_t score, size_t speed)
+void SFMLWindow::draw(gameField const& gameState, size_t score, size_t speed)
 {
     score_ = score;
     speed_ = speed;
@@ -94,7 +94,7 @@ SFMLWindow::~SFMLWindow()
     
 }
 
-void SFMLWindow::gameStateToPixels(std::vector<std::vector<size_t>> const& gameState)
+void SFMLWindow::gameStateToPixels(gameField const& gameState)
 {
     std::function<void(sf::CircleShape&)> setColor[nbGameFieldCellTypes] = {
         [](sf::CircleShape&){},

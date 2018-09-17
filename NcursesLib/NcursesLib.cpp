@@ -28,7 +28,7 @@ responseType NcuresesWindow::getResponse()
     }
 }
 
-void NcuresesWindow::draw(field const& gameState, size_t, size_t)
+void NcuresesWindow::draw(gameField const& gameState, size_t, size_t)
 {
     drawGameState(window_, gameState);
     wrefresh(window_);
@@ -65,7 +65,7 @@ void NcuresesWindow::closeWindow()
 }
 
 void NcuresesWindow::drawGameState(WINDOW* window_,
-    field const& gameState)
+    gameField const& gameState)
 {
     for (size_t i = 0; i < height_; ++i){
         for (size_t j = 0; j < width_; ++j){

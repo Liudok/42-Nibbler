@@ -37,7 +37,7 @@ responseType SDLWindow::getResponse()
     return noResponse;
 }
 
-void SDLWindow::draw(field const& gameState, size_t score, size_t speed)
+void SDLWindow::draw(gameField const& gameState, size_t score, size_t speed)
 {
     score_ = score;
     speed_ = speed;
@@ -92,7 +92,7 @@ SDLWindow::~SDLWindow()
     
 }
 
-void SDLWindow::gameStateToPixels(field const& gameState)
+void SDLWindow::gameStateToPixels(gameField const& gameState)
 {
     std::function<void()> setColor[nbGameFieldCellTypes] = {
         [this](){ return SDL_SetRenderDrawColor(renderer_, 79, 132, 196, 255); },

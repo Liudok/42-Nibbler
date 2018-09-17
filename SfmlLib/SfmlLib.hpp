@@ -17,7 +17,7 @@ class SFMLWindow : public IWindow
     public:
 
         responseType     getResponse() override;
-        void             draw(field const&, size_t score, size_t speed) override;
+        void             draw(gameField const&, size_t score, size_t speed) override;
         void             openWindow(size_t width, size_t height) override;
         void             closeWindow() override;
         void             showGameOver() override;
@@ -25,7 +25,7 @@ class SFMLWindow : public IWindow
 
     private:
 
-        void              gameStateToPixels(field const&);
+        void              gameStateToPixels(gameField const&);
         void              drawBorders();
         bool              isPaused();
 

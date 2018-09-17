@@ -22,8 +22,6 @@ struct PointHashBySum
     }
 };
 
-using gameField = std::vector<std::vector<size_t>>;
-
 class Snake
 {
     public:

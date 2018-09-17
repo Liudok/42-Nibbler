@@ -14,7 +14,7 @@ class SDLWindow : public IWindow
 	public:
 
         responseType    getResponse() override;
-        void            draw(field const&, size_t score, size_t speed) override;
+        void            draw(gameField const&, size_t score, size_t speed) override;
         void            openWindow(size_t width, size_t height) override;
         void            closeWindow() override;
         void            showGameOver() override;
@@ -22,7 +22,7 @@ class SDLWindow : public IWindow
 
     private:
 
-        void            gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
+        void            gameStateToPixels(gameField const& gameState);
         void            drawBorders();
         SDL_Rect        makeRect(size_t x, size_t y, size_t h, size_t w);
         void            showText(const char *text, size_t x, size_t y, SDL_Color color);
