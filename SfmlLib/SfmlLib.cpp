@@ -101,6 +101,8 @@ void SFMLWindow::gameStateToPixels(gameField const& gameState)
         [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(127, 255, 212)); },
         [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(64, 224, 208)); },
         [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(255, 105, 180)); },
+        [](sf::CircleShape& circle){ circle.setFillColor(
+            sf::Color(rand() % 255, rand() % 255, rand() % 255)); },
         [](sf::CircleShape& circle){ circle.setFillColor(sf::Color::Red); },
         [](sf::CircleShape& circle){ circle.setFillColor(sf::Color::Green); }
     };

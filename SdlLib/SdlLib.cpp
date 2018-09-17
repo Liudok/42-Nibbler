@@ -99,8 +99,10 @@ void SDLWindow::gameStateToPixels(gameField const& gameState)
         [this](){ return SDL_SetRenderDrawColor(renderer_, 127, 255, 212, 255); },
         [this](){ return SDL_SetRenderDrawColor(renderer_, 64, 224, 208, 255); },
         [this](){ return SDL_SetRenderDrawColor(renderer_, 255, 105, 180, 255); },
+        [this](){ return SDL_SetRenderDrawColor(
+            renderer_, rand() % 255, rand() % 255, rand() % 255, 255); },
         [this](){ return SDL_SetRenderDrawColor(renderer_, 248, 14, 50, 255); },
-        [this](){ return SDL_SetRenderDrawColor(renderer_, 11, 111, 144, 244); }
+        [this](){ return SDL_SetRenderDrawColor(renderer_, 11, 111, 144, 255); }
     };
     for (size_t i = 0; i < height_; ++i)
     {

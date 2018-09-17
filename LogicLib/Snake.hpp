@@ -56,6 +56,7 @@ class Snake
 
         const double speedIncrement_ = 0.05;
         const size_t scoreIncrement_ = 50;
+        const size_t superFoodFactor_ = 5;
 
         bool outOfField_ = false;
         bool hitBody_ = false;

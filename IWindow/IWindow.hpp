@@ -7,9 +7,9 @@ enum responseType { noResponse, left, right, up, down,
 
 constexpr size_t nbResponses = 10;
 
-enum gameFieldCellType { empty, body, head, food, obstacle, collision };
+enum gameFieldCellType { empty, body, head, food, superFood, obstacle, collision };
 
-constexpr size_t nbGameFieldCellTypes = 6;
+constexpr size_t nbGameFieldCellTypes = 7;
 
 using gameField = std::vector<std::vector<size_t>>;
 

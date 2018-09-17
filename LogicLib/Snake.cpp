@@ -19,6 +19,7 @@ Snake::Snake(size_t width, size_t height)
     srand(time(NULL));
     fieldObjects_.insert({0,0,food});
     fieldObjects_.insert({width-1,height-1,food});
+    fieldObjects_.insert({8,8,superFood});
     fieldObjects_.insert({6,6,obstacle});
     fieldObjects_.insert({7,7,obstacle});
 }
@@ -155,6 +156,18 @@ void Snake::processCollisionwithFieldObjects()
                 const size_t priorSize = fieldObjects_.size();
                 while (fieldObjects_.size() == priorSize)
                     fieldObjects_.insert(generatePoint(food));
+                fieldObjects_.erase(fieldObject);
+                return;
+            }
+            else if (fieldObject.cellType == superFood){
+                score_ += scoreIncrement_ * superFoodFactor_;
+                for (size_t i = 0; i < superFoodFactor_; ++i){
+                    const auto newBodyPart = body_[body_.size() - 1];
+                    futureBodyParts.push_front(std::move(newBodyPart));
+                }
+                const size_t priorSize = fieldObjects_.size();
+                while (fieldObjects_.size() == priorSize)
+                    fieldObjects_.insert(generatePoint(superFood));
                 fieldObjects_.erase(fieldObject);
                 return;
             }

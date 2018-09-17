@@ -4,9 +4,9 @@ Nestor:
 - less food ===DONE===
 - full field ===DONE===
 - obstacles ===DONE==
-- superfood ===IN PROGRESS===
+- superfood ===DONE===
 
-- default field size
+- default field size ===IN PROGRESS===
 - usage: map size, obstacles mode, insane mode, Bob Marley mode, granny mode
 - repair pause
 - Any class that declares at least one attribute must be written in canonical form.
