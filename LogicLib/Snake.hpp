@@ -3,24 +3,21 @@
 #include <IWindow.hpp>
 #include <unordered_set>
 
-struct Point
+namespace SnakeUtils
 {
-    size_t x = 0;
-    size_t y = 0;
-    bool operator==(Point const& rhs) const
+    struct Point
     {
-        return x == rhs.x && y == rhs.y;
-    }
+        size_t x = 0;
+        size_t y = 0;
+        gameFieldCellType cellType = empty;
+        bool operator==(Point const& rhs) const;
+    };
 
-};
-
-struct PointHashBySum
-{
-    size_t operator()(Point const& point) const
+    struct PointHashBySum
     {
-        return std::hash<size_t>()(point.x * point.y);
-    }
-};
+        size_t operator()(Point const& point) const;
+    };
+}
 
 class Snake
 {
@@ -42,27 +39,29 @@ class Snake
     private:
 
         void updateDirection(const direction newDirection);
-        Point defineNewHeadPosition() const;
+        SnakeUtils::Point defineNewHeadPosition() const;
         bool validNewDirection(const direction newDirection) const;
         bool headHitBody() const;
-        bool headHitObstacle() const;
-        void processCollisionWithFood();
+        void processCollisionwithFieldObjects();
 
-        Point generatePoint() const;
+        SnakeUtils::Point generatePoint(gameFieldCellType) const;
 
         size_t width_ = 0;
         size_t height_ = 0;
-        Point headPos_ {width_ / 2, height_ / 2};
-        std::vector<Point> body_ {{headPos_.x - 1, headPos_.y},
+        SnakeUtils::Point headPos_ {width_ / 2, height_ / 2};
+        std::vector<SnakeUtils::Point> body_ {{headPos_.x - 1, headPos_.y},
             {headPos_.x - 2, headPos_.y}, {headPos_.x - 3, headPos_.y},
                 {headPos_.x - 3, headPos_.y - 1}};
         direction currentDirection_ = right;
+
+        const double speedIncrement_ = 0.05;
+        const size_t scoreIncrement_ = 50;
 
         bool outOfField_ = false;
         bool hitBody_ = false;
         bool hitObstacle_ = false;
         double speed_ = 1.0;
         size_t score_ = 0;
-        std::unordered_set<Point, PointHashBySum> foodPos_;
-        std::unordered_set<Point, PointHashBySum> obstacles_;
+        std::unordered_set<SnakeUtils::Point,
+            SnakeUtils::PointHashBySum> fieldObjects_;
 };

@@ -2,7 +2,9 @@ Nestor:
 - comment ===DONE===
 - when snake goes from from (0, n) to (0, m) and eats something on (0, k), this counts as a collision for snake's tail grows left ===DONE===
 - less food ===DONE===
-- obstacles ===IN PROGRESS===
+- full field ===DONE===
+- obstacles ===DONE==
+
 - default field size
 - usage: map size, obstacles mode, insane mode, Bob Marley mode, granny mode
 - repair pause
@@ -10,7 +12,8 @@ Nestor:
 - Makefile
 - unordered_set
 - runtime error when trying to use mixer
-- full field ==DONE==
+
+- sounds
 
 Liuda:
 +- Nice exit for sdl
@@ -18,7 +21,6 @@ Liuda:
 - Highlight of death doesn't always work in sfml
 +- new buttons for changing libs
 - openGl/glut/...
-- sounds
 
 Investigate:
 - If a dynamic library does not exist or is not compatible, your program must display a relevant error message and exit neatly.

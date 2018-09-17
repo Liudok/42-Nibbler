@@ -1,13 +1,26 @@
 #include "Snake.hpp"
 #include <forward_list>
 
+bool SnakeUtils::Point::operator==(Point const& rhs) const
+{
+    return x == rhs.x && y == rhs.y;
+}
+
+size_t SnakeUtils::PointHashBySum::operator()
+    (Point const& point) const
+{
+    return std::hash<size_t>()(point.x * point.y);
+}
+
 Snake::Snake(size_t width, size_t height)
     : width_(width)
     , height_(height)
 {
     srand(time(NULL));
-    foodPos_.insert({0,0});
-    foodPos_.insert({width-1,height-1});
+    fieldObjects_.insert({0,0,food});
+    fieldObjects_.insert({width-1,height-1,food});
+    fieldObjects_.insert({6,6,obstacle});
+    fieldObjects_.insert({7,7,obstacle});
 }
 
 Snake::Snake(Snake const& other)
@@ -40,19 +53,19 @@ void Snake::fillMap(gameField& field) const
     for(auto& line : field)
         for (auto& cell : line)
             cell = empty;
-    for (auto const& foodPiece : foodPos_)
-        field[foodPiece.y][foodPiece.x] = food;
+    for (auto const& fieldObject : fieldObjects_)
+        field[fieldObject.y][fieldObject.x] =
+            fieldObject.cellType;
     for (auto const& bodyPart : body_)
         field[bodyPart.y][bodyPart.x] = body;
-    for (auto const& o : obstacles_)
-        field[o.y][o.x] = obstacle;
     field[headPos_.y][headPos_.x] =
         collapsed() ? collision : head;
 }
 
 void Snake::move(const direction newDirection)
 {
-    processCollisionWithFood();
+    processCollisionwithFieldObjects();
+    if (collapsed()) return;
     updateDirection(newDirection);
     const auto newHeadPosition = defineNewHeadPosition();
     const auto overflow = std::numeric_limits<size_t>::max();
@@ -67,8 +80,6 @@ void Snake::move(const direction newDirection)
     headPos_ = newHeadPosition;
     if (headHitBody())
         hitBody_ = true;
-    if (headHitObstacle())
-        hitObstacle_ = true;
 }
 
 double Snake::getSpeed() const
@@ -92,9 +103,9 @@ void Snake::updateDirection(const direction newDirection)
         currentDirection_ = newDirection;
 }
 
-Point Snake::defineNewHeadPosition() const
+SnakeUtils::Point Snake::defineNewHeadPosition() const
 {
-    Point result = headPos_;
+    SnakeUtils::Point result = headPos_;
     if (currentDirection_ == left)
         --result.x;
     else if (currentDirection_ == right)
@@ -121,43 +132,41 @@ bool Snake::validNewDirection(const direction newDirection) const
 
 bool Snake::headHitBody() const
 {
-    for (auto const& bodyPart : body_)
+    for (const auto& bodyPart : body_)
         if (bodyPart == headPos_)
             return true;
     return false;
 }
 
-bool Snake::headHitObstacle() const
+void Snake::processCollisionwithFieldObjects()
 {
-    for (auto const& o : obstacles_)
-        if (o == headPos_)
-            return true;
-    return false;
-}
-
-void Snake::processCollisionWithFood()
-{
-    static std::forward_list<Point> futureBodyParts;
+    static std::forward_list<SnakeUtils::Point> futureBodyParts;
     if (!futureBodyParts.empty()){
         body_.push_back(futureBodyParts.front());
         futureBodyParts.pop_front();
     }
-    for (auto const& foodPiece : foodPos_){
-        if (headPos_ == foodPiece){
-            speed_ += 0.05;
-            score_ += 50;
-            const auto newBodyPart = body_[body_.size() - 1];
-            futureBodyParts.push_front(std::move(newBodyPart));
-            const size_t priorSize = foodPos_.size();
-            while (foodPos_.size() == priorSize)
-                foodPos_.insert(generatePoint());
-            foodPos_.erase(foodPiece);
-            return;
+    for (auto const& fieldObject : fieldObjects_){
+        if (headPos_ == fieldObject){
+            if (fieldObject.cellType == food){
+                speed_ += speedIncrement_;
+                score_ += scoreIncrement_;
+                const auto newBodyPart = body_[body_.size() - 1];
+                futureBodyParts.push_front(std::move(newBodyPart));
+                const size_t priorSize = fieldObjects_.size();
+                while (fieldObjects_.size() == priorSize)
+                    fieldObjects_.insert(generatePoint(food));
+                fieldObjects_.erase(fieldObject);
+                return;
+            }
+            else if (fieldObject.cellType == obstacle){
+                hitObstacle_ = true;
+                return;
+            }
         }
     }
 }
 
-Point Snake::generatePoint() const
+SnakeUtils::Point Snake::generatePoint(gameFieldCellType t) const
 {
-    return {rand() % width_, rand() % height_};
+    return {rand() % width_, rand() % height_, t};
 }
