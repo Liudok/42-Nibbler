@@ -28,6 +28,11 @@ set(SfmlPath ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties/SFML)
 include_directories(${SfmlPath}/include)
 file(GLOB SfmlDynamicLibs ${SfmlPath}/lib/*.dylib)
 
+# Glfw configuration
+
+find_package(OpenGL REQUIRED)
+
+
 # Project sources and libraries
 
 project(Nibbler)
