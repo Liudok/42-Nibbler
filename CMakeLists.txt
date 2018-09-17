@@ -30,8 +30,9 @@ file(GLOB SfmlDynamicLibs ${SfmlPath}/lib/*.dylib)
 
 # Glfw configuration
 
-find_package(OpenGL REQUIRED)
-
+set(GlfwPath ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties/GLFW)
+include_directories(${GlfwPath}/include)
+file(GLOB GlfwDynamicLibs ${GlfwPath}/lib/*.a)
 
 # Project sources and libraries
 
@@ -65,6 +66,13 @@ file(GLOB SfmlLibSources
 
 add_library(SfmlLib SHARED ${SfmlLibSources})
 
+file(GLOB GlfwLibSources
+        ${CMAKE_CURRENT_SOURCE_DIR}/GlfwLib/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/GlfwLib/*.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
+
+add_library(GlfwLib SHARED ${GlfwLibSources})
+
 add_executable(Nibbler main.cpp)
 
 # Simpler includes
@@ -73,11 +81,13 @@ target_include_directories(LogicLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
 target_include_directories(NcursesLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
 target_include_directories(SdlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
 target_include_directories(SfmlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
+target_include_directories(GlfwLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
 
 # Links between project parts
 
-target_link_libraries(LogicLib NcursesLib SdlLib SfmlLib)
+target_link_libraries(LogicLib NcursesLib SdlLib SfmlLib GlfwLib)
 target_link_libraries(NcursesLib ncurses)
 target_link_libraries(SdlLib ${SdlDynamicLibs})
 target_link_libraries(SfmlLib ${SfmlDynamicLibs})
+target_link_libraries(GlfwLib ${GlfwDynamicLibs})
 target_link_libraries(Nibbler LogicLib)
