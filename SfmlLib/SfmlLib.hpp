@@ -32,15 +32,13 @@ class SFMLWindow : public IWindow
         void              drawBorders();
         bool              isPaused();
 
-        const size_t      zoomFactor_ = 30;
-        size_t            width_ = 0;
-        size_t            height_ = 0;
-        size_t            score_ = 0;
-        size_t            speed_ = 0;
-        GameMode          mode_ = classic;
+        const size_t      zoomFactor_ = defaultZoomFaftor * 2;
+        size_t            width_ = defaultWidth;
+        size_t            height_ = defaultHeight;
+        double            score_ = defaultScore;
+        size_t            speed_ = defaultSpeed;
+        GameMode          mode_ = defaultGameMode;
         std::unique_ptr<sf::RenderWindow> window_;
-
-        static constexpr size_t colorSpectrum = 255;
 
         inline static size_t rc()
         { return rand() % colorSpectrum; }

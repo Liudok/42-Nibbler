@@ -19,15 +19,21 @@ enum LibraryType { ncurses, sdl, sfml };
 
 constexpr size_t nbLibraries = 3;
 
+constexpr auto defaultZoomFaftor = 15;
 constexpr auto defaultWidth = 40;
 constexpr auto defaultHeight = 60;
+constexpr auto defaultSpeed = 1.0;
+constexpr auto defaultScore = 0;
+constexpr auto defaultGameMode = classic;
+constexpr auto defaultLibrary = sfml;
+constexpr auto colorSpectrum = 255;
 
 struct NibblerParameters
 {
     size_t width = 30;
     size_t height = 40;
-    GameMode mode = classic;
-    LibraryType lib = sfml;
+    GameMode mode = defaultGameMode;
+    LibraryType lib = defaultLibrary;
 };
 
 using GameField = std::vector<std::vector<size_t>>;

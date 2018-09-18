@@ -82,8 +82,8 @@ class Snake
         bool outOfField_ = false;
         bool hitBody_ = false;
         bool hitObstacle_ = false;
-        double speed_ = 1.0;
-        size_t score_ = 0;
+        size_t speed_ = defaultSpeed;
+        size_t score_ = defaultScore;
 
         using FieldObjects =
             std::unordered_set<SnakeUtils::Point,

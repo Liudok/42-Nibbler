@@ -28,23 +28,22 @@ class SDLWindow : public IWindow
 
     private:
 
-        void            gameStateToPixels(GameField const& gameState);
+        void            gameStateToPixels(GameField const&);
         void            drawBorders();
         SDL_Rect        makeRect(size_t x, size_t y, size_t h, size_t w);
         void            showText(const char *text, size_t x, size_t y,
                             SDL_Color color, size_t fontSize);
         size_t          zoomFont(size_t fontSize);
 
-        const size_t    zoomFactor_ = 14;
-        size_t          width_ = 0;
-        size_t          height_ = 0;
-        SDL_Window      *window_ = nullptr;
-        SDL_Renderer    *renderer_ = nullptr;
-        size_t          score_ = 0;
-        size_t          speed_ = 0;
-        GameMode        mode_ = classic;
+        const size_t    zoomFactor_ = defaultZoomFaftor;
+        size_t          width_ = defaultWidth;
+        size_t          height_ = defaultHeight;
 
-        static constexpr size_t colorSpectrum = 255;
+        SDL_Window*     window_ = nullptr;
+        SDL_Renderer*   renderer_ = nullptr;
+        size_t          score_ = defaultScore;
+        double          speed_ = defaultSpeed;
+        GameMode        mode_ = defaultGameMode;
 
         inline static size_t rc()
         { return rand() % colorSpectrum; }
