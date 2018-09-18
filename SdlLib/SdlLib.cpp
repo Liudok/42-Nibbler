@@ -41,7 +41,7 @@ void SDLWindow::draw(GameField const& gameState, size_t score, size_t speed)
 {
     score_ = score;
     speed_ = speed;
-    gameStateToPixels(gameState);//a leak here
+    gameStateToPixels(gameState);
     SDL_RenderClear(renderer_);
 }
 
@@ -49,7 +49,6 @@ void SDLWindow::openWindow(size_t width, size_t height)
 {
     width_ = width;
     height_ = height;
-    SDL_Init(SDL_INIT_EVERYTHING);
 
     window_ = SDL_CreateWindow(
         "SDL Nibbler", 
@@ -72,7 +71,6 @@ void SDLWindow::closeWindow()
     TTF_Quit();
     SDL_DestroyWindow(window_);
     SDL_DestroyRenderer(renderer_);
-    SDL_Quit();
 }
 
 void SDLWindow::showGameOver()
@@ -112,7 +110,7 @@ void SDLWindow::gameStateToPixels(GameField const& gameState)
         }
     }
    drawBorders();
-    SDL_RenderPresent(renderer_);
+   SDL_RenderPresent(renderer_);
 }
 
 void SDLWindow::drawBorders()
