@@ -13,10 +13,8 @@ Nestor:
 - unordered_set ===DONE===
 - replace width-height with NibblerParameters ===DONE===
 - PlayerPressedEscape vs snake_.collapsed() eog ===DONE===
-
-- Leaks ===IN PROGRESS===
-
-- Makefile
+- Leaks ===DONE===
+- Makefile ===DONE===
 
 Liuda:
 +- Nice exit for sdl

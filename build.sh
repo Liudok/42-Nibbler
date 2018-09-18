@@ -1,15 +1,13 @@
-RED='\033[0;31m'
 GREEN='\033[0;32m'
-BOLD=$(tput bold)
-EOC='\033[0m'
+RED='\033[0;31m'
 
 cmakePath=$(command -v cmake)
 if [ "$cmakePath" == "" ]
 then
-    echo "${RED}${BOLD}Please install cmake.${EOC}"
+    sh .talk.sh "Please install cmake" "$RED"
     exit 1
 else
-    echo "${GREEN}Cmake found${EOC}"
+    sh .talk.sh "Cmake found" "$GREEN"
 fi
 
 thirdPartiesPath=NibblerThirdParties
@@ -18,17 +16,17 @@ then
     git clone https://github.com/nestoroprysk/NibblerThirdParties.git
     if [ ! -d "$thirdPartiesPath" ]
     then
-        echo "${RED}${BOLD}Unable to clone third parties.${EOC}"
+        sh .talk.sh "Unable to clone third parties" "$RED"
         exit 2
     fi
 else
-    echo "${GREEN}Third parties found${EOC}"
+    sh .talk.sh "Third parties found" "$GREEN"
 fi
 
 buildPath=Build
 if [ -d "$buildPath" ]
 then
-    echo "Deleting old Build repo"
+    sh .talk.sh "Deleting old Build repo" "$GREEN"
     rm -rf Build
 fi
 
