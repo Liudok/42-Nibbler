@@ -3,12 +3,13 @@ RED='\033[0;31m'
 
 filesToDelete="$(ls Build/*.dylib 2> /dev/null)"
 
+sh .clean.sh
+
 buildPath=Build
 if [ -d "$buildPath" ] && [ "$filesToDelete" != "" ]
-then
-	sh .clean.sh
+then	
     cd Build && make clean && cd ..
     sh .talk.sh "Binaries cleaned" "$GREEN"
 else
-    sh .talk.sh "Nothing to delete" "$RED"
+    sh .talk.sh "No binaries to delete" "$RED"
 fi
