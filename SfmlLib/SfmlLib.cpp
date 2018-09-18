@@ -1,8 +1,5 @@
 #include "SfmlLib.hpp"
 #include <unistd.h>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <functional>
 
 extern "C"
 {
@@ -76,35 +73,27 @@ void SFMLWindow::showGameOver()
     sf::Font font;
     if (!font.loadFromFile("NibblerThirdParties/TextFonts/Roboto-Bold.ttf"))
         throw std::runtime_error("No font found");
+
     text.setFont(font);
     text.setCharacterSize(55);
+
     text.setString("Score: " + std::to_string((int)score_));
     text.setFillColor(sf::Color::Green);
-    text.setPosition((width_ / 2) * zoomFactor_ - 60, (height_ / 2) * zoomFactor_ - 50);
+    text.setPosition((width_ / 2) * zoomFactor_ - 60, (height_ / 2) * zoomFactor_ + 40);
     window_->draw(text);
+
     text.setString("Game over");
     text.setFillColor(sf::Color::Red);
-    text.setPosition((width_ / 2) * zoomFactor_ - 100, (height_ / 2) * zoomFactor_ + 40);
+    text.setPosition((width_ / 2) * zoomFactor_ - 100, (height_ / 2) * zoomFactor_ - 50);
     window_->draw(text);
+
     window_->display();
 }
 
 void SFMLWindow::gameStateToPixels(GameField const& gameState)
 {
-    std::function<void(sf::CircleShape&)> setColor[nbGameFieldCellTypes] = {
-        [](sf::CircleShape&){},
-        [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(127, 255, 212)); },
-        [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(64, 224, 208)); },
-        [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(255, 105, 180)); },
-        [](sf::CircleShape& circle){ circle.setFillColor(
-            sf::Color(rand() % 255, rand() % 255, rand() % 255)); },
-        [](sf::CircleShape& circle){ circle.setFillColor(sf::Color::Red); },
-        [](sf::CircleShape& circle){ circle.setFillColor(sf::Color::Green); }
-    };
-    for (size_t i = 0; i < height_; ++i)
-    {
-        for (size_t j = 0; j < width_; ++j)
-        {
+    for (size_t i = 0; i < height_; ++i){
+        for (size_t j = 0; j < width_; ++j){
             sf::RectangleShape rectangle(sf::Vector2f(100, 100));
             rectangle.setPosition(sf::Vector2f((j + 1) * zoomFactor_, (i + 1) * zoomFactor_));
             rectangle.setFillColor(sf::Color(79, 132, 196));
@@ -113,7 +102,7 @@ void SFMLWindow::gameStateToPixels(GameField const& gameState)
             {
                 sf::CircleShape circle(15);
                 circle.setPosition(sf::Vector2f((j + 1) * zoomFactor_, (i + 1) * zoomFactor_));
-                setColor[gameState[i][j]](circle);
+                setColor_[gameState[i][j]](circle);
                 window_->draw(circle);
             }
         }

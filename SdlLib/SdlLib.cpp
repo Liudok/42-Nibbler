@@ -1,7 +1,7 @@
 #include "SdlLib.hpp"
 #include <unistd.h>
 #include <string>
-#include <functional>
+#include <cmath>
 
 extern "C"
 {
@@ -74,37 +74,35 @@ void SDLWindow::closeWindow()
 
 void SDLWindow::showGameOver()
 {
-    SDL_Color color = {199, 50, 176, 0};
-    showText("Game over", (width_ / 2) * 4 - 5, (height_ / 2) * 4, color);
-    color = {59, 150, 116, 0};
-    std::string score("Score: " + std::to_string((int)score_));
-    const char *text = score.c_str();
-    showText(text, (width_ / 2) * 4, (height_ / 2) * 4 + 20, color);
+    const auto xShift = width_ * zoomFactor_ / 5.9;
+    const auto yShift = height_ * zoomFactor_ / 4.7;
+    const auto scoreDownShift = 1.3;
+    const size_t gameOverFontSize = 20;
+    {
+        const SDL_Color color = {199, 50, 176, 0};
+        showText("Game over", xShift, yShift, color,
+            zoomFont(gameOverFontSize));
+    }
+    {
+        const SDL_Color color = {59, 150, 116, 0};
+        std::string score("Score: " + std::to_string((int)score_));
+        const char *text = score.c_str();
+        showText(text, xShift, yShift * scoreDownShift,
+            color, zoomFont(gameOverFontSize));
+    }
     SDL_RenderPresent(renderer_);
 }
 
 void SDLWindow::gameStateToPixels(GameField const& gameState)
 {
-    std::function<void()> setColor[nbGameFieldCellTypes] = {
-        [this](){ return SDL_SetRenderDrawColor(renderer_, 79, 132, 196, 255); },
-        [this](){ return SDL_SetRenderDrawColor(renderer_, 127, 255, 212, 255); },
-        [this](){ return SDL_SetRenderDrawColor(renderer_, 64, 224, 208, 255); },
-        [this](){ return SDL_SetRenderDrawColor(renderer_, 255, 105, 180, 255); },
-        [this](){ return SDL_SetRenderDrawColor(
-            renderer_, rand() % 255, rand() % 255, rand() % 255, 255); },
-        [this](){ return SDL_SetRenderDrawColor(renderer_, 248, 14, 50, 255); },
-        [this](){ return SDL_SetRenderDrawColor(renderer_, 11, 111, 144, 255); }
-    };
-    for (size_t i = 0; i < height_; ++i)
-    {
-        for (size_t j = 0; j < width_; ++j)
-        {
+    for (size_t i = 0; i < height_; ++i){
+        for (size_t j = 0; j < width_; ++j){
             SDL_Rect rectangle;
             rectangle.x = (j + 1) * zoomFactor_;
             rectangle.y = (i + 1) * zoomFactor_;
             rectangle.w = zoomFactor_;
             rectangle.h = zoomFactor_;
-            setColor[gameState[i][j]]();
+            setColor_[gameState[i][j]]();
             SDL_RenderFillRect(renderer_, &rectangle);
         }
     }
@@ -144,10 +142,12 @@ void SDLWindow::drawBorders()
     left.h = (height_ + 1) * zoomFactor_;
     SDL_RenderFillRect(renderer_, &left);
 
+    const auto textFontSize = 14;
+    const SDL_Color veryNiceColor{199, 50, 176, 0};
     const auto score = "score: " + std::to_string(score_);
-    showText(score.c_str(), 0, 0, {199, 50, 176, 0});
+    showText(score.c_str(), 0, 0, veryNiceColor, textFontSize);
     const auto speed = "speed: " + std::to_string(speed_);
-    showText(speed.c_str(), (width_ / 2.4) * zoomFactor_, 0, {199, 50, 176, 0});
+    showText(speed.c_str(), (width_ / 2.29) * zoomFactor_, 0, veryNiceColor, textFontSize);
 }
 
 SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
@@ -160,9 +160,9 @@ SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
     return result;
 }
 
-void  SDLWindow::showText(const char *text, size_t x, size_t y, SDL_Color color)
+void  SDLWindow::showText(const char *text, size_t x, size_t y, SDL_Color color, size_t fontSize)
 {
-    auto font = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 11);
+    auto font = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", fontSize);
     if (!font) throw std::runtime_error("No font found.");
     TTF_SetFontStyle(font, TTF_STYLE_BOLD);
     auto surface = TTF_RenderUTF8_Blended(font, text, color);
@@ -172,4 +172,9 @@ void  SDLWindow::showText(const char *text, size_t x, size_t y, SDL_Color color)
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(surface);
     TTF_CloseFont(font);
+}
+
+size_t SDLWindow::zoomFont(size_t fontSize)
+{
+    return std::pow(fontSize * width_ * height_ * zoomFactor_, 1.0 / 3.5);
 }

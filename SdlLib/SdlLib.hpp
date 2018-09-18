@@ -3,6 +3,7 @@
 #include <IWindow.hpp>
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <functional>
 
 extern "C"
 {
@@ -29,7 +30,9 @@ class SDLWindow : public IWindow
         void            gameStateToPixels(GameField const& gameState);
         void            drawBorders();
         SDL_Rect        makeRect(size_t x, size_t y, size_t h, size_t w);
-        void            showText(const char *text, size_t x, size_t y, SDL_Color color);
+        void            showText(const char *text, size_t x, size_t y,
+                            SDL_Color color, size_t fontSize);
+        size_t          zoomFont(size_t fontSize);
 
         const size_t    zoomFactor_ = 14;
         size_t          width_ = 0;
@@ -38,5 +41,16 @@ class SDLWindow : public IWindow
         SDL_Renderer    *renderer_ = nullptr;
         size_t          score_ = 0;
         size_t          speed_ = 0;
+
+        std::function<void()> setColor_[nbGameFieldCellTypes] = {
+            [this](){ return SDL_SetRenderDrawColor(renderer_, 79, 132, 196, 255); },
+            [this](){ return SDL_SetRenderDrawColor(renderer_, 127, 255, 212, 255); },
+            [this](){ return SDL_SetRenderDrawColor(renderer_, 64, 224, 208, 255); },
+            [this](){ return SDL_SetRenderDrawColor(renderer_, 255, 105, 180, 255); },
+            [this](){ return SDL_SetRenderDrawColor(
+                renderer_, rand() % 255, rand() % 255, rand() % 255, 255); },
+            [this](){ return SDL_SetRenderDrawColor(renderer_, 248, 14, 50, 255); },
+            [this](){ return SDL_SetRenderDrawColor(renderer_, 11, 111, 144, 255); }
+        };
 
 };

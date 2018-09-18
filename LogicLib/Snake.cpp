@@ -16,11 +16,10 @@ Snake::Snake(NibblerParameters params, std::shared_ptr<IMusicPlayer> mp)
     : params_(params), musicPlayer_(mp)
 {
     srand(time(NULL));
-    fieldObjects_.insert({0,0,food});
-    fieldObjects_.insert({params_.width-1,params_.height-1,food});
-    fieldObjects_.insert({8,8,superFood});
-    fieldObjects_.insert({6,6,obstacle});
-    fieldObjects_.insert({7,7,obstacle});
+    fieldObjects_.insert(generatePoint(food));
+    fieldObjects_.insert(generatePoint(food));
+    fieldObjects_.insert(generatePoint(superFood));
+    fieldObjects_.insert(generatePoint(obstacle));
 }
 
 void Snake::fillMap(GameField& field) const
@@ -117,7 +116,6 @@ void Snake::processCollisionwithFieldObjects()
                 while (fieldObjects_.size() == priorSize)
                     fieldObjects_.insert(generatePoint(food));
                 fieldObjects_.erase(fieldObject);
-                return;
             }
             else if (fieldObject.cellType == superFood){
                 musicPlayer_->playSound(superFoodEaten);
@@ -130,12 +128,11 @@ void Snake::processCollisionwithFieldObjects()
                 while (fieldObjects_.size() == priorSize)
                     fieldObjects_.insert(generatePoint(superFood));
                 fieldObjects_.erase(fieldObject);
-                return;
+                fieldObjects_.insert(generatePoint(obstacle));
             }
-            else if (fieldObject.cellType == obstacle){
+            else if (fieldObject.cellType == obstacle)
                 hitObstacle_ = true;
-                return;
-            }
+            return;
         }
     }
 }

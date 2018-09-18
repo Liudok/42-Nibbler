@@ -1,15 +1,13 @@
 #pragma once
 
 #include <IWindow.hpp>
+#include <functional>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
 extern "C"
 {
     IWindow* create();
-}
-
-namespace sf
-{
-    class RenderWindow;
 }
 
 class SFMLWindow : public IWindow
@@ -39,5 +37,16 @@ class SFMLWindow : public IWindow
         size_t            score_ = 0;
         size_t            speed_ = 0;
         std::unique_ptr<sf::RenderWindow> window_;
+
+        std::function<void(sf::CircleShape&)> setColor_[nbGameFieldCellTypes] = {
+            [](sf::CircleShape&){},
+            [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(127, 255, 212)); },
+            [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(64, 224, 208)); },
+            [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(255, 105, 180)); },
+            [](sf::CircleShape& circle){ circle.setFillColor(
+                sf::Color(rand() % 255, rand() % 255, rand() % 255)); },
+            [](sf::CircleShape& circle){ circle.setFillColor(sf::Color::Red); },
+            [](sf::CircleShape& circle){ circle.setFillColor(sf::Color::Green); }
+        };
 
 };
