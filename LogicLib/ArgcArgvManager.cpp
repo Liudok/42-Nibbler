@@ -10,7 +10,8 @@ auto ArgcArgvManager::parseParameters(int argc, const char** argv)
         strings.push_back(argv[i]);
     const auto windowSize = defineWindowSize(strings);
     const auto gameMode = defineGameMode(strings);
-    return {windowSize.first, windowSize.second, gameMode};
+    const auto libraryType = defineLibraryType(strings);
+    return {windowSize.first, windowSize.second, gameMode, libraryType};
 }
 
 auto ArgcArgvManager::defineWindowSize(std::vector<std::string> const& strings)
@@ -46,6 +47,17 @@ GameMode ArgcArgvManager::defineGameMode(std::vector<std::string> const& strings
             if (gameModes[i] == str)
                 return static_cast<GameMode>(i);
     return classic;
+}
+
+LibraryType ArgcArgvManager::defineLibraryType(std::vector<std::string> const& strings)
+{
+    std::string libraryTypes[nbLibraries] =
+        { "ncurses", "sdl", "sfml" };
+    for (const auto& str : strings)
+        for (size_t i = 0; i < nbLibraries; ++i)
+            if (libraryTypes[i] == str)
+                return static_cast<LibraryType>(i);
+    return sfml;
 }
 
 bool ArgcArgvManager::validNumber(std::string const& str)

@@ -6,8 +6,6 @@
 
 LogicUnit::LogicUnit(NibblerParameters params)
     : params_(params)
-    , gameField_(params_.height, std::vector<size_t>(params_.width, 0))
-    , snake_(params, musicPlayer_)
 {
     snake_.fillMap(gameField_);
     musicPlayer_->playMainTheme();

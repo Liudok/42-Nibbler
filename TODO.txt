@@ -20,6 +20,8 @@ Nestor:
 - Nice position for text in sfml ===DONE===
 - no 0 or width - 1 for food ===DONE===
 
+- argc/argv selection of starting library
+
 Liuda:
 +- Nice exit for sdl
 - in SFML: 1 when paused

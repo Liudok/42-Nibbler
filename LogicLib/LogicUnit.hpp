@@ -22,34 +22,33 @@ class LogicUnit
     using WindowPtr = std::unique_ptr<IWindow>;
     using MusicPlayerPtr = std::shared_ptr<IMusicPlayer>;
     using LibraryIndex = size_t;
-    enum LibraryType { ncurses, sdl, sfml };
-    static constexpr size_t nbLibraries = 3;
 
     std::array<PtrToLibraryType, nbLibraries> initLibraries();
     std::vector<WindowPtr> initWindows();
 
+    NibblerParameters params_{40, 50, classic};
+
     std::array<PtrToLibraryType, nbLibraries> libraries_ = initLibraries();
     std::vector<WindowPtr> windows_ = initWindows();
-    LibraryIndex currentLibraryIndex_ = sfml;
+    LibraryIndex currentLibraryIndex_ = params_.lib;
 
     static constexpr auto musicLibraryName_ = "libSoundLib.dylib";
     PtrToLibraryType musicLibrary_ = openLibrary(musicLibraryName_);
     MusicPlayerPtr musicPlayer_ = makeMusicPlayer();
 
-    NibblerParameters params_{40, 50, classic};
-
     bool playerPressedEscape_ = false;
     bool paused_ = false;
-    GameField gameField_;
-    Snake snake_;
+    GameField gameField_ = GameField(params_.height,
+        std::vector<size_t>(params_.width, 0));
+    Snake snake_ = Snake(params_, musicPlayer_);
 
-    void       reactToNoResponse();
-    void       reactToNewDirection(ResponseType);
-    void       reactToNewLibrary(LibraryType);
-    void       reactToPlayerPressedEscape();
-    void       reactToPauseContinue();
+    void reactToNoResponse();
+    void reactToNewDirection(ResponseType);
+    void reactToNewLibrary(LibraryType);
+    void reactToPlayerPressedEscape();
+    void reactToPauseContinue();
 
-    size_t     countUsleep(int timePassed) const;
+    size_t countUsleep(int timePassed) const;
 
     static PtrToLibraryType openLibrary(const char* libraryName);
     MusicPlayerPtr makeMusicPlayer();

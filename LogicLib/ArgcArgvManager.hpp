@@ -16,6 +16,7 @@ class ArgcArgvManager
         static std::pair<size_t, size_t> defineWindowSize(std::vector<std::string> const&);
         static std::pair<size_t, size_t> findOptimalWindowSize();
         static GameMode defineGameMode(std::vector<std::string> const&);
+        static LibraryType defineLibraryType(std::vector<std::string> const&);
         static bool validNumber(std::string const&);
         static std::string readOutputOfCommand(std::string const& cmnd);
 

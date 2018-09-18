@@ -15,11 +15,16 @@ enum GameMode {classic, granny, insane, rasta};
 
 constexpr size_t nbGameModes = 4;
 
+enum LibraryType { ncurses, sdl, sfml };
+
+static constexpr size_t nbLibraries = 3;
+
 struct NibblerParameters
 {
     size_t width = 30;
     size_t height = 40;
     GameMode mode = classic;
+    LibraryType lib = sfml;
 };
 
 using GameField = std::vector<std::vector<size_t>>;
