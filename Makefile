@@ -6,14 +6,14 @@ all: | $(DUILDDIR)
 $(DUILDDIR):
 	@sh .talk.sh "The project is not built yet" $(GREEN)
 	@sh .talk.sh "Building the project" $(GREEN)
-	@sh build.sh
+	@sh build.sh || true
 
 NAME = Nibbler
 
 all: $(NAME)
 
 $(NAME):
-	@cd Build && make && cd ..
+	@cd Build 2> /dev/null && make && cd .. || true
 	@sh .talk.sh "Basic usage: ./Build/Nibbler" $(GREEN)
 	@sh .talk.sh "Possibly: ./Build/Nibbler [width] [heigth] [mode] [lib]" $(GREEN)
 	@sh .talk.sh "Where modes may be 'classic' 'granny' 'insane' or 'rasta'" $(GREEN)
