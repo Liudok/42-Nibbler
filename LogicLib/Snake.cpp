@@ -1,16 +1,4 @@
 #include "Snake.hpp"
-#include <forward_list>
-
-bool SnakeUtils::Point::operator==(Point const& rhs) const
-{
-    return x == rhs.x && y == rhs.y;
-}
-
-size_t SnakeUtils::PointHashBySum::operator()
-    (Point const& point) const
-{
-    return std::hash<size_t>()(point.x * point.y);
-}
 
 Snake::Snake(NibblerParameters params, std::shared_ptr<IMusicPlayer> mp) 
     : params_(params), musicPlayer_(mp)
@@ -52,8 +40,7 @@ void Snake::move(const Direction newDirection)
         body_[i] = body_[i - 1];
     body_[0] = headPos_;
     headPos_ = newHeadPosition;
-    if (headHitBody())
-        hitBody_ = true;
+    if (headHitBody()) hitBody_ = true;
 }
 
 void Snake::updateDirection(const Direction newDirection)
@@ -99,45 +86,82 @@ bool Snake::headHitBody() const
 
 void Snake::processCollisionwithFieldObjects()
 {
-    static std::forward_list<SnakeUtils::Point> futureBodyParts;
-    if (!futureBodyParts.empty()){
-        body_.push_back(futureBodyParts.front());
-        futureBodyParts.pop_front();
+    
+    if (!futureBodyParts_.empty()){
+        body_.push_back(futureBodyParts_.front());
+        futureBodyParts_.pop_front();
     }
     for (auto const& fieldObject : fieldObjects_){
         if (headPos_ == fieldObject){
-            if (fieldObject.cellType == food){
-                musicPlayer_->playSound(foodEaten);
-                speed_ += speedIncrement_;
-                score_ += scoreIncrement_;
-                const auto newBodyPart = body_[body_.size() - 1];
-                futureBodyParts.push_front(std::move(newBodyPart));
-                const size_t priorSize = fieldObjects_.size();
-                while (fieldObjects_.size() == priorSize)
-                    fieldObjects_.insert(generatePoint(food));
-                fieldObjects_.erase(fieldObject);
-            }
-            else if (fieldObject.cellType == superFood){
-                musicPlayer_->playSound(superFoodEaten);
-                score_ += scoreIncrement_ * superFoodFactor_;
-                for (size_t i = 0; i < superFoodFactor_; ++i){
-                    const auto newBodyPart = body_[body_.size() - 1];
-                    futureBodyParts.push_front(std::move(newBodyPart));
-                }
-                const size_t priorSize = fieldObjects_.size();
-                while (fieldObjects_.size() == priorSize)
-                    fieldObjects_.insert(generatePoint(superFood));
-                fieldObjects_.erase(fieldObject);
-                fieldObjects_.insert(generatePoint(obstacle));
-            }
-            else if (fieldObject.cellType == obstacle)
-                hitObstacle_ = true;
+            processFunctions_[adjustCellTypeIndex(fieldObject.cellType)]
+                (fieldObject);
             return;
         }
     }
 }
 
-SnakeUtils::Point Snake::generatePoint(GameFieldCellType t) const
+auto Snake::initBody() const
+    -> BodyParts
+{
+    return{
+        {headPos_.x - 1, headPos_.y},
+        {headPos_.x - 2, headPos_.y},
+        {headPos_.x - 3, headPos_.y},
+        {headPos_.x - 3, headPos_.y - 1}
+    };
+}
+
+auto Snake::generatePoint(GameFieldCellType t) const
+    -> SnakeUtils::Point
 {
     return {rand() % params_.width, rand() % params_.height, t};
+}
+
+auto Snake::initProcessFunctions()
+    -> ProcessFunctionsArray
+{
+    return {{
+        [this](const auto& o){ processCollisionWithFood(o); },
+        [this](const auto& o){ processCollisionWithSuperFood(o); },
+        [this](const auto&){ processCollisionWithObstacle(); }
+    }};
+}
+
+void Snake::processCollisionWithFood(SnakeUtils::Point const& fieldObject)
+{
+    musicPlayer_->playSound(foodEaten);
+    speed_ += speedIncrement_;
+    score_ += scoreIncrement_;
+    const auto newBodyPart = body_[body_.size() - 1];
+    futureBodyParts_.push_front(std::move(newBodyPart));
+    const size_t priorSize = fieldObjects_.size();
+    while (fieldObjects_.size() == priorSize)
+        fieldObjects_.insert(generatePoint(food));
+    fieldObjects_.erase(fieldObject);
+}
+
+void Snake::processCollisionWithSuperFood(SnakeUtils::Point const& fieldObject)
+{
+    musicPlayer_->playSound(superFoodEaten);
+    score_ += scoreIncrement_ * superFoodFactor_;
+    for (size_t i = 0; i < superFoodFactor_; ++i){
+        const auto newBodyPart = body_[body_.size() - 1];
+        futureBodyParts_.push_front(std::move(newBodyPart));
+    }
+    const size_t priorSize = fieldObjects_.size();
+    while (fieldObjects_.size() == priorSize)
+        fieldObjects_.insert(generatePoint(superFood));
+    fieldObjects_.erase(fieldObject);
+    fieldObjects_.insert(generatePoint(obstacle));
+}
+
+void Snake::processCollisionWithObstacle()
+{
+    hitObstacle_ = true;
+}
+
+size_t Snake::adjustCellTypeIndex(GameFieldCellType t)
+{
+    const auto enumPoseAdjucter = 3;
+    return static_cast<size_t>(t - enumPoseAdjucter);
 }

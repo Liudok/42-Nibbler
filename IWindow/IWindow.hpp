@@ -3,7 +3,7 @@
 #include <vector>
 
 enum ResponseType { noResponse, left, right, up, down,
-        toNcurses, toSDL, toSFML, pauseContinue, changeGameMode, PlayerPressedEscape };
+        toNcurses, toSDL, toSFML, pauseContinue, changeGameMode, playerPressedEscape };
 
 constexpr size_t nbResponses = 11;
 
@@ -17,7 +17,10 @@ constexpr size_t nbGameModes = 4;
 
 enum LibraryType { ncurses, sdl, sfml };
 
-static constexpr size_t nbLibraries = 3;
+constexpr size_t nbLibraries = 3;
+
+constexpr auto defaultWidth = 40;
+constexpr auto defaultHeight = 60;
 
 struct NibblerParameters
 {

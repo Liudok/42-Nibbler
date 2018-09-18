@@ -3,6 +3,8 @@
 #include <IWindow.hpp>
 #include <IMusicPlayer.hpp>
 #include <unordered_set>
+#include <array>
+#include <forward_list>
 
 namespace SnakeUtils
 {
@@ -11,12 +13,14 @@ namespace SnakeUtils
         size_t x = 0;
         size_t y = 0;
         GameFieldCellType cellType = empty;
-        bool operator==(Point const& rhs) const;
+        inline bool operator==(Point const& rhs) const
+        { return x == rhs.x && y == rhs.y; }
     };
 
     struct PointHashBySum
     {
-        size_t operator()(Point const& point) const;
+        inline size_t operator()(Point const& point) const
+        { return std::hash<size_t>()(point.x * point.y); }
     };
 }
 
@@ -37,26 +41,38 @@ class Snake
         inline bool collapsed() const
         { return outOfField_ || hitBody_ || hitObstacle_; }
         inline double getSpeed() const
-        {  return speed_; }
+        { return speed_; }
         inline size_t getScore() const
         { return score_; }
 
     private:
 
-        void updateDirection(const Direction newDirection);
+        void updateDirection(const Direction);
         SnakeUtils::Point defineNewHeadPosition() const;
-        bool validNewDirection(const Direction newDirection) const;
+        bool validNewDirection(const Direction) const;
         bool headHitBody() const;
         void processCollisionwithFieldObjects();
 
+        using BodyParts = std::vector<SnakeUtils::Point>;
+
+        BodyParts initBody() const;
+
         SnakeUtils::Point generatePoint(GameFieldCellType) const;
 
-        NibblerParameters params_{40,50,classic};
+        static constexpr auto nbProcessFunctions = 3;
+        using ProcessFunctionType = std::function<void(SnakeUtils::Point)>;
+        using ProcessFunctionsArray = std::array<ProcessFunctionType, nbProcessFunctions>;
 
-        SnakeUtils::Point headPos_ {params_.width / 2, params_.height / 2};
-        std::vector<SnakeUtils::Point> body_ {{headPos_.x - 1, headPos_.y},
-            {headPos_.x - 2, headPos_.y}, {headPos_.x - 3, headPos_.y},
-                {headPos_.x - 3, headPos_.y - 1}};
+        ProcessFunctionsArray initProcessFunctions();
+        void processCollisionWithFood(SnakeUtils::Point const&);
+        void processCollisionWithSuperFood(SnakeUtils::Point const&);
+        void processCollisionWithObstacle(); 
+
+        ProcessFunctionsArray processFunctions_ = initProcessFunctions();
+
+        NibblerParameters params_{defaultWidth, defaultHeight, classic};
+        SnakeUtils::Point headPos_{params_.width / 2, params_.height / 2};
+        BodyParts body_ = initBody();
         Direction currentDirection_ = right;
 
         const double speedIncrement_ = 0.05;
@@ -68,9 +84,20 @@ class Snake
         bool hitObstacle_ = false;
         double speed_ = 1.0;
         size_t score_ = 0;
-        std::unordered_set<SnakeUtils::Point,
-            SnakeUtils::PointHashBySum> fieldObjects_;
 
-        std::shared_ptr<IMusicPlayer> musicPlayer_;
+        using FieldObjects =
+            std::unordered_set<SnakeUtils::Point,
+                SnakeUtils::PointHashBySum>;
+        
+        FieldObjects fieldObjects_;
+
+        using MusicPlayerSPtr = std::shared_ptr<IMusicPlayer>;
+
+        MusicPlayerSPtr musicPlayer_;
+
+        static size_t adjustCellTypeIndex(GameFieldCellType);
+
+        using FutureBodyParts = std::forward_list<SnakeUtils::Point>;
+        FutureBodyParts futureBodyParts_;
 
 };

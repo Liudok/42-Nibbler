@@ -7,9 +7,9 @@ class ArgcArgvManager
 {
     public:
 
-        ArgcArgvManager() = delete;
-
         static NibblerParameters parseParameters(int argc, const char** argv);
+
+        ArgcArgvManager() = delete;
 
     private:
 

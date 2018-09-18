@@ -12,7 +12,7 @@ Nestor:
 - Any class that declares at least one attribute must be written in canonical form ===DONE===
 - unordered_set ===DONE===
 - replace width-height with NibblerParameters ===DONE===
-- PlayerPressedEscape vs snake_.collapsed() eog ===DONE===
+- playerPressedEscape vs snake_.collapsed() eog ===DONE===
 - Leaks ===DONE===
 - Makefile ===DONE===
 - SDL does not respond after clicked outside ===DONE===

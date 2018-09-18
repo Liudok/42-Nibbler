@@ -1,6 +1,5 @@
 #include "LogicUnit.hpp"
 #include <dlfcn.h>
-#include <iostream>
 #include <chrono>
 #include <unistd.h>
 
@@ -15,8 +14,8 @@ LogicUnit::~LogicUnit()
 {
     for (auto& library : libraries_)
         dlclose(library);
+    musicPlayer_->stopMainTheme();
     dlclose(musicLibrary_);
-    musicPlayer_->playMainTheme();
 }
 
 bool LogicUnit::loopTheGame()
@@ -24,19 +23,7 @@ bool LogicUnit::loopTheGame()
     windows_[currentLibraryIndex_]->openWindow(params_.width, params_.height);
     windows_[currentLibraryIndex_]->draw(gameField_,
         snake_.getScore(), snake_.getSpeed(), params_.mode);
-    std::function<void()> reactFunctions[nbResponses] = {
-        [this]{ reactToNoResponse(); },
-        [this]{ reactToNewDirection(left); },
-        [this]{ reactToNewDirection(right); },
-        [this]{ reactToNewDirection(up); },
-        [this]{ reactToNewDirection(down); },
-        [this]{ reactToNewLibrary(ncurses); },
-        [this]{ reactToNewLibrary(sdl); },
-        [this]{ reactToNewLibrary(sfml); },
-        [this]{ reactToPauseContinue(); },
-        [this]{ reactToChangeGameMode(); },
-        [this]{ reactToPlayerPressedEscape(); },
-    };
+    const auto reactFunctions = initReactFunctionsArray();
     while (true){
         const auto t0 = std::chrono::steady_clock::now();
         const auto response = windows_[currentLibraryIndex_]->getResponse();
@@ -56,9 +43,9 @@ bool LogicUnit::loopTheGame()
 }
 
 auto LogicUnit::initLibraries()
-    -> std::array<PtrToLibraryType, nbLibraries>
+    -> LibrariesArray
 {
-    std::array<PtrToLibraryType, nbLibraries> libraries;
+    LibrariesArray libraries;
     const char* libraryNames[nbLibraries] =
         { "libNcursesLib.dylib", "libSdlLib.dylib", "libSfmlLib.dylib"};
     for (size_t currentLib = 0; currentLib < nbLibraries; ++currentLib)
@@ -67,16 +54,16 @@ auto LogicUnit::initLibraries()
 }
 
 auto LogicUnit::initWindows()
-    -> std::vector<WindowPtr>
+    -> WindowsArray
 {
-    std::vector<WindowPtr> result;
+    WindowsArray result;
     const auto factoryFunctionName = "create";
     using factoryFunctionType = IWindow* (*)();
     for (size_t i = 0; i < nbLibraries; ++i){
         auto factoryFunctionPtr =
             reinterpret_cast<factoryFunctionType>(dlsym(libraries_[i],
                 factoryFunctionName));
-        result.push_back(WindowPtr{factoryFunctionPtr()});
+        result.push_back(WindowUPtr{factoryFunctionPtr()});
     }
     return result;
 }
@@ -106,7 +93,7 @@ void LogicUnit::reactToNewLibrary(LibraryType newLibrary)
         snake_.getScore(), snake_.getSpeed(), params_.mode);
 }
 
-void LogicUnit::reactToPlayerPressedEscape()
+void LogicUnit::reactToplayerPressedEscape()
 {
     showExitAndCloseWindow();
     playerPressedEscape_ = true;
@@ -125,6 +112,14 @@ void LogicUnit::reactToChangeGameMode()
 {
     params_.mode = static_cast<GameMode>(
         (params_.mode + 1) % nbGameModes);
+}
+
+void LogicUnit::showExitAndCloseWindow()
+{
+    windows_[currentLibraryIndex_]->showGameOver();
+    musicPlayer_->playSound(gameOver);
+    usleep(2'500'000);
+    windows_[currentLibraryIndex_]->closeWindow();
 }
 
 size_t LogicUnit::countUsleep(int timePassed) const
@@ -146,21 +141,31 @@ auto LogicUnit::openLibrary(const char* libraryName)
     return result;
 }
 
-auto LogicUnit::makeMusicPlayer()
-    -> MusicPlayerPtr
+auto LogicUnit::makeMusicPlayer() const
+    -> MusicPlayerSPtr
 {
     const auto factoryFunctionName = "create";
     using factoryFunctionType = IMusicPlayer* (*)();
     auto factoryFunctionPtr =
             reinterpret_cast<factoryFunctionType>(dlsym(musicLibrary_,
                 factoryFunctionName));
-    return MusicPlayerPtr{factoryFunctionPtr()};
+    return MusicPlayerSPtr{factoryFunctionPtr()};
 }
 
-void LogicUnit::showExitAndCloseWindow()
+auto LogicUnit::initReactFunctionsArray()
+    -> ReactFunctionsArray
 {
-    windows_[currentLibraryIndex_]->showGameOver();
-    musicPlayer_->playSound(gameOver);
-    usleep(2'500'000);
-    windows_[currentLibraryIndex_]->closeWindow();
+    return {{
+        [this]{ reactToNoResponse(); },
+        [this]{ reactToNewDirection(left); },
+        [this]{ reactToNewDirection(right); },
+        [this]{ reactToNewDirection(up); },
+        [this]{ reactToNewDirection(down); },
+        [this]{ reactToNewLibrary(ncurses); },
+        [this]{ reactToNewLibrary(sdl); },
+        [this]{ reactToNewLibrary(sfml); },
+        [this]{ reactToPauseContinue(); },
+        [this]{ reactToChangeGameMode(); },
+        [this]{ reactToplayerPressedEscape(); },
+    }};
 }

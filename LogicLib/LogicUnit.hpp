@@ -19,22 +19,23 @@ class LogicUnit
   private:
 
     using PtrToLibraryType = void*;
-    using WindowPtr = std::unique_ptr<IWindow>;
-    using MusicPlayerPtr = std::shared_ptr<IMusicPlayer>;
+    using WindowUPtr = std::unique_ptr<IWindow>;
     using LibraryIndex = size_t;
+    using LibrariesArray = std::array<PtrToLibraryType, nbLibraries>;
+    using WindowsArray = std::vector<WindowUPtr>;
+    using MusicPlayerSPtr = std::shared_ptr<IMusicPlayer>;
 
-    std::array<PtrToLibraryType, nbLibraries> initLibraries();
-    std::vector<WindowPtr> initWindows();
+    LibrariesArray initLibraries();
+    WindowsArray initWindows();
 
-    NibblerParameters params_{40, 50, classic};
-
-    std::array<PtrToLibraryType, nbLibraries> libraries_ = initLibraries();
-    std::vector<WindowPtr> windows_ = initWindows();
+    NibblerParameters params_{defaultWidth, defaultHeight, classic};
+    LibrariesArray libraries_ = initLibraries();
+    WindowsArray windows_ = initWindows();
     LibraryIndex currentLibraryIndex_ = params_.lib;
 
     static constexpr auto musicLibraryName_ = "libSoundLib.dylib";
     PtrToLibraryType musicLibrary_ = openLibrary(musicLibraryName_);
-    MusicPlayerPtr musicPlayer_ = makeMusicPlayer();
+    MusicPlayerSPtr musicPlayer_ = makeMusicPlayer();
 
     bool playerPressedEscape_ = false;
     bool paused_ = false;
@@ -45,14 +46,18 @@ class LogicUnit
     void reactToNoResponse();
     void reactToNewDirection(ResponseType);
     void reactToNewLibrary(LibraryType);
-    void reactToPlayerPressedEscape();
+    void reactToplayerPressedEscape();
     void reactToPauseContinue();
     void reactToChangeGameMode();
 
-    size_t countUsleep(int timePassed) const;
-
-    static PtrToLibraryType openLibrary(const char* libraryName);
-    MusicPlayerPtr makeMusicPlayer();
     void showExitAndCloseWindow();
+
+    size_t countUsleep(int timePassed) const;
+    static PtrToLibraryType openLibrary(const char* libraryName);
+    MusicPlayerSPtr makeMusicPlayer() const;
+
+    using ReactFunctionsArray =
+        std::array<std::function<void()>,nbResponses>;
+    ReactFunctionsArray initReactFunctionsArray();
 
 };

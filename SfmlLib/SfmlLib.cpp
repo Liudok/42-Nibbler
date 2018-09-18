@@ -16,7 +16,7 @@ ResponseType SFMLWindow::getResponse()
     switch (event.type)
     {
     case sf::Event::Closed:
-        return PlayerPressedEscape;
+        return playerPressedEscape;
     case sf::Event::KeyPressed:
         switch (event.key.code)
         {
@@ -25,7 +25,7 @@ ResponseType SFMLWindow::getResponse()
             case sf::Keyboard::Num4:
             return changeGameMode;
         case sf::Keyboard::Escape:
-            return PlayerPressedEscape;
+            return playerPressedEscape;
         case sf::Keyboard::Num1:
             return toSDL;
         case sf::Keyboard::Down:
@@ -151,4 +151,18 @@ void SFMLWindow::drawBorders()
         (height_ + 1) * zoomFactor_);
     text.setString("Speed: " + std::to_string((int)speed_));
     window_->draw(text);
+}
+
+auto SFMLWindow::initColorFunctionsArray() const
+    -> ColorFunctionsArray
+{
+    return {{
+        [](sf::CircleShape&){},
+        [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(127, 255, 212)); },
+        [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(64, 224, 208)); },
+        [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(255, 105, 180)); },
+        [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(rc(), rc(), rc())); },
+        [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(255, 0, 0)); },
+        [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(0, 255, 0)); }
+    }};
 }

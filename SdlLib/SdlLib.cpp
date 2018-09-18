@@ -16,7 +16,7 @@ ResponseType SDLWindow::getResponse()
     SDL_Event event;
     SDL_PollEvent(&event);
     if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
-        return PlayerPressedEscape;
+        return playerPressedEscape;
     else if (event.type == SDL_KEYDOWN)
     {
         if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)

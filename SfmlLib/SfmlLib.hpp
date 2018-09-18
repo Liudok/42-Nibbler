@@ -4,6 +4,7 @@
 #include <functional>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <array>
 
 extern "C"
 {
@@ -47,14 +48,9 @@ class SFMLWindow : public IWindow
         inline sf::Color defineColor(size_t r, size_t g, size_t b) const
         { return (mode_ == rasta) ? sf::Color(rc(), rc(), rc()) : sf::Color(r, g, b); }
 
-        std::function<void(sf::CircleShape&)> setColor_[nbGameFieldCellTypes] = {
-            [](sf::CircleShape&){},
-            [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(127, 255, 212)); },
-            [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(64, 224, 208)); },
-            [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(255, 105, 180)); },
-            [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(rc(), rc(), rc())); },
-            [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(255, 0, 0)); },
-            [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(0, 255, 0)); }
-        };
+        using ColorFunctionsArray =
+            std::array<std::function<void(sf::CircleShape&)>,nbGameFieldCellTypes>;
+        ColorFunctionsArray setColor_ = initColorFunctionsArray();
 
+        ColorFunctionsArray initColorFunctionsArray() const;
 };

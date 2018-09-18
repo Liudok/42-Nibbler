@@ -12,7 +12,7 @@ ResponseType NcuresesWindow::getResponse()
 {
     const auto response = wgetch(window_);
     switch(response){
-        case 'q': return PlayerPressedEscape;
+        case 'q': return playerPressedEscape;
         case 'a': return left;
         case KEY_LEFT: return left;
         case 'd': return right;
