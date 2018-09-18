@@ -27,21 +27,25 @@ class Snake
         Snake(NibblerParameters, std::shared_ptr<IMusicPlayer>);
         Snake(Snake const&) = delete;
         Snake& operator=(Snake const&) = delete;
-        ~Snake();
+        ~Snake() = default;
 
-        using direction = ResponseType;
+        using Direction = ResponseType;
 
-        void fillMap(gameField&) const;
-        void move(const direction = noResponse);
-        bool collapsed() const;
-        double getSpeed() const;
-        size_t getScore() const;
+        void fillMap(GameField&) const;
+        void move(const Direction = noResponse);
+
+        inline bool collapsed() const
+        { return outOfField_ || hitBody_ || hitObstacle_; }
+        inline double getSpeed() const
+        {  return speed_; }
+        inline size_t getScore() const
+        { return score_; }
 
     private:
 
-        void updateDirection(const direction newDirection);
+        void updateDirection(const Direction newDirection);
         SnakeUtils::Point defineNewHeadPosition() const;
-        bool validNewDirection(const direction newDirection) const;
+        bool validNewDirection(const Direction newDirection) const;
         bool headHitBody() const;
         void processCollisionwithFieldObjects();
 
@@ -53,7 +57,7 @@ class Snake
         std::vector<SnakeUtils::Point> body_ {{headPos_.x - 1, headPos_.y},
             {headPos_.x - 2, headPos_.y}, {headPos_.x - 3, headPos_.y},
                 {headPos_.x - 3, headPos_.y - 1}};
-        direction currentDirection_ = right;
+        Direction currentDirection_ = right;
 
         const double speedIncrement_ = 0.05;
         const size_t scoreIncrement_ = 50;

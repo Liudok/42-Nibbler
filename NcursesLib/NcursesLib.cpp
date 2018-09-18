@@ -12,7 +12,7 @@ ResponseType NcuresesWindow::getResponse()
 {
     const auto response = wgetch(window_);
     switch(response){
-        case 'q': return endGame;
+        case 'q': return PlayerPressedEscape;
         case 'a': return left;
         case KEY_LEFT: return left;
         case 'd': return right;
@@ -28,7 +28,7 @@ ResponseType NcuresesWindow::getResponse()
     }
 }
 
-void NcuresesWindow::draw(gameField const& gameState, size_t, size_t)
+void NcuresesWindow::draw(GameField const& gameState, size_t, size_t)
 {
     drawGameState(window_, gameState);
     wrefresh(window_);
@@ -65,7 +65,7 @@ void NcuresesWindow::closeWindow()
 }
 
 void NcuresesWindow::drawGameState(WINDOW* window_,
-    gameField const& gameState)
+    GameField const& gameState)
 {
     for (size_t i = 0; i < height_; ++i){
         for (size_t j = 0; j < width_; ++j){

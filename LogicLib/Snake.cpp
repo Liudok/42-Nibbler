@@ -23,12 +23,7 @@ Snake::Snake(NibblerParameters params, std::shared_ptr<IMusicPlayer> mp)
     fieldObjects_.insert({7,7,obstacle});
 }
 
-Snake::~Snake()
-{
-
-}
-
-void Snake::fillMap(gameField& field) const
+void Snake::fillMap(GameField& field) const
 {
     for(auto& line : field)
         for (auto& cell : line)
@@ -42,7 +37,7 @@ void Snake::fillMap(gameField& field) const
         collapsed() ? collision : head;
 }
 
-void Snake::move(const direction newDirection)
+void Snake::move(const Direction newDirection)
 {
     processCollisionwithFieldObjects();
     if (collapsed()) return;
@@ -62,22 +57,7 @@ void Snake::move(const direction newDirection)
         hitBody_ = true;
 }
 
-double Snake::getSpeed() const
-{
-    return speed_;
-}
-
-size_t Snake::getScore() const
-{
-    return score_;
-}
-
-bool Snake::collapsed() const
-{
-    return outOfField_ || hitBody_ || hitObstacle_;
-}
-
-void Snake::updateDirection(const direction newDirection)
+void Snake::updateDirection(const Direction newDirection)
 {
     if (validNewDirection(newDirection))
         currentDirection_ = newDirection;
@@ -99,7 +79,7 @@ SnakeUtils::Point Snake::defineNewHeadPosition() const
     return result;
 }
 
-bool Snake::validNewDirection(const direction newDirection) const
+bool Snake::validNewDirection(const Direction newDirection) const
 {
     if ((currentDirection_ == left || currentDirection_ == right) && 
         (newDirection == up || newDirection == down))

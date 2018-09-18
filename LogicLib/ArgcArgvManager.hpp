@@ -2,8 +2,6 @@
 
 #include <IWindow.hpp>
 #include <string>
-#include <sstream>
-#include <stdio.h>
 
 class ArgcArgvManager
 {

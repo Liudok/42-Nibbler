@@ -16,7 +16,7 @@ ResponseType SDLWindow::getResponse()
     SDL_Event event;
     SDL_PollEvent(&event);
     if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
-        return endGame;
+        return PlayerPressedEscape;
     else if (event.type == SDL_KEYDOWN)
     {
         if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)
@@ -37,11 +37,11 @@ ResponseType SDLWindow::getResponse()
     return noResponse;
 }
 
-void SDLWindow::draw(gameField const& gameState, size_t score, size_t speed)
+void SDLWindow::draw(GameField const&, size_t score, size_t speed)
 {
     score_ = score;
     speed_ = speed;
-    gameStateToPixels(gameState);
+    gameStateToPixels(gameState);//a leak here
     SDL_RenderClear(renderer_);
 }
 
@@ -64,15 +64,14 @@ void SDLWindow::openWindow(size_t width, size_t height)
         window_,
         -1,
         SDL_RENDERER_ACCELERATED);
-    SDL_RaiseWindow(window_);
     TTF_Init();
 }
 
 void SDLWindow::closeWindow()
 {
     TTF_Quit();
-    SDL_DestroyRenderer(renderer_);
     SDL_DestroyWindow(window_);
+    SDL_DestroyRenderer(renderer_);
     SDL_Quit();
 }
 
@@ -87,7 +86,7 @@ void SDLWindow::showGameOver()
     SDL_RenderPresent(renderer_);
 }
 
-void SDLWindow::gameStateToPixels(gameField const& gameState)
+void SDLWindow::gameStateToPixels(GameField const& gameState)
 {
     std::function<void()> setColor[nbGameFieldCellTypes] = {
         [this](){ return SDL_SetRenderDrawColor(renderer_, 79, 132, 196, 255); },
@@ -112,7 +111,7 @@ void SDLWindow::gameStateToPixels(gameField const& gameState)
             SDL_RenderFillRect(renderer_, &rectangle);
         }
     }
-    drawBorders();
+   drawBorders();
     SDL_RenderPresent(renderer_);
 }
 
@@ -166,7 +165,7 @@ SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
 
 void  SDLWindow::showText(const char *text, size_t x, size_t y, SDL_Color color)
 {
-    TTF_Font* font = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 11);
+    auto font = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", 11);
     if (!font) throw std::runtime_error("No font found.");
     TTF_SetFontStyle(font, TTF_STYLE_BOLD);
     auto surface = TTF_RenderUTF8_Blended(font, text, color);

@@ -1,5 +1,6 @@
 #include "ArgcArgvManager.hpp"
 #include <regex>
+#include <stdio.h>
 
 auto ArgcArgvManager::parseParameters(int argc, const char** argv)
     -> NibblerParameters
@@ -55,15 +56,15 @@ bool ArgcArgvManager::validNumber(std::string const& str)
 
 std::string ArgcArgvManager::readOutputOfCommand(std::string const& cmnd)
 {
-    const auto BUFF_SIZE = 32;
-    std::stringstream ss;
+    const auto BUFF_SIZE = 16;
+    std::string result;
     char buff[BUFF_SIZE];
-    FILE* ret = popen(cmnd.c_str(), "r");
+    auto ret = popen(cmnd.c_str(), "r");
     while (!feof(ret))
         if (fgets(buff, BUFF_SIZE, ret))
-            ss << buff;
+            result += buff;
     pclose(ret);
-    std::string str(ss.str());
-    str.erase(str.end() - 1);
-    return str;
+    if (result.empty()) return result;
+    result.erase(result.end() - 1);
+    return result;
 }

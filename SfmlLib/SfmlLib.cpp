@@ -19,14 +19,14 @@ ResponseType SFMLWindow::getResponse()
     switch (event.type)
     {
     case sf::Event::Closed:
-        return endGame;
+        return PlayerPressedEscape;
     case sf::Event::KeyPressed:
         switch (event.key.code)
         {
         case sf::Keyboard::Num3:
             return toNcurses;
         case sf::Keyboard::Escape:
-            return endGame;
+            return PlayerPressedEscape;
         case sf::Keyboard::Num1:
             return toSDL;
         case sf::Keyboard::Down:
@@ -47,7 +47,7 @@ ResponseType SFMLWindow::getResponse()
     }
 }
 
-void SFMLWindow::draw(gameField const& gameState, size_t score, size_t speed)
+void SFMLWindow::draw(GameField const& gameState, size_t score, size_t speed)
 {
     score_ = score;
     speed_ = speed;
@@ -89,7 +89,7 @@ void SFMLWindow::showGameOver()
     window_->display();
 }
 
-void SFMLWindow::gameStateToPixels(gameField const& gameState)
+void SFMLWindow::gameStateToPixels(GameField const& gameState)
 {
     std::function<void(sf::CircleShape&)> setColor[nbGameFieldCellTypes] = {
         [](sf::CircleShape&){},

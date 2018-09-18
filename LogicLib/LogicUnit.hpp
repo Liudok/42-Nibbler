@@ -38,21 +38,21 @@ class LogicUnit
 
     NibblerParameters params_{40, 50, classic};
 
-    bool       endOfGame_ = false;
-    bool       paused_ = false;
-    gameField  gameField_;
-    Snake      snake_;
+    bool playerPressedEscape_ = false;
+    bool paused_ = false;
+    GameField gameField_;
+    Snake snake_;
 
     void       reactToNoResponse();
     void       reactToNewDirection(ResponseType);
     void       reactToNewLibrary(LibraryType);
-    void       reactToToSDL();
-    void       reactToEndGame();
+    void       reactToPlayerPressedEscape();
     void       reactToPauseContinue();
 
-    size_t     countUsleep(int timePassed);
+    size_t     countUsleep(int timePassed) const;
 
     static PtrToLibraryType openLibrary(const char* libraryName);
     MusicPlayerPtr makeMusicPlayer();
+    void showExitAndCloseWindow();
 
 };

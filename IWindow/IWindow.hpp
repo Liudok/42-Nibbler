@@ -3,7 +3,7 @@
 #include <vector>
 
 enum ResponseType { noResponse, left, right, up, down,
-        toNcurses, toSDL, toSFML, pauseContinue, endGame };
+        toNcurses, toSDL, toSFML, pauseContinue, PlayerPressedEscape };
 
 constexpr size_t nbResponses = 10;
 
@@ -22,14 +22,14 @@ struct NibblerParameters
     GameMode mode = classic;
 };
 
-using gameField = std::vector<std::vector<size_t>>;
+using GameField = std::vector<std::vector<size_t>>;
 
 class IWindow
 {
     public:
 
         virtual ResponseType getResponse() = 0;
-        virtual void draw(gameField const&, size_t score, size_t speed) = 0;
+        virtual void draw(GameField const&, size_t score, size_t speed) = 0;
         virtual void openWindow(size_t width, size_t height) = 0;
         virtual void closeWindow() = 0;
         virtual void showGameOver() = 0;
