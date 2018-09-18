@@ -48,12 +48,12 @@ class SFMLWindow : public IWindow
         { return (mode_ == rasta) ? sf::Color(rc(), rc(), rc()) : sf::Color(r, g, b); }
 
         std::function<void(sf::CircleShape&)> setColor_[nbGameFieldCellTypes] = {
-            [this](sf::CircleShape&){},
+            [](sf::CircleShape&){},
             [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(127, 255, 212)); },
             [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(64, 224, 208)); },
             [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(255, 105, 180)); },
-            [this](sf::CircleShape& circle){ circle.setFillColor(sf::Color(rc(), rc(), rc())); },
-            [this](sf::CircleShape& circle){ circle.setFillColor(sf::Color(255, 0, 0)); },
+            [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(rc(), rc(), rc())); },
+            [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(255, 0, 0)); },
             [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(0, 255, 0)); }
         };
 
