@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <string>
 #include <functional>
-
+#include <iostream>
 extern "C"
 {
     IWindow* create()
@@ -12,7 +12,6 @@ extern "C"
 }
 
 #define SQUARE_SIZE 10
-//#include FT_FREETYPE_H
 
 responseType GlfwWindow::getResponse()
 {
@@ -44,7 +43,44 @@ void GlfwWindow::draw(field const& gameState, size_t score, size_t speed)
 {
     score_ = score;
     speed_ = speed;
+//
+//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//
+//    glMatrixMode(GL_MODELVIEW);
+//    glLoadIdentity();
+//
+//    glPointSize(10);
+//    glLineWidth(2.5);
+//    glColor3f(1.0, 0.0, -10.0);
+//    glBegin(GL_LINES);
+//    glVertex3f(10.0,10.0,-10.0);
+//    glVertex3f(50.0,50.0,-10.0);
+//    glEnd();
+
+    float ratio;
+    int width, height;
+    glfwGetFramebufferSize(window_, &width, &height);
+    ratio = width / (float) height;
+    glViewport(0, 0, width, height);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glRotatef((float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f);
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.f, 0.f, 0.f);
+    glVertex3f(-0.6f, -0.4f, 0.f);
+    glColor3f(0.f, 1.f, 0.f);
+    glVertex3f(0.6f, -0.4f, 0.f);
+    glColor3f(0.f, 0.f, 1.f);
+    glVertex3f(0.f, 0.6f, 0.f);
+    glEnd();
+
     gameStateToPixels(gameState);
+    //glFlush();
+    std::cout<<"leaving loop \n";
     glfwSwapBuffers(window_);
 }
 
@@ -76,28 +112,48 @@ void GlfwWindow::openWindow(size_t width, size_t height)
     glfwSetInputMode(window_, GLFW_STICKY_KEYS, GL_TRUE);
 
     glClearColor(0.1f, 0.2f, 0.4f, 0.0f);
-    //Init FreeType
-//    FT_Library ft;
-//    if (FT_Init_FreeType(&ft)) {
-//        fprintf(stderr, "FATAL: Could not init FreeType");
-//        return 1;
-//    }
-//    //Init Arial FreeType Face
-//    FT_Face arial;
-//    if (FT_New_Face(ft, "Arial", 0, &arial))
-//    {
-//        fprintf(stderr, "FATAL: Could not init font \"Arial\"");
-//        return 1;
-//    }
+    GLint windowWidth, windowHeight;
+    glfwGetWindowSize(window_, &windowWidth, &windowHeight);
+    glViewport(0, 0, windowWidth, windowHeight);
+    glMatrixMode(GL_PROJECTION);
+
+    glLoadIdentity();
+
+   // gluPerspective( 65.0f, (GLfloat)width/(GLfloat)height, 1.0f, 100.0f );
+
+    glOrtho(0.0, width_, height_, 0, 0, 1.0);
+
+    glEnable(GL_SMOOTH);		// Enable (gouraud) shading
+
+    glDisable(GL_DEPTH_TEST); 	// Disable depth testing
+    glEnable(GL_COLOR_MATERIAL);
+
+    glEnable(GL_BLEND);		// Enable blending (used for alpha) and blending function to use
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glLineWidth(5.0f);		// Set a 'chunky' line width
+
+    glEnable(GL_LINE_SMOOTH);	// Enable anti-aliasing on lines
+
+    glPointSize(5.0f);		// Set a 'chunky' point size
+
+    glEnable(GL_POINT_SMOOTH);	// Enable anti-aliasing on points
+//    glDepthFunc(GL_LEQUAL);
+//    glDisable(GL_CULL_FACE);
+//    glCullFace(GL_BACK);
 }
 
 void GlfwWindow::closeWindow()
 {
+    glfwDestroyWindow(window_);
     glfwTerminate();
 }
 
 void GlfwWindow::showGameOver()
 {
+    glClearColor(0.9f, 0.2f, 0.1f, 0.0f);
+
+    glfwSwapBuffers(window_);
 //    SDL_Color color = {199, 50, 176, 0};
 //    showText("Game over", (width_ / 2) * 4 - 5, (height_ / 2) * 4, color);
 //    color = {59, 150, 116, 0};
@@ -117,60 +173,74 @@ GlfwWindow::~GlfwWindow()
 
 void GlfwWindow::gameStateToPixels(field const& gameState)
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+//    glClear(GL_COLOR_BUFFER_BIT);
+//
+//    glColor3f(0.25, 0.87, 0.81);
+//    glBegin(GL_TRIANGLES);
+//
+//    glVertex2f(0.0, 0.0);
+//    glVertex2f(10.0, 10.0);
+//    glVertex2f(10.0, 0.0);
+//
+//    glEnd();
+//
+//    glColor3f(0.13, 0.56, 0.13);
+//    glBegin(GL_QUADS);
+//
+//    glVertex2f(20.0, 20.5);
+//    glVertex2f(20.0, 40.0);
+//    glVertex2f(20.5, 40.0);
+//    glVertex2f(20.5, 20.5);
+//
+//    glEnd();
 
-
-    int width, height;
-
-    glfwGetFramebufferSize ( window_, &width, &height );
-
-    float   ratio = width / (float) height;
-
-    glViewport(0, 0, width, height);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glRotatef((float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f);
-    glBegin(GL_TRIANGLES);
-    glColor3f(1.f, 0.f, 0.f);
-    glVertex3f(-0.6f, -0.4f, 0.f);
-    glColor3f(0.f, 1.f, 0.f);
-    glVertex3f(0.6f, -0.4f, 0.f);
-    glColor3f(0.f, 0.f, 1.f);
-    glVertex3f(0.f, 0.6f, 0.f);
-    glEnd();
-
-    //    std::function<void()> setColor[nbGameFieldCellTypes] = {
-//        [this](){ return SDL_SetRenderDrawColor(renderer_, 79, 132, 196, 255); },
-//        [this](){ return SDL_SetRenderDrawColor(renderer_, 127, 255, 212, 255); },
-//        [this](){ return SDL_SetRenderDrawColor(renderer_, 64, 224, 208, 255); },
-//        [this](){ return SDL_SetRenderDrawColor(renderer_, 255, 105, 180, 255); },
-//        [this](){ return SDL_SetRenderDrawColor(renderer_, 248, 14, 50, 255); },
-//        [this](){ return SDL_SetRenderDrawColor(renderer_, 11, 111, 144, 244); }
-//    };
     for (size_t i = 0; i < height_; ++i)
     {
         for (size_t j = 0; j < width_; ++j)
         {
-//            SDL_Rect rectangle;
-//            rectangle.x = (j + 1) * zoomFactor_;
-//            rectangle.y = (i + 1) * zoomFactor_;
-//            rectangle.w = zoomFactor_;
-//            rectangle.h = zoomFactor_;
-//            setColor[gameState[i][j]]();
-            gameState[i][j];
-//            SDL_RenderFillRect(renderer_, &rectangle);
+
+
+            if (gameState[i][j] == 0)
+            {
+                glColor3f(0.93, 0.56, 0.13);
+            }
+            else
+            {
+                if (gameState[i][j] == 1)
+                    glColor3f(0.93, 0.56, 0.93);
+                else if (gameState[i][j] == 2)
+                    glColor3f(0.93, 0.96, 0.13);
+                else if (gameState[i][j] == 3)
+                    glColor3f(0.03, 0.56, 0.13);
+                else if (gameState[i][j] == 4)
+                    glColor3f(0.3, 0.1, 0.83);
+            }
+            makeRect(j * 10 + 10, i * 10 + 10, 10, 10);
         }
     }
-//    drawBorders();
-
+    drawBorders();
 }
 
 void GlfwWindow::drawBorders()
 {
+    glColor3f(0.13, 0.56, 0.13);
+    glBegin(GL_QUADS);
+
+    glVertex2f(0.0, 30.0);
+    glVertex2f(0.0, 0.0);
+    glVertex2f(40.0, 0.0);
+    glVertex2f(40.0, 30.0);
+
+    glEnd();
+
+    glBegin(GL_TRIANGLES);
+
+    glVertex3f(1.0f, 0.5f, 4.0f);    // lower left vertex
+    glVertex3f( 2.0f, 0.5f, 4.0f);    // lower right vertex
+    glVertex3f( 0.0f,  1.5f, 4.0f);    // upper vertex
+
+    glEnd();
+   // glRecti(20, 20, 20, 20);
 //    SDL_Rect top;
 //    SDL_Rect bottom;
 //    SDL_Rect right;
@@ -207,23 +277,23 @@ void GlfwWindow::drawBorders()
 //    showText(speed.c_str(), (width_ / 2.4) * zoomFactor_, 0, {199, 50, 176, 0});
 }
 
-//void		GlfwWindow::makeRect(int x, int y, int width, int height)
-//{
-//    glBegin(GL_QUADS);
-//    glVertex2f((GLfloat)x, (GLfloat)y);
-//    glVertex2f((GLfloat)x + width, (GLfloat)y);
-//    glVertex2f((GLfloat)x + width, (GLfloat)y + height);
-//    glVertex2f((GLfloat)x, (GLfloat)y + height);
-//    glEnd();
-//}
-
-
-void GlfwWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
+void		GlfwWindow::makeRect(int x, int y, int width, int height)
 {
-    x = x * SQUARE_SIZE * 2;
-    y = y * SQUARE_SIZE * 2;
-    glRecti(x, y, w, h);
+    glBegin(GL_QUADS);
+    glVertex2f((GLfloat)x, (GLfloat)y);
+    glVertex2f((GLfloat)x + width, (GLfloat)y);
+    glVertex2f((GLfloat)x + width, (GLfloat)y + height);
+    glVertex2f((GLfloat)x, (GLfloat)y + height);
+    glEnd();
 }
+
+
+//void GlfwWindow::makeRect(int x, int y, int width, int height)
+//{
+//    x = x * SQUARE_SIZE * 2;
+//    y = y * SQUARE_SIZE * 2;
+//    glRecti(x, y, width, height);
+//}
 
 void  GlfwWindow::showText(const char *text, size_t x, size_t y)
 {

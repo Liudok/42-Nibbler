@@ -4,6 +4,7 @@
 //#define GLFW_INCLUDE_GLCOREARB
 //#define GLFW_INCLUDE_GL3
 #include <GLFW/glfw3.h>
+# include <GLUT/glut.h>
 //#include <GL/glfw.h>
 
 extern "C"
@@ -25,7 +26,7 @@ class GlfwWindow : public IWindow
     private:
 
         void            gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
-        void            makeRect(size_t x, size_t y, size_t h, size_t w);
+    void            makeRect(int x, int y, int width, int height);
     void    showText(const char *text, size_t x, size_t y);
         void            drawBorders();
 
