@@ -1,6 +1,7 @@
 #pragma once
 
 #include <IWindow.hpp>
+#include <IMusicPlayer.hpp>
 #include <unordered_set>
 
 namespace SnakeUtils
@@ -9,7 +10,7 @@ namespace SnakeUtils
     {
         size_t x = 0;
         size_t y = 0;
-        gameFieldCellType cellType = empty;
+        GameFieldCellType cellType = empty;
         bool operator==(Point const& rhs) const;
     };
 
@@ -23,12 +24,12 @@ class Snake
 {
     public:
     
-        Snake(NibblerParameters);
-        Snake(Snake const & other);
-        Snake& operator=(Snake const& src);
+        Snake(NibblerParameters, std::shared_ptr<IMusicPlayer>);
+        Snake(Snake const&) = delete;
+        Snake& operator=(Snake const&) = delete;
         ~Snake();
 
-        using direction = responseType;
+        using direction = ResponseType;
 
         void fillMap(gameField&) const;
         void move(const direction = noResponse);
@@ -44,7 +45,7 @@ class Snake
         bool headHitBody() const;
         void processCollisionwithFieldObjects();
 
-        SnakeUtils::Point generatePoint(gameFieldCellType) const;
+        SnakeUtils::Point generatePoint(GameFieldCellType) const;
 
         NibblerParameters params_{40,50,classic};
 
@@ -65,4 +66,7 @@ class Snake
         size_t score_ = 0;
         std::unordered_set<SnakeUtils::Point,
             SnakeUtils::PointHashBySum> fieldObjects_;
+
+        std::shared_ptr<IMusicPlayer> musicPlayer_;
+
 };

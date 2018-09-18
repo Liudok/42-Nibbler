@@ -13,12 +13,16 @@ class SDLWindow : public IWindow
 {
 	public:
 
-        responseType    getResponse() override;
+        SDLWindow() = default;
+        SDLWindow(SDLWindow const&) = delete;
+        SDLWindow& operator=(SDLWindow const&) = delete;
+        ~SDLWindow() = default;
+
+        ResponseType    getResponse() override;
         void            draw(gameField const&, size_t score, size_t speed) override;
         void            openWindow(size_t width, size_t height) override;
         void            closeWindow() override;
         void            showGameOver() override;
-        ~SDLWindow();
 
     private:
 
@@ -34,4 +38,5 @@ class SDLWindow : public IWindow
         SDL_Renderer    *renderer_ = nullptr;
         size_t          score_ = 0;
         size_t          speed_ = 0;
+
 };

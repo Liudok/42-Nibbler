@@ -12,7 +12,7 @@ extern "C"
     }
 }
 
-responseType SFMLWindow::getResponse()
+ResponseType SFMLWindow::getResponse()
 {
     sf::Event event;
     window_->pollEvent(event);
@@ -87,11 +87,6 @@ void SFMLWindow::showGameOver()
     text.setPosition((width_ / 2) * zoomFactor_ - 100, (height_ / 2) * zoomFactor_ + 40);
     window_->draw(text);
     window_->display();
-}
-
-SFMLWindow::~SFMLWindow()
-{
-    
 }
 
 void SFMLWindow::gameStateToPixels(gameField const& gameState)

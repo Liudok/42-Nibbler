@@ -60,6 +60,13 @@ file(GLOB SfmlLibSources
 
 add_library(SfmlLib SHARED ${SfmlLibSources})
 
+file(GLOB SoundLibSources
+        ${CMAKE_CURRENT_SOURCE_DIR}/SoundLib/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/SoundLib/*.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/IMusicPlayer/*.hpp)
+
+add_library(SoundLib SHARED ${SoundLibSources})
+
 add_executable(Nibbler main.cpp)
 
 # Simpler includes
@@ -68,11 +75,13 @@ target_include_directories(LogicLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
 target_include_directories(NcursesLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
 target_include_directories(SdlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
 target_include_directories(SfmlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
+target_include_directories(SoundLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IMusicPlayer)
 
 # Links between project parts
 
-target_link_libraries(LogicLib NcursesLib SdlLib SfmlLib)
+target_link_libraries(LogicLib NcursesLib SdlLib SfmlLib SoundLib)
 target_link_libraries(NcursesLib ncurses)
 target_link_libraries(SdlLib ${SdlDynamicLibs})
 target_link_libraries(SfmlLib ${SfmlDynamicLibs})
+target_link_libraries(SoundLib ${SfmlDynamicLibs})
 target_link_libraries(Nibbler LogicLib)

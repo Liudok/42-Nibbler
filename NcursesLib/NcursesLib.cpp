@@ -8,7 +8,7 @@ extern "C"
     }
 }
 
-responseType NcuresesWindow::getResponse()
+ResponseType NcuresesWindow::getResponse()
 {
     const auto response = wgetch(window_);
     switch(response){

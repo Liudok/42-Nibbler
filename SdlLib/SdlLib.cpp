@@ -11,7 +11,7 @@ extern "C"
     }
 }
 
-responseType SDLWindow::getResponse()
+ResponseType SDLWindow::getResponse()
 {
     SDL_Event event;
     SDL_PollEvent(&event);
@@ -85,11 +85,6 @@ void SDLWindow::showGameOver()
     const char *text = score.c_str();
     showText(text, (width_ / 2) * 4, (height_ / 2) * 4 + 20, color);
     SDL_RenderPresent(renderer_);
-}
-
-SDLWindow::~SDLWindow()
-{
-    
 }
 
 void SDLWindow::gameStateToPixels(gameField const& gameState)

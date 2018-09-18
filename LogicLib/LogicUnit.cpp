@@ -5,38 +5,20 @@
 #include <unistd.h>
 
 LogicUnit::LogicUnit(NibblerParameters params)
-    : libraries_(initLibraries())
-    , windows_(initWindows())
-    , params_(params)
+    : params_(params)
     , gameField_(params_.height, std::vector<size_t>(params_.width, 0))
-    , snake_(params)
+    , snake_(params, musicPlayer_)
 {
     snake_.fillMap(gameField_);
-}
-
-LogicUnit::LogicUnit(LogicUnit const& rhs)
- : libraries_(initLibraries())
- , windows_(initWindows())
- , gameField_(rhs.gameField_)
- , snake_(params_)
-{
-
-}
-
-LogicUnit& LogicUnit::operator=(LogicUnit const& rhs)
-{
-  if (this != &rhs)
-  {
-    snake_ = rhs.snake_;
-    gameField_ = rhs.gameField_;
-  }
-  return *this;
+    musicPlayer_->playMainTheme();
 }
 
 LogicUnit::~LogicUnit()
 {
     for (auto& library : libraries_)
         dlclose(library);
+    dlclose(musicLibrary_);
+    musicPlayer_->playMainTheme();
 }
 
 bool LogicUnit::loopTheGame()
@@ -56,7 +38,7 @@ bool LogicUnit::loopTheGame()
         [this]{ reactToPauseContinue(); },
         [this]{ reactToEndGame(); },
     };
-    while (!endOfGame_){
+    while (true){
         const auto t0 = std::chrono::steady_clock::now();
         const auto response = windows_[currentLibraryIndex_]->getResponse();
         if (paused_ && response != pauseContinue) continue;
@@ -65,40 +47,34 @@ bool LogicUnit::loopTheGame()
         const auto timePassed =
             std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count();
         usleep(countUsleep(timePassed));
+        if (endOfGame_) break;
     }
-    windows_[currentLibraryIndex_]->showGameOver();
-    usleep(1'000'000);
-    windows_[currentLibraryIndex_]->closeWindow();
     const auto repeat = snake_.collapsed();
     return repeat;
 }
 
 auto LogicUnit::initLibraries()
-    -> std::array<ptrToLibraryType, nbLibraries>
+    -> std::array<PtrToLibraryType, nbLibraries>
 {
-    std::array<ptrToLibraryType, nbLibraries> libraries;
+    std::array<PtrToLibraryType, nbLibraries> libraries;
     const char* libraryNames[nbLibraries] =
         { "libNcursesLib.dylib", "libSdlLib.dylib", "libSfmlLib.dylib"};
-    for (size_t currentLib = 0; currentLib < nbLibraries; ++currentLib){
-        libraries[currentLib] =
-            dlopen(libraryNames[currentLib], RTLD_LAZY | RTLD_LOCAL);
-        if (!libraries[currentLib])
-            throw std::runtime_error("The dl is not found");
-    }
+    for (size_t currentLib = 0; currentLib < nbLibraries; ++currentLib)
+        libraries[currentLib] = openLibrary(libraryNames[currentLib]);
     return libraries;
 }
 
 auto LogicUnit::initWindows()
-    -> std::vector<windowPtr>
+    -> std::vector<WindowPtr>
 {
-    std::vector<windowPtr> result;
+    std::vector<WindowPtr> result;
     const auto factoryFunctionName = "create";
     using factoryFunctionType = IWindow* (*)();
     for (size_t i = 0; i < nbLibraries; ++i){
         auto factoryFunctionPtr =
             reinterpret_cast<factoryFunctionType>(dlsym(libraries_[i],
                 factoryFunctionName));
-        result.push_back(windowPtr{factoryFunctionPtr()});
+        result.push_back(WindowPtr{factoryFunctionPtr()});
     }
     return result;
 }
@@ -112,7 +88,7 @@ void LogicUnit::reactToNoResponse()
     endOfGame_ = snake_.collapsed();
 }
 
-void LogicUnit::reactToNewDirection(responseType newDirection)
+void LogicUnit::reactToNewDirection(ResponseType newDirection)
 {
     snake_.move(newDirection);
     snake_.fillMap(gameField_);
@@ -121,7 +97,7 @@ void LogicUnit::reactToNewDirection(responseType newDirection)
     endOfGame_ = snake_.collapsed();
 }
 
-void LogicUnit::reactToNewLibrary(libraryType newLibrary)
+void LogicUnit::reactToNewLibrary(LibraryType newLibrary)
 {
     windows_[currentLibraryIndex_]->closeWindow();
     currentLibraryIndex_ = newLibrary;
@@ -132,6 +108,9 @@ void LogicUnit::reactToNewLibrary(libraryType newLibrary)
 
 void LogicUnit::reactToEndGame()
 {
+    windows_[currentLibraryIndex_]->showGameOver();
+    musicPlayer_->playSound(gameOver);
+    usleep(1'000'000);
     windows_[currentLibraryIndex_]->closeWindow();
     endOfGame_ = true;
 }
@@ -139,6 +118,10 @@ void LogicUnit::reactToEndGame()
 void LogicUnit::reactToPauseContinue()
 {
     paused_ = !paused_;
+    if (paused_)
+        musicPlayer_->pauseMainTheme();
+    else
+        musicPlayer_->playMainTheme();
 }
 
 size_t LogicUnit::countUsleep(int timePassed)
@@ -148,4 +131,25 @@ size_t LogicUnit::countUsleep(int timePassed)
         ((params_.mode == insane) ? 3 : 1);
     const auto delta = loopNormalDuration - timePassed;
     return (delta < 0) ? 0 : delta / snake_.getSpeed();
+}
+
+auto LogicUnit::openLibrary(const char* libraryName)
+    -> PtrToLibraryType
+{
+    const auto result =
+            dlopen(libraryName, RTLD_LAZY | RTLD_LOCAL);
+        if (!result)
+            throw std::runtime_error("The dl is not found");
+    return result;
+}
+
+auto LogicUnit::makeMusicPlayer()
+    -> MusicPlayerPtr
+{
+    const auto factoryFunctionName = "create";
+    using factoryFunctionType = IMusicPlayer* (*)();
+    auto factoryFunctionPtr =
+            reinterpret_cast<factoryFunctionType>(dlsym(musicLibrary_,
+                factoryFunctionName));
+    return MusicPlayerPtr{factoryFunctionPtr()};
 }

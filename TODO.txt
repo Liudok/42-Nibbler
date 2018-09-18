@@ -8,13 +8,13 @@ Nestor:
 - default field size ===DONE===
 - usage: map size, obstacles mode, insane mode, Bob Marley mode, granny mode ===DONE===
 
+- sounds ===IN PROGRESS===
+
 - repair pause
 - Any class that declares at least one attribute must be written in canonical form.
 - Makefile
 - unordered_set
 - runtime error when trying to use mixer
-
-- sounds
 
 Liuda:
 +- Nice exit for sdl
@@ -35,3 +35,4 @@ New:
 - SDL does not respond after clicked outside
 - Leaks in executable
 - replace width-height with NibblerParameters
+- EndGame vs snake_.collapsed() eog

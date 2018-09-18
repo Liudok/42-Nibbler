@@ -12,7 +12,8 @@ size_t SnakeUtils::PointHashBySum::operator()
     return std::hash<size_t>()(point.x * point.y);
 }
 
-Snake::Snake(NibblerParameters params) : params_(params)
+Snake::Snake(NibblerParameters params, std::shared_ptr<IMusicPlayer> mp) 
+    : params_(params), musicPlayer_(mp)
 {
     srand(time(NULL));
     fieldObjects_.insert({0,0,food});
@@ -20,23 +21,6 @@ Snake::Snake(NibblerParameters params) : params_(params)
     fieldObjects_.insert({8,8,superFood});
     fieldObjects_.insert({6,6,obstacle});
     fieldObjects_.insert({7,7,obstacle});
-}
-
-Snake::Snake(Snake const& other) : params_(other.params_)
-{
-
-}
-
-Snake& Snake::operator=(Snake const& rhs)
-{
-  if (this != &rhs)
-  {
-    params_ = rhs.params_;
-    body_ = rhs.body_;
-    speed_ = rhs.speed_;
-    score_ = rhs.score_;
-  }
-  return *this;
 }
 
 Snake::~Snake()
@@ -144,6 +128,7 @@ void Snake::processCollisionwithFieldObjects()
     for (auto const& fieldObject : fieldObjects_){
         if (headPos_ == fieldObject){
             if (fieldObject.cellType == food){
+                musicPlayer_->playSound(foodEaten);
                 speed_ += speedIncrement_;
                 score_ += scoreIncrement_;
                 const auto newBodyPart = body_[body_.size() - 1];
@@ -155,6 +140,7 @@ void Snake::processCollisionwithFieldObjects()
                 return;
             }
             else if (fieldObject.cellType == superFood){
+                musicPlayer_->playSound(superFoodEaten);
                 score_ += scoreIncrement_ * superFoodFactor_;
                 for (size_t i = 0; i < superFoodFactor_; ++i){
                     const auto newBodyPart = body_[body_.size() - 1];
@@ -174,7 +160,7 @@ void Snake::processCollisionwithFieldObjects()
     }
 }
 
-SnakeUtils::Point Snake::generatePoint(gameFieldCellType t) const
+SnakeUtils::Point Snake::generatePoint(GameFieldCellType t) const
 {
     return {rand() % params_.width, rand() % params_.height, t};
 }
