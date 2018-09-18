@@ -156,7 +156,7 @@ void SFMLWindow::drawBorders()
 auto SFMLWindow::initColorFunctionsArray() const
     -> ColorFunctionsArray
 {
-    return {{
+    return{{
         [](sf::CircleShape&){},
         [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(127, 255, 212)); },
         [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(64, 224, 208)); },

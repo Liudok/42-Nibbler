@@ -53,4 +53,5 @@ class SFMLWindow : public IWindow
         ColorFunctionsArray setColor_ = initColorFunctionsArray();
 
         ColorFunctionsArray initColorFunctionsArray() const;
+
 };

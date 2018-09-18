@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <functional>
+#include <array>
 
 extern "C"
 {
@@ -53,14 +54,10 @@ class SDLWindow : public IWindow
             SDL_SetRenderDrawColor(renderer_, rc(), rc(), rc(), colorSpectrum) :
                 SDL_SetRenderDrawColor(renderer_, r, g, b, colorSpectrum); }
 
-        std::function<void()> setColor_[nbGameFieldCellTypes] = {
-            [this](){ SDL_SetRenderDrawColor(renderer_, 79, 132, 196,colorSpectrum); },
-            [this](){ setColor(127, 255, 212); },
-            [this](){ setColor(64, 224, 208); },
-            [this](){ setColor(255, 105, 180); },
-            [this](){ SDL_SetRenderDrawColor(renderer_, rc(), rc(), rc(), colorSpectrum); },
-            [this](){ SDL_SetRenderDrawColor(renderer_, 255, 0, 0, colorSpectrum); },
-            [this](){ setColor(11, 111, 144); }
-        };
+        using ColorFunctionsArray =
+            std::array<std::function<void()>, nbGameFieldCellTypes>;
+        ColorFunctionsArray setColor_ = initColorFunctionsArray();
+
+        ColorFunctionsArray initColorFunctionsArray();
 
 };

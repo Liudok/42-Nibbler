@@ -181,3 +181,17 @@ size_t SDLWindow::zoomFont(size_t fontSize)
 {
     return std::pow(fontSize * width_ * height_ * zoomFactor_, 1.0 / 3.5);
 }
+
+auto SDLWindow::initColorFunctionsArray()
+    -> ColorFunctionsArray
+{
+    return{{
+        [this](){ SDL_SetRenderDrawColor(renderer_, 79, 132, 196,colorSpectrum); },
+        [this](){ setColor(127, 255, 212); },
+        [this](){ setColor(64, 224, 208); },
+        [this](){ setColor(255, 105, 180); },
+        [this](){ SDL_SetRenderDrawColor(renderer_, rc(), rc(), rc(), colorSpectrum); },
+        [this](){ SDL_SetRenderDrawColor(renderer_, 255, 0, 0, colorSpectrum); },
+        [this](){ setColor(11, 111, 144); }
+    }};
+}
