@@ -14,10 +14,7 @@ all: $(NAME)
 
 $(NAME):
 	@cd Build 2> /dev/null && make && cd .. || true
-	@sh .talk.sh "Basic usage: ./Build/Nibbler" $(GREEN)
-	@sh .talk.sh "Possibly: ./Build/Nibbler [width] [heigth] [mode] [lib]" $(GREEN)
-	@sh .talk.sh "Where modes may be 'classic' 'granny' 'insane' or 'rasta'" $(GREEN)
-	@sh .talk.sh "Where default lib may be 'ncurses' 'sdl' ' or 'sfml'" $(GREEN)
+	@sh .usage.sh
 
 clean:
 	@sh .clean.sh

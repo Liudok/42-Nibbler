@@ -37,8 +37,9 @@ ResponseType SDLWindow::getResponse()
     return noResponse;
 }
 
-void SDLWindow::draw(GameField const& gameState, size_t score, size_t speed)
+void SDLWindow::draw(GameField const& gameState, size_t score, size_t speed, GameMode mode)
 {
+    mode_ = mode;
     score_ = score;
     speed_ = speed;
     gameStateToPixels(gameState);

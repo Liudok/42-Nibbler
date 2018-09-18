@@ -3,9 +3,9 @@
 #include <vector>
 
 enum ResponseType { noResponse, left, right, up, down,
-        toNcurses, toSDL, toSFML, pauseContinue, PlayerPressedEscape };
+        toNcurses, toSDL, toSFML, pauseContinue, changeGameMode, PlayerPressedEscape };
 
-constexpr size_t nbResponses = 10;
+constexpr size_t nbResponses = 11;
 
 enum GameFieldCellType { empty, body, head, food, superFood, obstacle, collision };
 
@@ -34,7 +34,7 @@ class IWindow
     public:
 
         virtual ResponseType getResponse() = 0;
-        virtual void draw(GameField const&, size_t score, size_t speed) = 0;
+        virtual void draw(GameField const&, size_t score, size_t speed, GameMode) = 0;
         virtual void openWindow(size_t width, size_t height) = 0;
         virtual void closeWindow() = 0;
         virtual void showGameOver() = 0;

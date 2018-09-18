@@ -20,7 +20,7 @@ class SDLWindow : public IWindow
         ~SDLWindow() = default;
 
         ResponseType    getResponse() override;
-        void            draw(GameField const&, size_t score, size_t speed) override;
+        void            draw(GameField const&, size_t score, size_t speed, GameMode) override;
         void            openWindow(size_t width, size_t height) override;
         void            closeWindow() override;
         void            showGameOver() override;
@@ -41,16 +41,26 @@ class SDLWindow : public IWindow
         SDL_Renderer    *renderer_ = nullptr;
         size_t          score_ = 0;
         size_t          speed_ = 0;
+        GameMode        mode_ = classic;
+
+        static constexpr size_t colorSpectrum = 255;
+
+        inline static size_t rc()
+        { return rand() % colorSpectrum; }
+
+        inline void setColor(size_t r, size_t g, size_t b)
+        { (mode_ == rasta) ?
+            SDL_SetRenderDrawColor(renderer_, rc(), rc(), rc(), colorSpectrum) :
+                SDL_SetRenderDrawColor(renderer_, r, g, b, colorSpectrum); }
 
         std::function<void()> setColor_[nbGameFieldCellTypes] = {
-            [this](){ return SDL_SetRenderDrawColor(renderer_, 79, 132, 196, 255); },
-            [this](){ return SDL_SetRenderDrawColor(renderer_, 127, 255, 212, 255); },
-            [this](){ return SDL_SetRenderDrawColor(renderer_, 64, 224, 208, 255); },
-            [this](){ return SDL_SetRenderDrawColor(renderer_, 255, 105, 180, 255); },
-            [this](){ return SDL_SetRenderDrawColor(
-                renderer_, rand() % 255, rand() % 255, rand() % 255, 255); },
-            [this](){ return SDL_SetRenderDrawColor(renderer_, 248, 14, 50, 255); },
-            [this](){ return SDL_SetRenderDrawColor(renderer_, 11, 111, 144, 255); }
+            [this](){ setColor(79, 132, 196); },
+            [this](){ setColor(127, 255, 212); },
+            [this](){ setColor(64, 224, 208); },
+            [this](){ setColor(255, 105, 180); },
+            [this](){ setColor(rc(), rc(), rc()); },
+            [this](){ setColor(248, 14, 50); },
+            [this](){ setColor(11, 111, 144); }
         };
 
 };

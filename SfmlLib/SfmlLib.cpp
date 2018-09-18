@@ -22,6 +22,8 @@ ResponseType SFMLWindow::getResponse()
         {
         case sf::Keyboard::Num3:
             return toNcurses;
+            case sf::Keyboard::Num4:
+            return changeGameMode;
         case sf::Keyboard::Escape:
             return PlayerPressedEscape;
         case sf::Keyboard::Num1:
@@ -44,8 +46,9 @@ ResponseType SFMLWindow::getResponse()
     }
 }
 
-void SFMLWindow::draw(GameField const& gameState, size_t score, size_t speed)
+void SFMLWindow::draw(GameField const& gameState, size_t score, size_t speed, GameMode mode)
 {
+    mode_ = mode;
     score_ = score;
     speed_ = speed;
     window_->clear();

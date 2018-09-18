@@ -18,7 +18,7 @@ class NcuresesWindow : public IWindow
         ~NcuresesWindow() = default;
 
         ResponseType getResponse() override;
-        void draw(GameField const&, size_t score, size_t speed) override;
+        void draw(GameField const&, size_t score, size_t speed, GameMode) override;
         void openWindow(size_t width, size_t height) override;
         void closeWindow() override;
         void showGameOver() override;

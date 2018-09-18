@@ -47,6 +47,7 @@ class LogicUnit
     void reactToNewLibrary(LibraryType);
     void reactToPlayerPressedEscape();
     void reactToPauseContinue();
+    void reactToChangeGameMode();
 
     size_t countUsleep(int timePassed) const;
 

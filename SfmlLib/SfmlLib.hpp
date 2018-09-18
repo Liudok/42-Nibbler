@@ -20,7 +20,7 @@ class SFMLWindow : public IWindow
         ~SFMLWindow() = default;
 
         ResponseType     getResponse() override;
-        void             draw(GameField const&, size_t score, size_t speed) override;
+        void             draw(GameField const&, size_t score, size_t speed, GameMode) override;
         void             openWindow(size_t width, size_t height) override;
         void             closeWindow() override;
         void             showGameOver() override;
@@ -36,17 +36,25 @@ class SFMLWindow : public IWindow
         size_t            height_ = 0;
         size_t            score_ = 0;
         size_t            speed_ = 0;
+        GameMode          mode_ = classic;
         std::unique_ptr<sf::RenderWindow> window_;
 
+        static constexpr size_t colorSpectrum = 255;
+
+        inline static size_t rc()
+        { return rand() % colorSpectrum; }
+
+        inline sf::Color defineColor(size_t r, size_t g, size_t b) const
+        { return (mode_ == rasta) ? sf::Color(rc(), rc(), rc()) : sf::Color(r, g, b); }
+
         std::function<void(sf::CircleShape&)> setColor_[nbGameFieldCellTypes] = {
-            [](sf::CircleShape&){},
-            [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(127, 255, 212)); },
-            [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(64, 224, 208)); },
-            [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(255, 105, 180)); },
-            [](sf::CircleShape& circle){ circle.setFillColor(
-                sf::Color(rand() % 255, rand() % 255, rand() % 255)); },
-            [](sf::CircleShape& circle){ circle.setFillColor(sf::Color::Red); },
-            [](sf::CircleShape& circle){ circle.setFillColor(sf::Color::Green); }
+            [this](sf::CircleShape&){},
+            [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(127, 255, 212)); },
+            [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(64, 224, 208)); },
+            [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(255, 105, 180)); },
+            [this](sf::CircleShape& circle){ circle.setFillColor(sf::Color(rc(), rc(), rc())); },
+            [this](sf::CircleShape& circle){ circle.setFillColor(sf::Color(255, 0, 0)); },
+            [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(0, 255, 0)); }
         };
 
 };

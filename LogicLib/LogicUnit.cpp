@@ -23,7 +23,7 @@ bool LogicUnit::loopTheGame()
 {
     windows_[currentLibraryIndex_]->openWindow(params_.width, params_.height);
     windows_[currentLibraryIndex_]->draw(gameField_,
-        snake_.getScore(), snake_.getSpeed());
+        snake_.getScore(), snake_.getSpeed(), params_.mode);
     std::function<void()> reactFunctions[nbResponses] = {
         [this]{ reactToNoResponse(); },
         [this]{ reactToNewDirection(left); },
@@ -34,6 +34,7 @@ bool LogicUnit::loopTheGame()
         [this]{ reactToNewLibrary(sdl); },
         [this]{ reactToNewLibrary(sfml); },
         [this]{ reactToPauseContinue(); },
+        [this]{ reactToChangeGameMode(); },
         [this]{ reactToPlayerPressedEscape(); },
     };
     while (true){
@@ -85,7 +86,7 @@ void LogicUnit::reactToNoResponse()
     snake_.move();
     snake_.fillMap(gameField_);
     windows_[currentLibraryIndex_]->draw(gameField_,
-        snake_.getScore(), snake_.getSpeed());
+        snake_.getScore(), snake_.getSpeed(), params_.mode);
 }
 
 void LogicUnit::reactToNewDirection(ResponseType newDirection)
@@ -93,7 +94,7 @@ void LogicUnit::reactToNewDirection(ResponseType newDirection)
     snake_.move(newDirection);
     snake_.fillMap(gameField_);
     windows_[currentLibraryIndex_]->draw(gameField_,
-        snake_.getScore(), snake_.getSpeed());
+        snake_.getScore(), snake_.getSpeed(), params_.mode);
 }
 
 void LogicUnit::reactToNewLibrary(LibraryType newLibrary)
@@ -102,7 +103,7 @@ void LogicUnit::reactToNewLibrary(LibraryType newLibrary)
     currentLibraryIndex_ = newLibrary;
     windows_[currentLibraryIndex_]->openWindow(params_.width, params_.height);
     windows_[currentLibraryIndex_]->draw(gameField_,
-        snake_.getScore(), snake_.getSpeed());
+        snake_.getScore(), snake_.getSpeed(), params_.mode);
 }
 
 void LogicUnit::reactToPlayerPressedEscape()
@@ -118,6 +119,12 @@ void LogicUnit::reactToPauseContinue()
         musicPlayer_->pauseMainTheme();
     else
         musicPlayer_->playMainTheme();
+}
+
+void LogicUnit::reactToChangeGameMode()
+{
+    params_.mode = static_cast<GameMode>(
+        (params_.mode + 1) % nbGameModes);
 }
 
 size_t LogicUnit::countUsleep(int timePassed) const
