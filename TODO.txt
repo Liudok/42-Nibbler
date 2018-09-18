@@ -15,6 +15,7 @@ Nestor:
 - PlayerPressedEscape vs snake_.collapsed() eog ===DONE===
 - Leaks ===DONE===
 - Makefile ===DONE===
+- SDL does not respond after clicked outside ===DONE===
 
 Liuda:
 +- Nice exit for sdl
@@ -30,5 +31,3 @@ Investigate:
 New:
 - Nice position for text in sdl
 - Nice position for text in sfml
-- Font path issues
-- SDL does not respond after clicked outside

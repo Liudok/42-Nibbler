@@ -56,8 +56,7 @@ void SDLWindow::openWindow(size_t width, size_t height)
         SDL_WINDOWPOS_CENTERED,
         width_ * zoomFactor_ + 2 * zoomFactor_,
         height_ * zoomFactor_ + 2 * zoomFactor_,
-        SDL_WINDOW_OPENGL |SDL_WINDOW_INPUT_GRABBED |
-        SDL_WINDOW_SHOWN);
+        SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
     renderer_ = SDL_CreateRenderer(
         window_,
