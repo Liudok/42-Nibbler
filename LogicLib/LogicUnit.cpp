@@ -49,7 +49,7 @@ auto LogicUnit::initLibraries()
 {
     LibrariesArray libraries;
     const char* libraryNames[nbLibraries] =
-        { "libNcursesLib.dylib", "libSdlLib.dylib", "libSfmlLib.dylib"};
+        { "libGlfwLib.dylib", "libSdlLib.dylib", "libSfmlLib.dylib"};
     for (size_t currentLib = 0; currentLib < nbLibraries; ++currentLib)
         libraries[currentLib] = openLibrary(libraryNames[currentLib]);
     return libraries;
@@ -166,7 +166,7 @@ auto LogicUnit::initReactFunctionsArray()
         [this]{ reactToNewDirection(right); },
         [this]{ reactToNewDirection(up); },
         [this]{ reactToNewDirection(down); },
-        [this]{ reactToNewLibrary(ncurses); },
+        [this]{ reactToNewLibrary(glfw); },
         [this]{ reactToNewLibrary(sdl); },
         [this]{ reactToNewLibrary(sfml); },
         [this]{ reactToPauseContinue(); },

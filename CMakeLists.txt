@@ -28,9 +28,24 @@ set(SfmlPath ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties/SFML)
 include_directories(${SfmlPath}/include)
 file(GLOB SfmlDynamicLibs ${SfmlPath}/lib/*.dylib)
 
+# Glfw configuration
+
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+set(GlfwPath ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties/GLFW)
+add_subdirectory(${GlfwPath})
+
 # Project sources and libraries
 
+# Nibbler
+
 project(Nibbler)
+
+add_executable(Nibbler main.cpp)
+
+# Logic
 
 file(GLOB LogicSources
         ${CMAKE_CURRENT_SOURCE_DIR}/LogicLib/*.cpp
@@ -39,12 +54,16 @@ file(GLOB LogicSources
 
 add_library(LogicLib STATIC ${LogicSources})
 
-file(GLOB NcursesLibSources
-        ${CMAKE_CURRENT_SOURCE_DIR}/NcursesLib/*.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/NcursesLib/*.hpp
+# GlfwLib
+
+file(GLOB GlfwLibSources
+        ${CMAKE_CURRENT_SOURCE_DIR}/GlfwLib/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/GlfwLib/*.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
 
-add_library(NcursesLib SHARED ${NcursesLibSources})
+add_library(GlfwLib SHARED ${GlfwLibSources})
+
+# SdlLib
 
 file(GLOB SdlLibSources
         ${CMAKE_CURRENT_SOURCE_DIR}/SdlLib/*.cpp
@@ -53,12 +72,16 @@ file(GLOB SdlLibSources
 
 add_library(SdlLib SHARED ${SdlLibSources})
 
+# SfmlLib
+
 file(GLOB SfmlLibSources
         ${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/*.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/*.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
 
 add_library(SfmlLib SHARED ${SfmlLibSources})
+
+# SoundLib
 
 file(GLOB SoundLibSources
         ${CMAKE_CURRENT_SOURCE_DIR}/SoundLib/*.cpp
@@ -67,20 +90,18 @@ file(GLOB SoundLibSources
 
 add_library(SoundLib SHARED ${SoundLibSources})
 
-add_executable(Nibbler main.cpp)
-
 # Simpler includes
 
 target_include_directories(LogicLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(NcursesLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(GlfwLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(SdlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(SfmlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(SoundLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Links between project parts
 
-target_link_libraries(LogicLib NcursesLib SdlLib SfmlLib SoundLib)
-target_link_libraries(NcursesLib ncurses)
+target_link_libraries(LogicLib GlfwLib SdlLib SfmlLib SoundLib)
+target_link_libraries(GlfwLib glfw "-framework OpenGL -framework GLUT")
 target_link_libraries(SdlLib ${SdlDynamicLibs})
 target_link_libraries(SfmlLib ${SfmlDynamicLibs})
 target_link_libraries(SoundLib ${SfmlDynamicLibs})

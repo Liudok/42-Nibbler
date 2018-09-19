@@ -32,7 +32,7 @@ ResponseType SDLWindow::getResponse()
         else if (event.key.keysym.sym == SDLK_4)
             return changeGameMode;
         else if (event.key.keysym.sym == SDLK_3)
-            return toNcurses;
+            return toGlfw;
         else if (event.key.keysym.sym == SDLK_2)
             return toSFML;
     }

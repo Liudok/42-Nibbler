@@ -54,7 +54,7 @@ GameMode ArgcArgvManager::defineGameMode(CmndInput strings)
 LibraryType ArgcArgvManager::defineLibraryType(CmndInput strings)
 {
     std::string libraryTypes[nbLibraries] =
-        { "ncurses", "sdl", "sfml" };
+        { "glfw", "sdl", "sfml" };
     for (const auto& str : strings)
         for (size_t i = 0; i < nbLibraries; ++i)
             if (libraryTypes[i] == str)

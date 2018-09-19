@@ -21,8 +21,8 @@ ResponseType SFMLWindow::getResponse()
         switch (event.key.code)
         {
         case sf::Keyboard::Num3:
-            return toNcurses;
-            case sf::Keyboard::Num4:
+            return toGlfw;
+        case sf::Keyboard::Num4:
             return changeGameMode;
         case sf::Keyboard::Escape:
             return playerPressedEscape;

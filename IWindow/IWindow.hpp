@@ -4,7 +4,7 @@
 #include <cstddef>
 
 enum ResponseType { noResponse, left, right, up, down,
-        toNcurses, toSDL, toSFML, pauseContinue, changeGameMode, playerPressedEscape };
+        toGlfw, toSDL, toSFML, pauseContinue, changeGameMode, playerPressedEscape };
 
 constexpr size_t nbResponses = 11;
 
@@ -12,7 +12,7 @@ enum GameFieldCellType { empty, body, head, food, superFood, obstacle, collision
 
 constexpr size_t nbGameFieldCellTypes = 7;
 
-enum LibraryType { ncurses, sdl, sfml };
+enum LibraryType { glfw, sdl, sfml };
 
 constexpr size_t nbLibraries = 3;
 
