@@ -45,11 +45,13 @@ void SDLWindow::draw(GameField const& gameState, size_t score, size_t speed, Gam
     score_ = score;
     speed_ = speed;
     gameStateToPixels(gameState);
-    SDL_RenderClear(renderer_);
+    SDL_RenderPresent(renderer_);
 }
 
 void SDLWindow::openWindow(size_t width, size_t height)
 {
+    SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
     width_ = width;
     height_ = height;
 
@@ -58,21 +60,17 @@ void SDLWindow::openWindow(size_t width, size_t height)
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         width_ * zoomFactor_ + 2 * zoomFactor_,
-        height_ * zoomFactor_ + 2 * zoomFactor_,
-        SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+        height_ * zoomFactor_ + 2 * zoomFactor_, 0);
 
-    renderer_ = SDL_CreateRenderer(
-        window_,
-        -1,
-        SDL_RENDERER_ACCELERATED);
-    TTF_Init();
+    renderer_ = SDL_CreateRenderer(window_, -1, 0);
 }
 
 void SDLWindow::closeWindow()
 {
-    TTF_Quit();
-    SDL_DestroyWindow(window_);
     SDL_DestroyRenderer(renderer_);
+    SDL_DestroyWindow(window_);
+    TTF_Quit();
+    SDL_Quit();
 }
 
 void SDLWindow::showGameOver()
@@ -110,7 +108,6 @@ void SDLWindow::gameStateToPixels(GameField const& gameState)
         }
     }
    drawBorders();
-   SDL_RenderPresent(renderer_);
 }
 
 void SDLWindow::drawBorders()
@@ -168,12 +165,16 @@ void  SDLWindow::showText(const char *text, size_t x, size_t y, SDL_Color color,
     auto font = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", fontSize);
     if (!font) throw std::runtime_error("No font found.");
     TTF_SetFontStyle(font, TTF_STYLE_BOLD);
-    auto surface = TTF_RenderUTF8_Blended(font, text, color);
+    auto surface = TTF_RenderText_Solid(font, text, color);
+
     auto rect = makeRect(x, y, surface->h / 2, surface->w / 2);
     auto texture = SDL_CreateTextureFromSurface(renderer_, surface);
     SDL_RenderCopy(renderer_, texture, NULL, &rect);
+
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(surface);
+    
+
     TTF_CloseFont(font);
 }
 

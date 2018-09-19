@@ -13,7 +13,6 @@ MusicPlayer::MusicPlayer()
 
 void MusicPlayer::playMainTheme()
 {
-
     mainTheme.play();
 }
 
@@ -34,16 +33,16 @@ void MusicPlayer::playSound(SoundType i)
 
 void MusicPlayer::initMainTheme()
 {
-    if (!mainTheme.openFromFile("NibblerThirdParties/MainTheme.wav"))
+    if (!mainTheme.openFromFile("NibblerThirdParties/Audio/MainTheme.wav"))
         throw std::runtime_error("MainTheme.wav not found");
 }
 
 void MusicPlayer::initSounds()
 {
     const char* namesOfSoundFiles[nbSoundTypes] = {
-        "NibblerThirdParties/FoodEaten.wav",
-        "NibblerThirdParties/FoodEaten.wav",
-        "NibblerThirdParties/GameOver.wav"
+        "NibblerThirdParties/Audio/FoodEaten.wav",
+        "NibblerThirdParties/Audio/SuperFoodEaten.wav",
+        "NibblerThirdParties/Audio/GameOver.wav"
     };
     for(size_t i = 0; i < nbSoundTypes; ++i){
         if (!soundBuffers[i].loadFromFile(namesOfSoundFiles[i]))

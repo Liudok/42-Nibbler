@@ -31,3 +31,7 @@ Liuda:
 
 Investigate:
 - If a dynamic library does not exist or is not compatible, your program must display a relevant error message and exit neatly.
+
+New:
+- Leaks in SDL
+- Speed is not displayed
