@@ -1,11 +1,7 @@
 #pragma once
 
 #include <IWindow.hpp>
-//#define GLFW_INCLUDE_GLCOREARB
-//#define GLFW_INCLUDE_GL3
 #include <GLFW/glfw3.h>
-# include <GLUT/glut.h>
-//#include <GL/glfw.h>
 
 extern "C"
 {
@@ -26,11 +22,11 @@ class GlfwWindow : public IWindow
     private:
 
         void            gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
-    void            makeRect(int x, int y, int width, int height);
+    void            makeRect(float x, float y, float width, float height);
     void    showText(const char *text, size_t x, size_t y);
         void            drawBorders();
 
-        const size_t    zoomFactor_ = 14;
+        const size_t    zoomFactor_ = 10;
         size_t          width_ = 0;
         size_t          height_ = 0;
         GLFWwindow*     window_;
