@@ -74,8 +74,10 @@ void SFMLWindow::showGameOver()
 {
     sf::Text text;
     sf::Font font;
-    if (!font.loadFromFile("NibblerThirdParties/TextFonts/Roboto-Bold.ttf"))
+    if (!font.loadFromFile("NibblerThirdParties/TextFonts/Roboto-Bold.ttf")){
+        closeWindow();
         throw std::runtime_error("No font found");
+    }
 
     text.setFont(font);
     text.setCharacterSize(55);
@@ -138,8 +140,10 @@ void SFMLWindow::drawBorders()
     window_->draw(bottom);
 
     sf::Font font;
-    if (!font.loadFromFile("NibblerThirdParties/TextFonts/Roboto-Bold.ttf"))
+    if (!font.loadFromFile("NibblerThirdParties/TextFonts/Roboto-Bold.ttf")){
+        closeWindow();
         throw std::runtime_error("No font found");
+    }
     sf::Text text;
     text.setFont(font);
     text.setCharacterSize(20);

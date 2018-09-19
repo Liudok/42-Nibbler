@@ -165,7 +165,10 @@ SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)
 void  SDLWindow::showText(const char *text, size_t x, size_t y, SDL_Color color, size_t fontSize)
 {
     auto font = TTF_OpenFont("NibblerThirdParties/TextFonts/Roboto-Light.ttf", fontSize);
-    if (!font) throw std::runtime_error("No font found.");
+    if (!font){
+        closeWindow();
+        throw std::runtime_error("No font found.");
+    }
     TTF_SetFontStyle(font, TTF_STYLE_BOLD);
     auto surface = TTF_RenderText_Solid(font, text, color);
 

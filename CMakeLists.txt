@@ -13,7 +13,7 @@ if (NOT APPLE)
             "The project may be built only in macOS for now. Sorry :(")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wno-deprecated")
 
 # Sdl configuration
 

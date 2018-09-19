@@ -32,10 +32,12 @@ class GlfwWindow : public IWindow
         void            showText(const char *text, float x, float y);
         void            drawBorders();
 
-        const size_t    zoomFactor_ = 10;
-        size_t          width_ = 0;
-        size_t          height_ = 0;
+        const size_t    zoomFactor_ = defaultZoomFaftor * 2.0 / 3;
+        size_t          width_ = defaultWidth;
+        size_t          height_ = defaultHeight;
         GLFWwindow*     window_ = nullptr;
-        size_t          score_ = 0;
-        size_t          speed_ = 0;
+        size_t          score_ = defaultScore;
+        size_t          speed_ = defaultSpeed;
+        GameMode        mode_ = defaultGameMode;
+
 };

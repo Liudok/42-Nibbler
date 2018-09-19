@@ -13,12 +13,11 @@ extern "C"
 ResponseType GlfwWindow::getResponse()
 {
     glfwPollEvents();
-
-    if ( glfwGetKey(window_, GLFW_KEY_ESCAPE ) == GLFW_PRESS)
+    if (glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         return playerPressedEscape;
     else
     {
-        if (glfwGetKey(window_, GLFW_KEY_UP )  == GLFW_PRESS || glfwGetKey(window_,GLFW_KEY_W)  == GLFW_PRESS)
+        if (glfwGetKey(window_, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window_,GLFW_KEY_W) == GLFW_PRESS)
             return up;
         else if (glfwGetKey(window_, GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_S ) == GLFW_PRESS)
             return down;
@@ -26,20 +25,23 @@ ResponseType GlfwWindow::getResponse()
             return left;
         else if (glfwGetKey(window_, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_D) == GLFW_PRESS)
             return right;
-        else if (glfwGetKey(window_, GLFW_KEY_SPACE ) == GLFW_PRESS)
+        else if (glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS)
             return pauseContinue;
-        else if (glfwGetKey(window_, GLFW_KEY_1 ) == GLFW_PRESS)
+        else if (glfwGetKey(window_, GLFW_KEY_1) == GLFW_PRESS)
             return toSDL;
-        else if (glfwGetKey(window_, GLFW_KEY_2 ) == GLFW_PRESS)
+        else if (glfwGetKey(window_, GLFW_KEY_2) == GLFW_PRESS)
             return toSFML;
+        else if (glfwGetKey(window_, GLFW_KEY_4) == GLFW_PRESS)
+            return changeGameMode;
     }
     return noResponse;
 }
 
-void GlfwWindow::draw(GameField const& gameState, size_t score, size_t speed, GameMode)
+void GlfwWindow::draw(GameField const& gameState, size_t score, size_t speed, GameMode mode)
 {
     score_ = score;
     speed_ = speed;
+    mode_ = mode;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -74,9 +76,10 @@ void GlfwWindow::openWindow(size_t width, size_t height)
     if(!glfwInit())
         throw std::runtime_error("Failed to initialize GLFW");
 
-    window_ = glfwCreateWindow( (width_ + 2) * zoomFactor_, (height_ + 2) * zoomFactor_, "GLFW Nibbler", NULL, NULL);
-    if(!window_)
-    {
+    window_ = glfwCreateWindow((width_ + 2) * zoomFactor_, 
+        (height_ + 2) * zoomFactor_, "GLFW Nibbler", NULL, NULL);
+    
+    if(!window_){
         glfwTerminate();
         throw std::runtime_error("Failed to initialize GLFW window");
     }
@@ -167,10 +170,10 @@ void		GlfwWindow::makeRect(float x, float y, float width, float height)
 {
     glLoadIdentity();
     glBegin(GL_QUADS);
-    glVertex3f((GLfloat)x, (GLfloat)y, 0.0f);              // Top Left
-    glVertex3f((GLfloat)x + width, (GLfloat)y, 0.0f);      // Top Right
-    glVertex3f((GLfloat)x + width, (GLfloat)y + height, 0.0f);  // Bottom Right
-    glVertex3f((GLfloat)x, (GLfloat)y + height, 0.0f);          // Bottom Left
+    glVertex3f((GLfloat)x, (GLfloat)y, 0.0f); // Top Left
+    glVertex3f((GLfloat)x + width, (GLfloat)y, 0.0f); // Top Right
+    glVertex3f((GLfloat)x + width, (GLfloat)y + height, 0.0f); // Bottom Right
+    glVertex3f((GLfloat)x, (GLfloat)y + height, 0.0f); // Bottom Left
     glEnd();
 }
 
@@ -182,13 +185,9 @@ void  GlfwWindow::showText(const char *text, float x, float y)
     glLoadIdentity();
     glRasterPos2f(x, y);
 
-    size_t len = strlen(text);
-    size_t i = 0;
+    const auto len = std::strlen(text);
+    for (size_t i = 0; i < len; ++i)
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18 , text[i]);
 
-    while (i < len)
-    {
-        //glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18 , text[i]); ===DEPRECATED===
-        i++;
-    }
     glEnable(GL_TEXTURE_2D);
 }

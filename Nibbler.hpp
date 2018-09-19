@@ -6,8 +6,8 @@
 constexpr auto defaultZoomFaftor = 15;
 constexpr auto defaultWidth = 40;
 constexpr auto defaultHeight = 60;
-constexpr auto defaultSpeed = 1.0;
 constexpr auto defaultScore = 0;
+constexpr auto defaultSpeed = 1.0;
 constexpr auto defaultGameMode = classic;
 constexpr auto defaultLibrary = sfml;
 constexpr auto defaultMusicPlayerState = soundsOnly;
