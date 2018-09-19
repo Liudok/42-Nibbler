@@ -84,7 +84,7 @@ void SDLWindow::showGameOver()
     {
         const SDL_Color color = {199, 50, 176, 0};
         showText("Game over", xShift, yShift, color,
-            zoomFont(gameOverFontSize));
+        zoomFont(gameOverFontSize));
     }
     {
         const SDL_Color color = {59, 150, 116, 0};

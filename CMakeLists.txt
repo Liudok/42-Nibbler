@@ -71,11 +71,11 @@ add_executable(Nibbler main.cpp)
 
 # Simpler includes
 
-target_include_directories(LogicLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
-target_include_directories(NcursesLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
-target_include_directories(SdlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
-target_include_directories(SfmlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
-target_include_directories(SoundLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IMusicPlayer)
+target_include_directories(LogicLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(NcursesLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(SdlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(SfmlLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(SoundLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Links between project parts
 

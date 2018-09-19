@@ -1,10 +1,14 @@
 #pragma once
 
-#include <stddef.h>
+#include <cstddef>
 
 enum SoundType { foodEaten, superFoodEaten, gameOver };
 
 constexpr size_t nbSoundTypes = 3;
+
+enum MusicPlayerState { on, soundsOnly, off };
+
+constexpr size_t nbMusicPlayerStates = 3;
 
 class IMusicPlayer
 {

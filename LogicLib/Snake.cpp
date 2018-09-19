@@ -129,7 +129,8 @@ auto Snake::initProcessFunctions()
 
 void Snake::processCollisionWithFood(SnakeUtils::Point const& fieldObject)
 {
-    musicPlayer_->playSound(foodEaten);
+    if (params_.player != off)
+        musicPlayer_->playSound(foodEaten);
     speed_ += speedIncrement_;
     score_ += scoreIncrement_;
     const auto newBodyPart = body_[body_.size() - 1];
@@ -142,7 +143,8 @@ void Snake::processCollisionWithFood(SnakeUtils::Point const& fieldObject)
 
 void Snake::processCollisionWithSuperFood(SnakeUtils::Point const& fieldObject)
 {
-    musicPlayer_->playSound(superFoodEaten);
+    if (params_.player != off)
+        musicPlayer_->playSound(superFoodEaten);
     score_ += scoreIncrement_ * superFoodFactor_;
     for (size_t i = 0; i < superFoodFactor_; ++i){
         const auto newBodyPart = body_[body_.size() - 1];

@@ -7,14 +7,16 @@ LogicUnit::LogicUnit(NibblerParameters params)
     : params_(params)
 {
     snake_.fillMap(gameField_);
-    musicPlayer_->playMainTheme();
+    if (params_.player == on)
+        musicPlayer_->playMainTheme();
 }
 
 LogicUnit::~LogicUnit()
 {
     for (auto& library : libraries_)
         dlclose(library);
-    musicPlayer_->stopMainTheme();
+    if (params_.player == on)
+        musicPlayer_->stopMainTheme();
     dlclose(musicLibrary_);
 }
 
@@ -102,10 +104,12 @@ void LogicUnit::reactToplayerPressedEscape()
 void LogicUnit::reactToPauseContinue()
 {
     paused_ = !paused_;
-    if (paused_)
-        musicPlayer_->pauseMainTheme();
-    else
-        musicPlayer_->playMainTheme();
+    if (params_.player == on){
+        if (paused_)
+            musicPlayer_->pauseMainTheme();
+        else
+            musicPlayer_->playMainTheme();
+    }
 }
 
 void LogicUnit::reactToChangeGameMode()
@@ -117,7 +121,8 @@ void LogicUnit::reactToChangeGameMode()
 void LogicUnit::showExitAndCloseWindow()
 {
     windows_[currentLibraryIndex_]->showGameOver();
-    musicPlayer_->playSound(gameOver);
+    if (params_.player != off)
+        musicPlayer_->playSound(gameOver);
     usleep(2'500'000);
     windows_[currentLibraryIndex_]->closeWindow();
 }

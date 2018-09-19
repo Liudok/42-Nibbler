@@ -1,6 +1,6 @@
 #pragma once
 
-#include <IWindow.hpp>
+#include <Nibbler.hpp>
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <functional>

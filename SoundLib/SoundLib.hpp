@@ -1,6 +1,6 @@
 #pragma once
 
-#include <IMusicPlayer.hpp>
+#include <Nibbler.hpp>
 #include <SFML/Audio.hpp>
 
 extern "C"

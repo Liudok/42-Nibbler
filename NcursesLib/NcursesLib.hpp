@@ -1,6 +1,6 @@
 #pragma once
 
-#include <IWindow.hpp>
+#include <Nibbler.hpp>
 #include <ncurses.h>
 
 extern "C"

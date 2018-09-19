@@ -1,6 +1,6 @@
 #pragma once
 
-#include <IWindow.hpp>
+#include <Nibbler.hpp>
 #include <functional>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>

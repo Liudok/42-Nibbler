@@ -11,10 +11,12 @@ auto ArgcArgvManager::parseParameters(int argc, const char** argv)
     const auto windowSize = defineWindowSize(strings);
     const auto gameMode = defineGameMode(strings);
     const auto libraryType = defineLibraryType(strings);
-    return {windowSize.first, windowSize.second, gameMode, libraryType};
+    const auto musicPlayerState = defineMusicPlayerState(strings);
+    return {windowSize.first, windowSize.second,
+        gameMode, libraryType, musicPlayerState};
 }
 
-auto ArgcArgvManager::defineWindowSize(std::vector<std::string> const& strings)
+auto ArgcArgvManager::defineWindowSize(CmndInput strings)
     -> std::pair<size_t, size_t>
 {
     std::regex number("^[0-9]+$");
@@ -38,7 +40,7 @@ auto ArgcArgvManager::findOptimalWindowSize()
     return {width / sizeFactor, height / sizeFactor};
 }
 
-GameMode ArgcArgvManager::defineGameMode(std::vector<std::string> const& strings)
+GameMode ArgcArgvManager::defineGameMode(CmndInput strings)
 {
     std::string gameModes[nbGameModes] =
         { "classic", "granny", "insane", "rasta" };
@@ -46,10 +48,10 @@ GameMode ArgcArgvManager::defineGameMode(std::vector<std::string> const& strings
         for (size_t i = 0; i < nbGameModes; ++i)
             if (gameModes[i] == str)
                 return static_cast<GameMode>(i);
-    return classic;
+    return defaultGameMode;
 }
 
-LibraryType ArgcArgvManager::defineLibraryType(std::vector<std::string> const& strings)
+LibraryType ArgcArgvManager::defineLibraryType(CmndInput strings)
 {
     std::string libraryTypes[nbLibraries] =
         { "ncurses", "sdl", "sfml" };
@@ -57,7 +59,18 @@ LibraryType ArgcArgvManager::defineLibraryType(std::vector<std::string> const& s
         for (size_t i = 0; i < nbLibraries; ++i)
             if (libraryTypes[i] == str)
                 return static_cast<LibraryType>(i);
-    return sfml;
+    return defaultLibrary;
+}
+
+MusicPlayerState ArgcArgvManager::defineMusicPlayerState(CmndInput strings)
+{
+    std::string musicPlayerStates[nbMusicPlayerStates] =
+        { "on", "soundsOnly", "off" };
+    for (const auto& str : strings)
+        for (size_t i = 0; i < nbLibraries; ++i)
+            if (musicPlayerStates[i] == str)
+                return static_cast<MusicPlayerState>(i);
+    return defaultMusicPlayerState;
 }
 
 bool ArgcArgvManager::validNumber(std::string const& str)

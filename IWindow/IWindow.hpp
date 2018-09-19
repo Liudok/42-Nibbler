@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <cstddef>
 
 enum ResponseType { noResponse, left, right, up, down,
         toNcurses, toSDL, toSFML, pauseContinue, changeGameMode, playerPressedEscape };
@@ -11,30 +12,13 @@ enum GameFieldCellType { empty, body, head, food, superFood, obstacle, collision
 
 constexpr size_t nbGameFieldCellTypes = 7;
 
-enum GameMode {classic, granny, insane, rasta};
-
-constexpr size_t nbGameModes = 4;
-
 enum LibraryType { ncurses, sdl, sfml };
 
 constexpr size_t nbLibraries = 3;
 
-constexpr auto defaultZoomFaftor = 15;
-constexpr auto defaultWidth = 40;
-constexpr auto defaultHeight = 60;
-constexpr auto defaultSpeed = 1.0;
-constexpr auto defaultScore = 0;
-constexpr auto defaultGameMode = classic;
-constexpr auto defaultLibrary = sfml;
-constexpr auto colorSpectrum = 255;
+enum GameMode {classic, granny, insane, rasta};
 
-struct NibblerParameters
-{
-    size_t width = 30;
-    size_t height = 40;
-    GameMode mode = defaultGameMode;
-    LibraryType lib = defaultLibrary;
-};
+constexpr size_t nbGameModes = 4;
 
 using GameField = std::vector<std::vector<size_t>>;
 

@@ -1,7 +1,6 @@
 #pragma once
 
-#include <IWindow.hpp>
-#include <IMusicPlayer.hpp>
+#include <Nibbler.hpp>
 #include <unordered_set>
 #include <array>
 #include <forward_list>

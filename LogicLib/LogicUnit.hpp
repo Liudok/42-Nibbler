@@ -1,8 +1,7 @@
 #pragma once
 
-#include <IWindow.hpp>
+#include <Nibbler.hpp>
 #include "Snake.hpp"
-#include <IMusicPlayer.hpp>
 #include <array>
 
 class LogicUnit
