@@ -41,9 +41,9 @@ ResponseType SDLWindow::getResponse()
 
 void SDLWindow::draw(GameField const& gameState, size_t score, size_t speed, GameMode mode)
 {
-    mode_ = mode;
     score_ = score;
     speed_ = speed;
+    mode_ = mode;
     gameStateToPixels(gameState);
     SDL_RenderPresent(renderer_);
 }
@@ -59,8 +59,8 @@ void SDLWindow::openWindow(size_t width, size_t height)
         "SDL Nibbler", 
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        width_ * zoomFactor_ + 2 * zoomFactor_,
-        height_ * zoomFactor_ + 2 * zoomFactor_, 0);
+        (width_ + 2) * zoomFactor_,
+        (height_ + 2) * zoomFactor_, 0);
 
     renderer_ = SDL_CreateRenderer(window_, -1, 0);
 }

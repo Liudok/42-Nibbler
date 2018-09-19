@@ -133,15 +133,7 @@ void GlfwWindow::gameStateToPixels(GameField const& gameState)
         {
             if (gameState[i][j] != 0)
             {
-                glColor3f(0.93, 0.96, 0.93);
-                if (gameState[i][j] == 1)
-                    glColor3f(0.93, 0.96, 0.13);
-                else if (gameState[i][j] == 2)
-                    glColor3f(0.93, 0.56, 0.93);
-                else if (gameState[i][j] == 3)
-                    glColor3f(0.13, 0.86, 0.13);
-                else if (gameState[i][j] == 4)
-                    glColor3f(0.3, 0.1, 0.83);
+                setColor_[gameState[i][j]]();
                 float x = -1 + 2 * (((float)j + 0.0) / ((float)width_)) + 0.05;
                 float y = 1 - 2 * (((float)i + 0.0) / (float)height_) - 0.1;
                 makeRect(x, y, 0.05, 0.05);
@@ -190,4 +182,18 @@ void  GlfwWindow::showText(const char *text, float x, float y)
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18 , text[i]);
 
     glEnable(GL_TEXTURE_2D);
+}
+
+auto GlfwWindow::initColorFunctionsArray()
+    -> ColorFunctionsArray
+{
+    return{{
+        [](){ glColor3f(0.3, 0.51, 0.07); },
+        [this](){ setColor(0.49, 1, 0.95); },
+        [this](){ setColor(0.25, 0.97, 0.87); },
+        [this](){ setColor(1, 0.45, 0.83); },
+        [](){ glColor3f(rc(), rc(), rc()); },
+        [](){ glColor3f(1, 0, 0); },
+        [this](){ setColor(0.04, 0.44, 0.59); }
+    }};
 }

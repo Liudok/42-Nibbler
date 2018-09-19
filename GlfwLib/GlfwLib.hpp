@@ -4,6 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <GLUT/glut.h>
 #include <GLKit/GLKMatrix4.h>
+#include <array>
+#include <functional>
 
 extern "C"
 {
@@ -39,5 +41,19 @@ class GlfwWindow : public IWindow
         size_t          score_ = defaultScore;
         size_t          speed_ = defaultSpeed;
         GameMode        mode_ = defaultGameMode;
+
+        inline static double rc()
+        { return static_cast<double>(rand()) / (RAND_MAX); }
+
+        inline void setColor(double r, double g, double b)
+        { (mode_ == rasta) ?
+            glColor3f(rc(), rc(), rc()) :
+                glColor3f(r, g, b); }
+
+        using ColorFunctionsArray =
+            std::array<std::function<void()>, nbGameFieldCellTypes>;
+        ColorFunctionsArray setColor_ = initColorFunctionsArray();
+
+        ColorFunctionsArray initColorFunctionsArray();
 
 };
