@@ -80,7 +80,7 @@ void SFMLWindow::showGameOver()
     text.setFont(font);
     text.setCharacterSize(55);
 
-    text.setString("Score: " + std::to_string((int)score_));
+    text.setString("Score: " + std::to_string(score_));
     text.setFillColor(sf::Color::Green);
     text.setPosition((width_ / 2) * zoomFactor_ - 60, (height_ / 2) * zoomFactor_ + 40);
     window_->draw(text);
@@ -149,7 +149,7 @@ void SFMLWindow::drawBorders()
     window_->draw(text);
     text.setPosition(width_ * zoomFactor_ - 3 * zoomFactor_,
         (height_ + 1) * zoomFactor_);
-    text.setString("Speed: " + std::to_string((int)speed_));
+    text.setString("Speed: " + std::to_string(static_cast<size_t>(speed_)));
     window_->draw(text);
 }
 

@@ -86,7 +86,7 @@ void SDLWindow::showGameOver()
     }
     {
         const SDL_Color color = {59, 150, 116, 0};
-        std::string score("Score: " + std::to_string((int)score_));
+        std::string score("Score: " + std::to_string(score_));
         const char *text = score.c_str();
         showText(text, xShift, yShift * scoreDownShift,
             color, zoomFont(gameOverFontSize));
@@ -146,8 +146,10 @@ void SDLWindow::drawBorders()
     const SDL_Color veryNiceColor{199, 50, 176, 0};
     const auto score = "score: " + std::to_string(score_);
     showText(score.c_str(), 0, 0, veryNiceColor, textFontSize);
-    const auto speed = "speed: " + std::to_string(speed_);
-    showText(speed.c_str(), (width_ / 2.29) * zoomFactor_, 0, veryNiceColor, textFontSize);
+    const auto speed = "speed: " + std::to_string(
+        static_cast<size_t>(speed_));
+    showText(speed.c_str(), (width_ / 2.29) * zoomFactor_, 0,
+        veryNiceColor, textFontSize);
 }
 
 SDL_Rect SDLWindow::makeRect(size_t x, size_t y, size_t h, size_t w)

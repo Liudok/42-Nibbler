@@ -81,7 +81,7 @@ class Snake
         bool outOfField_ = false;
         bool hitBody_ = false;
         bool hitObstacle_ = false;
-        size_t speed_ = defaultSpeed;
+        double speed_ = defaultSpeed;
         size_t score_ = defaultScore;
 
         using FieldObjects =

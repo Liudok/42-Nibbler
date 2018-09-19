@@ -35,8 +35,8 @@ class SFMLWindow : public IWindow
         const size_t      zoomFactor_ = defaultZoomFaftor * 2;
         size_t            width_ = defaultWidth;
         size_t            height_ = defaultHeight;
-        double            score_ = defaultScore;
-        size_t            speed_ = defaultSpeed;
+        size_t            score_ = defaultScore;
+        double            speed_ = defaultSpeed;
         GameMode          mode_ = defaultGameMode;
         std::unique_ptr<sf::RenderWindow> window_;
 

@@ -1,27 +1,3 @@
-Nestor:
-- comment ===DONE===
-- when snake goes from from (0, n) to (0, m) and eats something on (0, k), this counts as a collision for snake's tail grows left ===DONE===
-- less food ===DONE===
-- full field ===DONE===
-- obstacles ===DONE==
-- superfood ===DONE===
-- default field size ===DONE===
-- usage: map size, obstacles mode, insane mode, Bob Marley mode, granny mode ===DONE===
-- sounds ===DONE===
-- repair pause
-- Any class that declares at least one attribute must be written in canonical form ===DONE===
-- unordered_set ===DONE===
-- replace width-height with NibblerParameters ===DONE===
-- playerPressedEscape vs snake_.collapsed() eog ===DONE===
-- Leaks ===DONE===
-- Makefile ===DONE===
-- SDL does not respond after clicked outside ===DONE===
-- Nice position for text in sdl ===DONE===
-- Nice position for text in sfml ===DONE===
-- no 0 or width - 1 for food ===DONE===
-
-- argc/argv selection of starting library
-
 Liuda:
 +- Nice exit for sdl
 - in SFML: 1 when paused
@@ -34,4 +10,3 @@ Investigate:
 
 New:
 - Leaks in SDL
-- Speed is not displayed
