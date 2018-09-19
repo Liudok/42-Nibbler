@@ -29,5 +29,5 @@ int main(int ac, char **av)
 
 bool validWindowSize(size_t w, size_t h)
 {
-    return w > 10 && h > 10 && w < 180 && h < 86;
+    return w > 20 && h > 20 && w < 180 && h < 86;
 }

@@ -2,6 +2,8 @@
 
 #include <IWindow.hpp>
 #include <GLFW/glfw3.h>
+# include <GLUT/glut.h>
+#include <GLKit/GLKMatrix4.h>
 
 extern "C"
 {
@@ -22,8 +24,8 @@ class GlfwWindow : public IWindow
     private:
 
         void            gameStateToPixels(std::vector<std::vector<size_t>> const& gameState);
-    void            makeRect(float x, float y, float width, float height);
-    void    showText(const char *text, size_t x, size_t y);
+        void            makeRect(float x, float y, float width, float height);
+        void            showText(const char *text, float x, float y);
         void            drawBorders();
 
         const size_t    zoomFactor_ = 10;

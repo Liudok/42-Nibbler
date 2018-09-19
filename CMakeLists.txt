@@ -13,7 +13,7 @@ if (NOT APPLE)
             "The project may be built only in macOS for now. Sorry :(")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wno-deprecated-declarations")
 
 # Sdl configuration
 
@@ -84,5 +84,5 @@ target_include_directories(GlfwLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/IWindow)
 target_link_libraries(LogicLib SdlLib SfmlLib GlfwLib)
 target_link_libraries(SdlLib ${SdlDynamicLibs})
 target_link_libraries(SfmlLib ${SfmlDynamicLibs})
-target_link_libraries(GlfwLib glfw "-framework OpenGL")
+target_link_libraries(GlfwLib glfw "-framework OpenGL -framework GLUT")
 target_link_libraries(Nibbler LogicLib)
