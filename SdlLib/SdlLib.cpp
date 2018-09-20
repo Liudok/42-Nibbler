@@ -15,17 +15,18 @@ ResponseType SDLWindow::getResponse()
 {
     SDL_Event event;
     SDL_PollEvent(&event);
-    if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
+    if (event.type == SDL_QUIT ||
+        (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
         return playerPressedEscape;
     else if (event.type == SDL_KEYDOWN)
     {
-        if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)
+        if (event.key.keysym.sym == SDLK_UP)
             return up;
-        else if (event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s)
+        else if (event.key.keysym.sym == SDLK_DOWN)
             return down;
-        else if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a)
+        else if (event.key.keysym.sym == SDLK_LEFT)
             return left;
-        else if (event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d)
+        else if (event.key.keysym.sym == SDLK_RIGHT)
             return right;
         else if (event.key.keysym.sym == SDLK_SPACE)
             return pauseContinue;

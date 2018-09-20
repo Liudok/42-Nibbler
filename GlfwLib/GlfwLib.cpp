@@ -17,13 +17,13 @@ ResponseType GlfwWindow::getResponse()
         return playerPressedEscape;
     else
     {
-        if (glfwGetKey(window_, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window_,GLFW_KEY_W) == GLFW_PRESS)
+        if (glfwGetKey(window_, GLFW_KEY_UP) == GLFW_PRESS)
             return up;
-        else if (glfwGetKey(window_, GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_S ) == GLFW_PRESS)
+        else if (glfwGetKey(window_, GLFW_KEY_DOWN) == GLFW_PRESS )
             return down;
-        else if (glfwGetKey(window_, GLFW_KEY_LEFT)  == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_A) == GLFW_PRESS)
+        else if (glfwGetKey(window_, GLFW_KEY_LEFT)  == GLFW_PRESS)
             return left;
-        else if (glfwGetKey(window_, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_D) == GLFW_PRESS)
+        else if (glfwGetKey(window_, GLFW_KEY_RIGHT) == GLFW_PRESS)
             return right;
         else if (glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS)
             return pauseContinue;
@@ -90,19 +90,6 @@ void GlfwWindow::openWindow(size_t width, size_t height)
     glfwSetInputMode(window_, GLFW_STICKY_KEYS, GL_TRUE);
 
     glClearColor(0.1f, 0.2f, 0.4f, 0.0f);
-
-    glMatrixMode(GL_PROJECTION);
-
-    glLoadIdentity();
-
-    GLfloat zNear = 0.1f;
-    GLfloat zFar = 255.0f;
-    GLfloat aspect = float(width)/float(height);
-    GLfloat fH = tan( 60 / 360.0f * 3.14159f ) * zNear;
-    GLfloat fW = fH * aspect;
-    glFrustum( -fW, fW, -fH, fH, zNear, zFar );
-
-    GLKMatrix4MakeOrtho(0, (float)(width_ + 1), 0, (float)(height_ + 1), 0, 1);
 }
 
 void GlfwWindow::closeWindow()
@@ -171,17 +158,12 @@ void		GlfwWindow::makeRect(float x, float y, float width, float height)
 
 void  GlfwWindow::showText(const char *text, float x, float y)
 {
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_TEXTURE);
-
     glLoadIdentity();
     glRasterPos2f(x, y);
 
     const auto len = std::strlen(text);
     for (size_t i = 0; i < len; ++i)
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18 , text[i]);
-
-    glEnable(GL_TEXTURE_2D);
 }
 
 auto GlfwWindow::initColorFunctionsArray()

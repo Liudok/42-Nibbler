@@ -76,7 +76,7 @@ MusicPlayerState ArgcArgvManager::defineMusicPlayerState(CmndInput strings)
 bool ArgcArgvManager::validNumber(std::string const& str)
 {
     const auto number = std::stoul(str);
-    return number > 15 && number < 150;
+    return number > 15 && number < 87;
 }
 
 std::string ArgcArgvManager::readOutputOfCommand(std::string const& cmnd)
