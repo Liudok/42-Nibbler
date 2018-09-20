@@ -59,4 +59,7 @@ class LogicUnit
         std::array<std::function<void()>,nbResponses>;
     ReactFunctionsArray initReactFunctionsArray();
 
+    inline bool allowedActionWhilePaused(ResponseType t) const
+    { return !(t >= noResponse && t <= down); }
+
 };

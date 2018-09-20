@@ -29,7 +29,7 @@ bool LogicUnit::loopTheGame()
     while (true){
         const auto t0 = std::chrono::steady_clock::now();
         const auto response = windows_[currentLibraryIndex_]->getResponse();
-        if (paused_ && response != pauseContinue) continue;
+        if (paused_ && !(allowedActionWhilePaused(response))) continue;
         reactFunctions[response]();
         const auto t1 = std::chrono::steady_clock::now();
         const auto timePassed =

@@ -51,7 +51,6 @@ void SDLWindow::draw(GameField const& gameState, size_t score, double speed, Gam
 
 void SDLWindow::openWindow(size_t width, size_t height)
 {
-    SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
     width_ = width;
     height_ = height;
@@ -71,7 +70,6 @@ void SDLWindow::closeWindow()
     SDL_DestroyRenderer(renderer_);
     SDL_DestroyWindow(window_);
     TTF_Quit();
-    SDL_Quit();
 }
 
 void SDLWindow::showGameOver()
@@ -179,7 +177,6 @@ void  SDLWindow::showText(const char *text, size_t x, size_t y, SDL_Color color,
 
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(surface);
-    
 
     TTF_CloseFont(font);
 }
