@@ -13,37 +13,14 @@ ResponseType SFMLWindow::getResponse()
 {
     sf::Event event;
     window_->pollEvent(event);
-    switch (event.type)
-    {
-    case sf::Event::Closed:
+
+    if (event.type == sf::Event::Closed)
         return playerPressedEscape;
-    case sf::Event::KeyPressed:
-        switch (event.key.code)
-        {
-        case sf::Keyboard::Num3:
-            return toGlfw;
-        case sf::Keyboard::Num4:
-            return changeGameMode;
-        case sf::Keyboard::Escape:
-            return playerPressedEscape;
-        case sf::Keyboard::Num1:
-            return toSDL;
-        case sf::Keyboard::Down:
-            return down;
-        case sf::Keyboard::Up:
-            return up;
-        case sf::Keyboard::Right:
-            return right;
-        case sf::Keyboard::Left:
-            return left;
-        case sf::Keyboard::Space:
-            return pauseContinue;
-        default:
-            break;
-        }
-    default:
-        return noResponse;
-    }
+    else if (event.type == sf::Event::KeyPressed)
+        for (size_t i = 0; i < nbResponses; ++i)
+            if (event.key.code == responses_[i])
+                return static_cast<ResponseType>(i);
+    return noResponse;
 }
 
 void SFMLWindow::draw(GameField const& gameState, size_t score, double speed, GameMode mode)
@@ -169,4 +146,23 @@ auto SFMLWindow::initColorFunctionsArray() const
         [](sf::CircleShape& circle){ circle.setFillColor(sf::Color(255, 0, 0)); },
         [this](sf::CircleShape& circle){ circle.setFillColor(defineColor(0, 255, 0)); }
     }};
+}
+
+std::array<sf::Keyboard::Key, nbResponses>SFMLWindow::initResponses()
+{
+    std::array<sf::Keyboard::Key, nbResponses> responses =
+        {{
+             sf::Keyboard::Num0,
+             sf::Keyboard::Left,
+             sf::Keyboard::Right,
+             sf::Keyboard::Up,
+             sf::Keyboard::Down,
+             sf::Keyboard::Num3,
+             sf::Keyboard::Num1,
+             sf::Keyboard::Num9,
+             sf::Keyboard::Space,
+             sf::Keyboard::Num4,
+             sf::Keyboard::Escape
+         }};
+    return responses;
 }

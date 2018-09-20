@@ -9,7 +9,8 @@ int main(int ac, const char** av)
         while (LogicUnit(parameters).loopTheGame());
     }
     catch (std::exception& e){
-        std::cerr << "ERROR: " << e.what() << std::endl;
+        std::cerr << boldRedBegin << "Exception caught in main: " <<
+            e.what() << boldRedEnd << std::endl;
         return 1;
     }
     return 0;

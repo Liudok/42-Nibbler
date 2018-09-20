@@ -15,6 +15,8 @@ constexpr auto colorSpectrum = 255;
 constexpr auto minWindowSize = 30;
 constexpr auto maxWindowSize = 85;
 
+const auto boldRedBegin = "\033[1;31m";
+const auto boldRedEnd = "\033[0m";
 
 struct NibblerParameters
 {

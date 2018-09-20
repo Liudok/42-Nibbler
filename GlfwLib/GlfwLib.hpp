@@ -55,4 +55,6 @@ class GlfwWindow : public IWindow
 
         ColorFunctionsArray initColorFunctionsArray();
 
+        std::array<size_t, nbResponses> initResponses();
+        std::array<size_t, nbResponses> responses_ = initResponses();
 };

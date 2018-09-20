@@ -1,6 +1,6 @@
 #include "Snake.hpp"
 
-Snake::Snake(NibblerParameters params, std::shared_ptr<IMusicPlayer> mp) 
+Snake::Snake(NibblerParameters params, Handle<IMusicPlayer>& mp) 
     : params_(params), musicPlayer_(mp)
 {
     srand(time(NULL));
@@ -129,8 +129,8 @@ auto Snake::initProcessFunctions()
 
 void Snake::processCollisionWithFood(SnakeUtils::Point const& fieldObject)
 {
-    if (params_.player != off)
-        musicPlayer_->playSound(foodEaten);
+    if (musicPlayer_.get() && params_.player != off)
+        musicPlayer_.get()->playSound(foodEaten);
     speed_ += speedIncrement_;
     score_ += scoreIncrement_;
     const auto newBodyPart = body_[body_.size() - 1];
@@ -143,8 +143,8 @@ void Snake::processCollisionWithFood(SnakeUtils::Point const& fieldObject)
 
 void Snake::processCollisionWithSuperFood(SnakeUtils::Point const& fieldObject)
 {
-    if (params_.player != off)
-        musicPlayer_->playSound(superFoodEaten);
+    if (musicPlayer_.get() && params_.player != off)
+        musicPlayer_.get()->playSound(superFoodEaten);
     score_ += scoreIncrement_ * superFoodFactor_;
     for (size_t i = 0; i < superFoodFactor_; ++i){
         const auto newBodyPart = body_[body_.size() - 1];

@@ -95,7 +95,6 @@ target_include_directories(SoundLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Links between project parts
 
-target_link_libraries(LogicLib GlfwLib SdlLib SfmlLib SoundLib)
 target_link_libraries(GlfwLib glfw "-framework OpenGL -framework GLUT")
 target_link_libraries(SdlLib ${SdlDynamicLibs})
 target_link_libraries(SfmlLib ${SfmlDynamicLibs})

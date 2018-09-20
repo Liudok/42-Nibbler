@@ -10,12 +10,13 @@ $(DUILDDIR):
 	@sh .talk.sh "Building the project" $(GREEN)
 	@sh build.sh || true
 
-NAME = Nibbler
+NAME = Nope
 
 all: $(NAME)
 
 $(NAME):
-	@cd Build 2> /dev/null && make && cd .. || true
+	@make -C Build
+	@sh .cp.sh || true
 	@sh .usage.sh
 
 clean:

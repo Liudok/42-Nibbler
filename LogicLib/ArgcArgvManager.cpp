@@ -1,6 +1,7 @@
 #include "ArgcArgvManager.hpp"
 #include <regex>
 #include <cstdio>
+#include <iostream>
 
 auto ArgcArgvManager::parseParameters(int argc, const char** argv)
     -> NibblerParameters
@@ -19,14 +20,22 @@ auto ArgcArgvManager::parseParameters(int argc, const char** argv)
 auto ArgcArgvManager::defineWindowSize(CmndInput strings)
     -> std::pair<size_t, size_t>
 {
-    std::regex number("^[0-9]+$");
+    std::regex number("^[-]?[0-9]+$");
     std::vector<size_t> numbers;
-    for (const auto& str : strings)
-        if (std::regex_match(str, number) && validNumber(str))
-            numbers.push_back(std::stoul(str));
-    if (numbers.size() > 1)
+    for (const auto& str : strings){
+        if (std::regex_match(str, number)){
+            if (validNumber(str))
+                numbers.push_back(std::stoul(str));
+            else{
+                showInvalidWindowParamsWarning();
+                return findOptimalWindowSize();
+            }
+        }
+    }
+    if (numbers.size() == 2)
         return {numbers[0], numbers[1]};
-    system("sh .talk.sh 'Invalid window size. Applying default window parameters' '\033[0;31m'");
+    if (numbers.size() != 0)
+        showInvalidWindowParamsWarning();
     return findOptimalWindowSize();
 }
 
@@ -91,4 +100,11 @@ std::string ArgcArgvManager::readOutputOfCommand(std::string const& cmnd)
     if (result.empty()) return result;
     result.erase(result.end() - 1);
     return result;
+}
+
+void ArgcArgvManager::showInvalidWindowParamsWarning()
+{
+    std::cerr << boldRedBegin <<
+        "Invalid window size. Applying default window parameters" <<
+            boldRedEnd << std::endl;
 }

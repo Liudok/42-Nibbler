@@ -19,24 +19,9 @@ ResponseType SDLWindow::getResponse()
         (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
         return playerPressedEscape;
     else if (event.type == SDL_KEYDOWN)
-    {
-        if (event.key.keysym.sym == SDLK_UP)
-            return up;
-        else if (event.key.keysym.sym == SDLK_DOWN)
-            return down;
-        else if (event.key.keysym.sym == SDLK_LEFT)
-            return left;
-        else if (event.key.keysym.sym == SDLK_RIGHT)
-            return right;
-        else if (event.key.keysym.sym == SDLK_SPACE)
-            return pauseContinue;
-        else if (event.key.keysym.sym == SDLK_4)
-            return changeGameMode;
-        else if (event.key.keysym.sym == SDLK_3)
-            return toGlfw;
-        else if (event.key.keysym.sym == SDLK_2)
-            return toSFML;
-    }
+        for (size_t i = 0; i < nbResponses; ++i)
+            if (responses_[i] == static_cast<size_t>(event.key.keysym.sym))
+                return static_cast<ResponseType>(i);
     return noResponse;
 }
 
@@ -198,4 +183,23 @@ auto SDLWindow::initColorFunctionsArray()
         [this](){ SDL_SetRenderDrawColor(renderer_, 255, 0, 0, colorSpectrum); },
         [this](){ setColor(11, 111, 144); }
     }};
+}
+
+std::array<size_t, nbResponses> SDLWindow::initResponses()
+{
+    std::array<size_t, nbResponses> responses =
+            {{
+                     0,
+                     SDLK_LEFT,
+                     SDLK_RIGHT,
+                     SDLK_UP,
+                     SDLK_DOWN,
+                     SDLK_3,
+                     6,
+                     SDLK_2,
+                     SDLK_SPACE,
+                     SDLK_4,
+                     SDLK_ESCAPE
+             }};
+    return responses;
 }

@@ -52,4 +52,6 @@ class SFMLWindow : public IWindow
 
         ColorFunctionsArray initColorFunctionsArray() const;
 
+        std::array<sf::Keyboard::Key, nbResponses> initResponses();
+        std::array<sf::Keyboard::Key, nbResponses> responses_ = initResponses();
 };

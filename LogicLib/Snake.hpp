@@ -1,33 +1,15 @@
 #pragma once
 
-#include <Nibbler.hpp>
-#include <unordered_set>
+#include "Handle.hpp"
+#include "SnakeUtils.hpp"
 #include <array>
 #include <forward_list>
-
-namespace SnakeUtils
-{
-    struct Point
-    {
-        size_t x = 0;
-        size_t y = 0;
-        GameFieldCellType cellType = empty;
-        inline bool operator==(Point const& rhs) const
-        { return x == rhs.x && y == rhs.y; }
-    };
-
-    struct PointHashBySum
-    {
-        inline size_t operator()(Point const& point) const
-        { return std::hash<size_t>()(point.x * point.y); }
-    };
-}
 
 class Snake
 {
     public:
     
-        Snake(NibblerParameters, std::shared_ptr<IMusicPlayer>);
+        Snake(NibblerParameters, Handle<IMusicPlayer>&);
         Snake(Snake const&) = delete;
         Snake& operator=(Snake const&) = delete;
         ~Snake() = default;
@@ -90,9 +72,7 @@ class Snake
         
         FieldObjects fieldObjects_;
 
-        using MusicPlayerSPtr = std::shared_ptr<IMusicPlayer>;
-
-        MusicPlayerSPtr musicPlayer_;
+        Handle<IMusicPlayer>& musicPlayer_;
 
         static size_t adjustCellTypeIndex(GameFieldCellType);
 

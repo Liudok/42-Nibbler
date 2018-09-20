@@ -23,4 +23,6 @@ class ArgcArgvManager
         static bool validNumber(std::string const&);
         static std::string readOutputOfCommand(std::string const&);
 
+        static void showInvalidWindowParamsWarning();
+
 };

@@ -13,27 +13,9 @@ extern "C"
 ResponseType GlfwWindow::getResponse()
 {
     glfwPollEvents();
-    if (glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        return playerPressedEscape;
-    else
-    {
-        if (glfwGetKey(window_, GLFW_KEY_UP) == GLFW_PRESS)
-            return up;
-        else if (glfwGetKey(window_, GLFW_KEY_DOWN) == GLFW_PRESS )
-            return down;
-        else if (glfwGetKey(window_, GLFW_KEY_LEFT)  == GLFW_PRESS)
-            return left;
-        else if (glfwGetKey(window_, GLFW_KEY_RIGHT) == GLFW_PRESS)
-            return right;
-        else if (glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS)
-            return pauseContinue;
-        else if (glfwGetKey(window_, GLFW_KEY_1) == GLFW_PRESS)
-            return toSDL;
-        else if (glfwGetKey(window_, GLFW_KEY_2) == GLFW_PRESS)
-            return toSFML;
-        else if (glfwGetKey(window_, GLFW_KEY_4) == GLFW_PRESS)
-            return changeGameMode;
-    }
+    for (size_t i = 0; i < nbResponses; ++i)
+        if (glfwGetKey(window_, responses_[i]) == GLFW_PRESS)
+            return static_cast<ResponseType>(i);
     return noResponse;
 }
 
@@ -178,4 +160,23 @@ auto GlfwWindow::initColorFunctionsArray()
         [](){ glColor3f(1, 0, 0); },
         [this](){ setColor(0.04, 0.44, 0.59); }
     }};
+}
+
+std::array<size_t, nbResponses>GlfwWindow::initResponses()
+{
+    std::array<size_t, nbResponses> responses =
+        {{
+             0,
+             GLFW_KEY_LEFT,
+             GLFW_KEY_RIGHT,
+             GLFW_KEY_UP,
+             GLFW_KEY_DOWN,
+             5,
+             GLFW_KEY_1,
+             GLFW_KEY_2,
+             GLFW_KEY_SPACE,
+             GLFW_KEY_4,
+             GLFW_KEY_ESCAPE
+         }};
+    return responses;
 }
