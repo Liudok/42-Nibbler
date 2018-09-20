@@ -32,12 +32,10 @@ auto ArgcArgvManager::defineWindowSize(CmndInput strings)
 auto ArgcArgvManager::findOptimalWindowSize()
     -> std::pair<size_t, size_t>
 {
-    const auto width = std::stoul(readOutputOfCommand(
-        "system_profiler SPDisplaysDataType | grep Resolution | awk '{print $2}'"));
     const auto height = std::stoul((readOutputOfCommand(
         "system_profiler SPDisplaysDataType | grep Resolution | awk '{print $4}'")));
-    const auto sizeFactor = 35;
-    return {width / sizeFactor, height / sizeFactor};
+    const auto sizeFactor = 40;
+    return {height / sizeFactor, height / sizeFactor};
 }
 
 GameMode ArgcArgvManager::defineGameMode(CmndInput strings)
@@ -76,7 +74,7 @@ MusicPlayerState ArgcArgvManager::defineMusicPlayerState(CmndInput strings)
 bool ArgcArgvManager::validNumber(std::string const& str)
 {
     const auto number = std::stoul(str);
-    return number > 15 && number < 87;
+    return number >= minWindowSize && number <= maxWindowSize;
 }
 
 std::string ArgcArgvManager::readOutputOfCommand(std::string const& cmnd)

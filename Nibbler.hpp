@@ -12,6 +12,9 @@ constexpr auto defaultGameMode = classic;
 constexpr auto defaultLibrary = sfml;
 constexpr auto defaultMusicPlayerState = soundsOnly;
 constexpr auto colorSpectrum = 255;
+constexpr auto minWindowSize = 30;
+constexpr auto maxWindowSize = 85;
+
 
 struct NibblerParameters
 {

@@ -8,6 +8,7 @@ if [ -e "$executable" ]
 then	
     sh .talk.sh "Basic usage: ./Build/Nibbler" "$GREEN"
 	sh .talk.sh "Possibly: ./Build/Nibbler [width] [heigth] [gameMode] [lib] [musicPlayerMode]" "$GREEN"
+	sh .talk.sh "Where width and heigth may be from 30 to 85" "$PURPLE"
 	sh .talk.sh "Where gameMode may be 'classic' 'granny' 'insane', or 'rasta'" "$PURPLE"
 	sh .talk.sh "Where default lib may be 'glfw' 'sdl', ' or 'sfml'" "$PURPLE"
 	sh .talk.sh "Where musicPlayerMode may be 'on' 'soundsOnly', or 'off'" "$PURPLE"
