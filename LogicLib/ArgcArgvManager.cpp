@@ -1,6 +1,6 @@
 #include "ArgcArgvManager.hpp"
 #include <regex>
-#include <stdio.h>
+#include <cstdio>
 
 auto ArgcArgvManager::parseParameters(int argc, const char** argv)
     -> NibblerParameters
@@ -26,6 +26,7 @@ auto ArgcArgvManager::defineWindowSize(CmndInput strings)
             numbers.push_back(std::stoul(str));
     if (numbers.size() > 1)
         return {numbers[0], numbers[1]};
+    system("sh .talk.sh 'Invalid window size. Applying default window parameters' '\033[0;31m'");
     return findOptimalWindowSize();
 }
 
