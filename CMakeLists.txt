@@ -49,8 +49,7 @@ add_executable(Nibbler main.cpp)
 
 file(GLOB LogicSources
         ${CMAKE_CURRENT_SOURCE_DIR}/LogicLib/*.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/LogicLib/*.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/LogicLib/*.hpp)
 
 add_library(LogicLib STATIC ${LogicSources})
 
@@ -58,8 +57,7 @@ add_library(LogicLib STATIC ${LogicSources})
 
 file(GLOB GlfwLibSources
         ${CMAKE_CURRENT_SOURCE_DIR}/GlfwLib/*.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/GlfwLib/*.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/GlfwLib/*.hpp)
 
 add_library(GlfwLib SHARED ${GlfwLibSources})
 
@@ -67,8 +65,7 @@ add_library(GlfwLib SHARED ${GlfwLibSources})
 
 file(GLOB SdlLibSources
         ${CMAKE_CURRENT_SOURCE_DIR}/SdlLib/*.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/SdlLib/*.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/SdlLib/*.hpp)
 
 add_library(SdlLib SHARED ${SdlLibSources})
 
@@ -76,8 +73,7 @@ add_library(SdlLib SHARED ${SdlLibSources})
 
 file(GLOB SfmlLibSources
         ${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/*.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/*.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/IWindow/*.hpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/SfmlLib/*.hpp)
 
 add_library(SfmlLib SHARED ${SfmlLibSources})
 
@@ -85,8 +81,7 @@ add_library(SfmlLib SHARED ${SfmlLibSources})
 
 file(GLOB SoundLibSources
         ${CMAKE_CURRENT_SOURCE_DIR}/SoundLib/*.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/SoundLib/*.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/IMusicPlayer/*.hpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/SoundLib/*.hpp)
 
 add_library(SoundLib SHARED ${SoundLibSources})
 
