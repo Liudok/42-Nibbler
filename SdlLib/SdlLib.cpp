@@ -40,7 +40,7 @@ ResponseType SDLWindow::getResponse()
     return noResponse;
 }
 
-void SDLWindow::draw(GameField const& gameState, size_t score, size_t speed, GameMode mode)
+void SDLWindow::draw(GameField const& gameState, size_t score, double speed, GameMode mode)
 {
     score_ = score;
     speed_ = speed;
@@ -148,7 +148,7 @@ void SDLWindow::drawBorders()
     const auto score = "score: " + std::to_string(score_);
     showText(score.c_str(), 0, 0, veryNiceColor, textFontSize);
     const auto speed = "speed: " + std::to_string(
-        static_cast<size_t>(speed_));
+        static_cast<size_t>(speed_ * 100));
     showText(speed.c_str(), (width_ / 2.29) * zoomFactor_, 0,
         veryNiceColor, textFontSize);
 }

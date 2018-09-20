@@ -46,7 +46,7 @@ ResponseType SFMLWindow::getResponse()
     }
 }
 
-void SFMLWindow::draw(GameField const& gameState, size_t score, size_t speed, GameMode mode)
+void SFMLWindow::draw(GameField const& gameState, size_t score, double speed, GameMode mode)
 {
     mode_ = mode;
     score_ = score;
@@ -153,7 +153,7 @@ void SFMLWindow::drawBorders()
     window_->draw(text);
     text.setPosition(width_ * zoomFactor_ - 3 * zoomFactor_,
         (height_ + 1) * zoomFactor_);
-    text.setString("Speed: " + std::to_string(static_cast<size_t>(speed_)));
+    text.setString("Speed: " + std::to_string(static_cast<size_t>(speed_ * 100)));
     window_->draw(text);
 }
 

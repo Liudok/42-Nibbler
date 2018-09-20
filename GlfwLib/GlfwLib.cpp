@@ -37,7 +37,7 @@ ResponseType GlfwWindow::getResponse()
     return noResponse;
 }
 
-void GlfwWindow::draw(GameField const& gameState, size_t score, size_t speed, GameMode mode)
+void GlfwWindow::draw(GameField const& gameState, size_t score, double speed, GameMode mode)
 {
     score_ = score;
     speed_ = speed;
@@ -107,7 +107,7 @@ void GlfwWindow::showGameOver()
     showText("Game over", -0.1, 0);
 
     glColor3f(0.99, 0.35, 0.63);
-    showText(("Score: " + std::to_string((int)score_)).c_str(), -0.1, -0.1);
+    showText(("Score: " + std::to_string(score_)).c_str(), -0.1, -0.1);
 
     glfwSwapBuffers(window_);
 }
@@ -121,8 +121,8 @@ void GlfwWindow::gameStateToPixels(GameField const& gameState)
             if (gameState[i][j] != 0)
             {
                 setColor_[gameState[i][j]]();
-                float x = -1 + 2 * (((float)j + 0.0) / ((float)width_)) + 0.05;
-                float y = 1 - 2 * (((float)i + 0.0) / (float)height_) - 0.1;
+                const auto x = -1 + 2.0 * j / width_ + 0.05;
+                const auto y = 1 - 2.0 * i / height_ - 0.1;
                 makeRect(x, y, 0.05, 0.05);
             }
         }
@@ -141,8 +141,8 @@ void GlfwWindow::drawBorders()
     makeRect(0.95,0.05, 0.05, -1);
 
     glColor3f(0.99, 0.35, 0.63);
-    showText(("Score: " + std::to_string((int)score_)).c_str(), -0.95, -0.99);
-    showText(("Speed: " + std::to_string((int)speed_)).c_str(), 0.65, -0.99);
+    showText(("Score: " + std::to_string(score_)).c_str(), -0.95, -0.99);
+    showText(("Speed: " + std::to_string(static_cast<size_t>(speed_ * 100))).c_str(), 0.65, -0.99);
 }
 
 void		GlfwWindow::makeRect(float x, float y, float width, float height)

@@ -21,7 +21,7 @@ class SFMLWindow : public IWindow
         ~SFMLWindow() = default;
 
         ResponseType     getResponse() override;
-        void             draw(GameField const&, size_t score, size_t speed, GameMode) override;
+        void             draw(GameField const&, size_t score, double speed, GameMode) override;
         void             openWindow(size_t width, size_t height) override;
         void             closeWindow() override;
         void             showGameOver() override;

@@ -3,7 +3,6 @@
 #include <Nibbler.hpp>
 #include <GLFW/glfw3.h>
 #include <GLUT/glut.h>
-#include <GLKit/GLKMatrix4.h>
 #include <array>
 #include <functional>
 
@@ -22,7 +21,7 @@ class GlfwWindow : public IWindow
         ~GlfwWindow() = default;
 
         ResponseType    getResponse() override;
-        void            draw(GameField const&, size_t score, size_t speed, GameMode) override;
+        void            draw(GameField const&, size_t score, double speed, GameMode) override;
         void            openWindow(size_t width, size_t height) override;
         void            closeWindow() override;
         void            showGameOver() override;
@@ -39,7 +38,7 @@ class GlfwWindow : public IWindow
         size_t          height_ = defaultHeight;
         GLFWwindow*     window_ = nullptr;
         size_t          score_ = defaultScore;
-        size_t          speed_ = defaultSpeed;
+        double          speed_ = defaultSpeed;
         GameMode        mode_ = defaultGameMode;
 
         inline static double rc()
