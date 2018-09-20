@@ -143,9 +143,9 @@ void SDLWindow::drawBorders()
 
     const auto textFontSize = 14;
     const SDL_Color veryNiceColor{199, 50, 176, 0};
-    const auto score = "score: " + std::to_string(score_);
-    showText(score.c_str(), 0, 0, veryNiceColor, textFontSize);
-    const auto speed = "speed: " + std::to_string(
+    const auto score = "score : " + std::to_string(score_);
+    showText(score.c_str(), zoomFactor_, ((height_ + 1) * zoomFactor_ / 2), veryNiceColor, textFontSize);
+    const auto speed = "speed : " + std::to_string(
         static_cast<size_t>(speed_ * 100));
     showText(speed.c_str(), (width_ / 2.29) * zoomFactor_, 0,
         veryNiceColor, textFontSize);

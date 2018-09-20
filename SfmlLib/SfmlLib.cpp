@@ -147,13 +147,13 @@ void SFMLWindow::drawBorders()
     sf::Text text;
     text.setFont(font);
     text.setCharacterSize(20);
-    text.setString("Score: " + std::to_string((int)score_));
+    text.setString("Score : " + std::to_string(score_));
     text.setFillColor(sf::Color::Red);
     text.setPosition(zoomFactor_, (height_ + 1) * zoomFactor_);
     window_->draw(text);
     text.setPosition(width_ * zoomFactor_ - 3 * zoomFactor_,
         (height_ + 1) * zoomFactor_);
-    text.setString("Speed: " + std::to_string(static_cast<size_t>(speed_ * 100)));
+    text.setString("Speed : " + std::to_string(static_cast<size_t>(speed_ * 100)));
     window_->draw(text);
 }
 

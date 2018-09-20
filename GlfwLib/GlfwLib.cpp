@@ -141,8 +141,8 @@ void GlfwWindow::drawBorders()
     makeRect(0.95,0.05, 0.05, -1);
 
     glColor3f(0.99, 0.35, 0.63);
-    showText(("Score: " + std::to_string(score_)).c_str(), -0.95, -0.99);
-    showText(("Speed: " + std::to_string(static_cast<size_t>(speed_ * 100))).c_str(), 0.65, -0.99);
+    showText(("Score : " + std::to_string(score_)).c_str(), -0.95, -0.99);
+    showText(("Speed : " + std::to_string(static_cast<size_t>(speed_ * 100))).c_str(), 0.65, -0.99);
 }
 
 void		GlfwWindow::makeRect(float x, float y, float width, float height)
