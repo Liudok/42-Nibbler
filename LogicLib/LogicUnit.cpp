@@ -66,7 +66,7 @@ void LogicUnit::reactToNewLibrary(LibraryType newLibrary)
         snake_.getScore(), snake_.getSpeed(), params_.mode);
 }
 
-void LogicUnit::reactToplayerPressedEscape()
+void LogicUnit::reactToPlayerPressedEscape()
 {
     showExitAndCloseWindow();
     playerPressedEscape_ = true;
@@ -121,6 +121,6 @@ auto LogicUnit::initReactFunctionsArray()
         [this]{ reactToNewLibrary(sfml); },
         [this]{ reactToPauseContinue(); },
         [this]{ reactToChangeGameMode(); },
-        [this]{ reactToplayerPressedEscape(); },
+        [this]{ reactToPlayerPressedEscape(); },
     }};
 }

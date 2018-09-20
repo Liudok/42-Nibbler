@@ -33,7 +33,7 @@ Handle<T>::Handle(const char* libName)
     errorMessage += "' is not found";
     if (!lib_) throw std::runtime_error(errorMessage.c_str());
     o_ = reinterpret_cast<T* (*)()>(dlsym(lib_, "create"))();
-    if (!o_) std::runtime_error("Failed to create the window");
+    if (!o_) throw std::runtime_error("Failed to create the window");
     if (dlerror()) throw std::runtime_error(dlerror());
 }
 

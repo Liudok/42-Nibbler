@@ -41,7 +41,7 @@ class LogicUnit
     void reactToNoResponse();
     void reactToNewDirection(ResponseType);
     void reactToNewLibrary(LibraryType);
-    void reactToplayerPressedEscape();
+    void reactToPlayerPressedEscape();
     void reactToPauseContinue();
     void reactToChangeGameMode();
 

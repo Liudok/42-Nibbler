@@ -4,8 +4,8 @@
 #include "IMusicPlayer/IMusicPlayer.hpp"
 
 constexpr auto defaultZoomFaftor = 15;
-constexpr auto defaultWidth = 40;
-constexpr auto defaultHeight = 60;
+constexpr auto defaultWidth = 60;
+constexpr auto defaultHeight = 40;
 constexpr auto defaultScore = 0;
 constexpr auto defaultSpeed = 1.0;
 constexpr auto defaultGameMode = classic;
@@ -20,8 +20,8 @@ const auto boldRedEnd = "\033[0m";
 
 struct NibblerParameters
 {
-    size_t width = 30;
-    size_t height = 40;
+    size_t width = defaultWidth;
+    size_t height = defaultHeight;
     GameMode mode = defaultGameMode;
     LibraryType lib = defaultLibrary;
     MusicPlayerState player = defaultMusicPlayerState;
