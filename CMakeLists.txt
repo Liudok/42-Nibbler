@@ -17,7 +17,6 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wno-deprecated")
 set(NibblerThirdPartiesPath ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties)
-add_definitions(-DPATH_TO_THIRD_PARTIES="${NibblerThirdPartiesPath}")
 
 # Sdl configuration
 
@@ -104,3 +103,9 @@ target_link_libraries(SdlLib ${SdlDynamicLibs})
 target_link_libraries(SfmlLib ${SfmlDynamicLibs})
 target_link_libraries(SoundLib ${SfmlDynamicLibs})
 target_link_libraries(Nibbler LogicLib)
+
+# Adding definitions
+
+add_definitions(-DPATH_TO_BUILD_DIR="${CMAKE_CURRENT_SOURCE_DIR}/Build")
+add_definitions(-DPATH_TO_THIRD_PARTIES="${NibblerThirdPartiesPath}")
+

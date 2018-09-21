@@ -16,7 +16,6 @@ all: $(NAME)
 
 $(NAME):
 	@make -C Build || true
-	@sh .cp.sh || true
 	@sh .usage.sh
 
 clean:

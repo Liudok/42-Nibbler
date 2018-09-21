@@ -1,4 +1,5 @@
 #include "SfmlLib.hpp"
+#include <NibblerUtils.hpp>
 #include <unistd.h>
 
 extern "C"
@@ -51,7 +52,7 @@ void SFMLWindow::showGameOver()
 {
     sf::Text text;
     sf::Font font;
-    std::string fontPath = IWindowUtils::getPathToThirdParties();
+    std::string fontPath = NibblerUtils::getPathToThirdParties();
     fontPath += "/TextFonts/Roboto-Light.ttf";
     if (!font.loadFromFile(fontPath.c_str())){
         closeWindow();
@@ -119,7 +120,7 @@ void SFMLWindow::drawBorders()
     window_->draw(bottom);
 
     sf::Font font;
-    std::string fontPath = IWindowUtils::getPathToThirdParties();
+    std::string fontPath = NibblerUtils::getPathToThirdParties();
     fontPath += "/TextFonts/Roboto-Light.ttf";
     if (!font.loadFromFile(fontPath.c_str())){
         closeWindow();

@@ -30,4 +30,5 @@ class MusicPlayer : public IMusicPlayer
     	sf::Music mainTheme;
         sf::SoundBuffer soundBuffers[nbSoundTypes];
         sf::Sound sounds[nbSoundTypes];
+
 };

@@ -1,7 +1,7 @@
 #include "LogicUnit.hpp"
-
 #include <chrono>
 #include <unistd.h>
+#include <string>
 
 LogicUnit::LogicUnit(NibblerParameters params)
     : params_(params)
@@ -39,6 +39,17 @@ bool LogicUnit::loopTheGame()
         }
     }
     return !playerPressedEscape_;
+}
+
+auto LogicUnit::initWindows() const
+    -> WindowsArray
+{
+    using namespace NibblerUtils;
+    return{{
+        mergePath(getPathToBuildDir(), "/libGlfwLib.dylib").c_str(),
+        mergePath(getPathToBuildDir(), "/libSdlLib.dylib").c_str(),
+        mergePath(getPathToBuildDir(), "/libSfmlLib.dylib").c_str()
+    }};
 }
 
 void LogicUnit::reactToNoResponse()
@@ -123,4 +134,11 @@ auto LogicUnit::initReactFunctionsArray()
         [this]{ reactToChangeGameMode(); },
         [this]{ reactToPlayerPressedEscape(); },
     }};
+}
+
+std::string LogicUnit::mergePath(const char* left, const char* right) const
+{
+    std::string result = left;
+    result += right;
+    return result;
 }

@@ -3,11 +3,11 @@ GREEN='\033[0;32m'
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 
-executable=Nibbler
+executable=Build/Nibbler
 if [ -e "$executable" ]
 then	
-    sh .talk.sh "Basic usage: ./Nibbler" "$GREEN"
-	sh .talk.sh "Possibly: ./Nibbler [width] [heigth] [gameMode] [lib] [musicPlayerMode]" "$GREEN"
+    sh .talk.sh "Basic usage: ./Build/Nibbler" "$GREEN"
+	sh .talk.sh "Possibly: ./Build/Nibbler [width] [heigth] [gameMode] [lib] [musicPlayerMode]" "$GREEN"
 	sh .talk.sh "Where width and heigth may be from 30 to 85" "$PURPLE"
 	sh .talk.sh "Where gameMode may be 'classic' 'granny' 'insane', or 'rasta'" "$PURPLE"
 	sh .talk.sh "Where default lib may be 'glfw' 'sdl', ' or 'sfml'" "$PURPLE"

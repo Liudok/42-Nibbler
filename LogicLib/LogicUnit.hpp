@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Nibbler.hpp>
+#include <NibblerUtils.hpp>
 #include "Handle.hpp"
 #include "Snake.hpp"
 #include <array>
@@ -22,15 +23,14 @@ class LogicUnit
 
     NibblerParameters params_{defaultWidth, defaultHeight, classic};
 
-    WindowsArray windows_ = {{
-        "libGlfwLib.dylib",
-        "libSdlLib.dylib",
-        "libSfmlLib.dylib"
-    }};
+    WindowsArray initWindows() const;
+    WindowsArray windows_ = initWindows();
+
     size_t currentLibraryIndex_ = params_.lib;
 
     using MusicPlayer = Handle<IMusicPlayer>;
-    MusicPlayer musicPlayer_ = "libSoundLib.dylib";
+    MusicPlayer musicPlayer_ = mergePath(
+        NibblerUtils::getPathToBuildDir(), "/libSoundLib.dylib").c_str();
 
     bool playerPressedEscape_ = false;
     bool paused_ = false;
@@ -56,4 +56,5 @@ class LogicUnit
     inline bool allowedActionWhilePaused(ResponseType t) const
     { return !(t >= noResponse && t <= down); }
 
+    std::string mergePath(const char* left, const char* right) const;
 };

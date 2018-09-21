@@ -1,5 +1,5 @@
 #include "SoundLib.hpp"
-#include <string>
+#include <NibblerUtils.hpp>
 
 IMusicPlayer* create()
 {
@@ -34,19 +34,19 @@ void MusicPlayer::playSound(SoundType i)
 
 void MusicPlayer::initMainTheme()
 {
-    std::string audioPath = IWindowUtils::getPathToThirdParties();
-    audioPath += "/Audio/MainTheme.wav";
-    if (!mainTheme.openFromFile(audioPath.c_str()))
-        throw std::runtime_error("MainTheme.wav not found");
+    std::string path = NibblerUtils::getPathToThirdParties();
+    path += "/Audio/MainTheme.wav";
+    if (!mainTheme.openFromFile(path.c_str()))
+            throw std::runtime_error("MainTheme.wav not found");
 }
 
 void MusicPlayer::initSounds()
 {
-    std::string foodEaten = IWindowUtils::getPathToThirdParties();
+    std::string foodEaten = NibblerUtils::getPathToThirdParties();
     foodEaten += "/Audio/FoodEaten.wav";
-    std::string superFoodEaten = IWindowUtils::getPathToThirdParties();
+    std::string superFoodEaten = NibblerUtils::getPathToThirdParties();
     superFoodEaten += "/Audio/SuperFoodEaten.wav";
-    std::string gameOver = IWindowUtils::getPathToThirdParties();
+    std::string gameOver = NibblerUtils::getPathToThirdParties();
     gameOver += "/Audio/GameOver.wav";
     const char* namesOfSoundFiles[nbSoundTypes] = {
         foodEaten.c_str(),
