@@ -1,4 +1,5 @@
 #include "SoundLib.hpp"
+#include <string>
 
 IMusicPlayer* create()
 {
@@ -33,16 +34,24 @@ void MusicPlayer::playSound(SoundType i)
 
 void MusicPlayer::initMainTheme()
 {
-    if (!mainTheme.openFromFile("NibblerThirdParties/Audio/MainTheme.wav"))
+    std::string audioPath = IWindowUtils::getPathToThirdParties();
+    audioPath += "/Audio/MainTheme.wav";
+    if (!mainTheme.openFromFile(audioPath.c_str()))
         throw std::runtime_error("MainTheme.wav not found");
 }
 
 void MusicPlayer::initSounds()
 {
+    std::string foodEaten = IWindowUtils::getPathToThirdParties();
+    foodEaten += "/Audio/FoodEaten.wav";
+    std::string superFoodEaten = IWindowUtils::getPathToThirdParties();
+    superFoodEaten += "/Audio/SuperFoodEaten.wav";
+    std::string gameOver = IWindowUtils::getPathToThirdParties();
+    gameOver += "/Audio/GameOver.wav";
     const char* namesOfSoundFiles[nbSoundTypes] = {
-        "NibblerThirdParties/Audio/FoodEaten.wav",
-        "NibblerThirdParties/Audio/SuperFoodEaten.wav",
-        "NibblerThirdParties/Audio/GameOver.wav"
+        foodEaten.c_str(),
+        superFoodEaten.c_str(),
+        gameOver.c_str()
     };
     for(size_t i = 0; i < nbSoundTypes; ++i){
         if (!soundBuffers[i].loadFromFile(namesOfSoundFiles[i]))

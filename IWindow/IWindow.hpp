@@ -34,3 +34,11 @@ class IWindow
         virtual ~IWindow() {}
 
 };
+
+namespace IWindowUtils
+{
+	inline const char* getPathToThirdParties()
+	{
+		return PATH_TO_THIRD_PARTIES;
+	}
+}

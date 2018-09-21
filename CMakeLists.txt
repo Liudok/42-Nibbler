@@ -13,18 +13,22 @@ if (NOT APPLE)
             "The project may be built only in macOS for now. Sorry :(")
 endif()
 
+# Third parties configuration
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wno-deprecated")
+set(NibblerThirdPartiesPath ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties)
+add_definitions(-DPATH_TO_THIRD_PARTIES="${NibblerThirdPartiesPath}")
 
 # Sdl configuration
 
-set(Sdl2Path ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties/SDL2.framework)
-set(Sdl2TtfPath ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties/SDL2_ttf.framework)
+set(Sdl2Path ${NibblerThirdPartiesPath}/SDL2.framework)
+set(Sdl2TtfPath ${NibblerThirdPartiesPath}/SDL2_ttf.framework)
 include_directories(${Sdl2Path}/Headers ${Sdl2TtfPath}/Headers)
 file(GLOB SdlDynamicLibs ${Sdl2Path}/SDL2 ${Sdl2TtfPath}/SDL2_ttf)
 
 # Sfml configuration
 
-set(SfmlPath ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties/SFML)
+set(SfmlPath ${NibblerThirdPartiesPath}/SFML)
 include_directories(${SfmlPath}/include)
 file(GLOB SfmlDynamicLibs ${SfmlPath}/lib/*.dylib)
 
@@ -34,10 +38,10 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
-set(GlfwPath ${CMAKE_CURRENT_SOURCE_DIR}/NibblerThirdParties/GLFW)
+set(GlfwPath ${NibblerThirdPartiesPath}/GLFW)
 add_subdirectory(${GlfwPath})
 
-# Project sources and libraries
+# Project sources and libraries configuration
 
 # Nibbler
 
